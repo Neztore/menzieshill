@@ -1,0 +1,11 @@
+{
+  "name": "menzieshill-client",
+  "version": "1.0.0",
+  "description": "Client side for the Menzieshill Whitehall site (And the server which hosts it)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Josh Muir",
+  "license": "UNLICENSED"
+}

@@ -1,2 +1,2 @@
 
-Copyright (C) 2019 Neztore
+Copyright (C) 2019 Josh Muir

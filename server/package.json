@@ -1,0 +1,17 @@
+{
+  "name": "menzieshill-server",
+  "version": "1.0.0",
+  "description": "Server side code for the Menzieshill whitehall site (API)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js"
+  },
+  "author": "Josh Muir",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@sentry/node": "^5.6.1",
+    "express": "^4.17.1",
+    "node-fetch": "^2.6.0"
+  }
+}
