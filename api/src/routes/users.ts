@@ -1,24 +1,30 @@
 import express from "express";
 
-const posts = express.Router();
+const users = express.Router();
 
-posts.get('/:page', (_req, res) => res.send({
-    message: "Get posts",
+// User ID should be either a valid userId string or @me
+users.get('/', (_req, res) => res.status(204).send({
+    message: "Empty page: No content.",
+    status: 204
+}));
+
+users.post('/register', (_req, res) => res.send({
+    message: "Add user (register).",
     status: 200
 }));
 
-posts.post('/', (_req, res) => res.send({
-    message: "Add post.",
+users.post('/login', (_req, res) => res.send({
+    message: "Login to account.",
     status: 200
 }));
 
-posts.patch('/:postId', (_req, res) => res.send({
-    message: "edit post.",
+users.patch('/:userId', (_req, res) => res.send({
+    message: "Edit user (settings)?",
     status: 200
 }));
 
-posts.delete('/:postId', (_req, res) => res.send({
-    message: "delete post.",
+users.delete('/:userId', (_req, res) => res.send({
+    message: "delete user.",
     status: 200
 }));
 

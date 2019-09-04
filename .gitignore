@@ -89,3 +89,4 @@ typings/
 
 # Local files
 .idea
+api/build/
