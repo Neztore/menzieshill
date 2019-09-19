@@ -19,4 +19,13 @@ app.get('/', (req, res) =>
 res.sendFile(path.join(pagePath, "index.html"))
 )
 
+app.get('/swimming', (req, res) =>
+  res.sendFile(path.join(pagePath, "swimming.html"))
+)
+
+app.get('/waterpolo', (req, res) =>
+  res.sendFile(path.join(pagePath, "waterpolo.html"))
+)
+
+
 app.listen(port, () => console.log(`Client listening: port ${port}!`))
