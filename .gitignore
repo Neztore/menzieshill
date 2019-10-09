@@ -90,3 +90,5 @@ typings/
 # Local files
 .idea
 api/build/
+
+api/ormconfig.js

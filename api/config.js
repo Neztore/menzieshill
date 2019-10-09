@@ -1,4 +1,4 @@
-{
+module.exports = {
   "port": 3000,
   "sentryDsn": "https://f120824f080e4dc49677ad203a228004@sentry.io/1532075"
 }

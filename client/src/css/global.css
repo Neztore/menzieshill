@@ -2,3 +2,35 @@
 Global (Shared CSS)
 Copyright Menzieshill Whitehall Swimming and Water Polo club 2019.
  */
+
+/* Calendar */
+.calendar {
+    overflow-y: scroll;
+    padding: 0 1em 1em;
+    border-radius: 2px;
+    height: 50vh;
+}
+
+.calendar .day {
+    border-bottom: 2px solid #7a7a7a;
+    padding-bottom: 0.2em;
+    margin-top: 0.1em;
+}
+
+.calendar .day .event {
+    padding: 0.2em;
+    border-radius: 4px;
+    color: white;
+    margin-left: 0.5em;
+    margin-bottom: 0.1em;
+    cursor: pointer;
+}
+
+.calendar .day .event:hover {
+    margin-left: 1em;
+
+}
+
+.calendar .day .event .time {
+    font-weight: bold;
+}
