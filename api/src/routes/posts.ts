@@ -23,4 +23,4 @@ posts.delete('/:postId', (_req, res) => res.send({
 }));
 
 
-
+export default  posts

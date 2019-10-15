@@ -6,10 +6,15 @@
 import {NextFunction, Request, Response} from "express";
 
 function errorHandler (error: any, _req: Request, res: Response, _next: NextFunction) {
-  console.error(`Error catch`, error);
-  res.status(error.status || 500);
-  res.send(errorGenerator(500, error.message));
 
+  if (error instanceof SyntaxError) {
+    // do your own thing here 👍
+    res.status(400).send(errorGenerator(400, "Bad JSON."));
+  } else {
+    console.error(`Error catch`, error);
+    res.status(error.status || 500);
+    res.send(errorGenerator(500, error.message));
+  }
 }
 
 interface HttpError {
@@ -50,10 +55,10 @@ const errorCatch = (fn: Function) => (
 // Contains common errors
 const errors = {
   unauthorized: errorGenerator(401, "Unauthorized: Please login or supply authorization token."),
-  forbidden: errorGenerator(403, "Forbidden. Access denied."),
+  forbidden: errorGenerator(403, "Forbidden. You do not have access to that resource."),
   notFound: errorGenerator(404, "Page not found."),
 
-  notImplemented: errorGenerator(501, "Not implemented.")
+  notImplemented: errorGenerator(501, "Not implemented."),
 };
 
 
