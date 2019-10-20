@@ -38,7 +38,7 @@ groups.post('/', errorCatch(async (req: Request, res:Response) => {
 // Delete group
 groups.delete('/:id', errorCatch(async (req: Request, res:Response) => {
     if (req.params.id && !isEmpty(req.params.id) && isInt(req.params.id)) {
-        const group = await Database.getGroup(req.params.id);
+        const group = await Database.getGroup(parseInt(req.params.id));
         if (group) {
             await Database.deleteGroup(group);
             res.send({success: true, message: `Successfully deleted group ${group.name}.`})
@@ -51,7 +51,7 @@ groups.delete('/:id', errorCatch(async (req: Request, res:Response) => {
 // Edit group
 groups.patch('/:id', errorCatch(async (req: Request, res:Response) => {
     if (req.params.id && !isEmpty(req.params.id) && isInt(req.params.id)) {
-        const group = await Database.getGroup(req.params.id);
+        const group = await Database.getGroup(parseInt(req.params.id, 10));
         if (group) {
             modifyGroup(group, req.body);
             await Database.modifyGroup(group);

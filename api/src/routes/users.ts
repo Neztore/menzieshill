@@ -96,6 +96,7 @@ users.post('/register', errorCatch(async (req: Request, res: Response): Promise<
 }));
 
 users.post('/login', errorCatch(async (req: Request, res: Response) => {
+    console.log(`w`)
     // Validations - Username can be username OR email.
     let { username, password } = req.body;
     const errors = [];
@@ -185,7 +186,7 @@ users.get('/:id', errorCatch(async (req: Request, res:Response) => {
 
     if (hasPerms(req.user, [Perms.Admin])) {
 
-        const user = await Database.getUser(req.params.id);
+        const user = await Database.getUser(parseInt(req.params.id, 10));
         if (user) {
             res.send(user);
         } else {
@@ -223,7 +224,7 @@ users.patch('/:userId/groups', errorCatch(async (req: Request, res: Response) =>
 
     if (req.params.userId && !isEmpty(req.params.userId) && isNumeric(req.params.userId)) {
         // Add permission check HERE.
-        const user = await Database.getUser(req.params.userId);
+        const user = await Database.getUser(parseInt(req.params.userId, 10));
         if (user) {
             // Check permissions then modify it.
             if (req.body.groups && Array.isArray(req.body.groups)) {

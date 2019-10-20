@@ -37,6 +37,12 @@ function showContent (pos) {
     }
   }
 }
+// IE detector.
+const ua = window.navigator.userAgent;
+const msie = ua.indexOf("MSIE ");
+if (msie > 0) {
+  alert("We've noticed you are using Internet explorer.\nPlease note that some features on this site are not supported by your browser.\n\nIf possible, please upgrade to a newer browser.\nThanks :)")
+}
 
 
 

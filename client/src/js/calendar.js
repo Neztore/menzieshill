@@ -1,123 +1,60 @@
 // Javascript code for the Calendar widget.
+const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October" , "November", "December"];
 
-function addDay (date) {
-  const calendar = document.getElementsByClassName("calendar")[0]
-  if (!calendar) { return console.error("Failed to hook calendar!") }
-
-  const day = document.createElement("div");
-  day.className = "day"
-
-  const dayTitle = document.createElement("h3");
-  dayTitle.className = "is-size-5"
-  const dayText = document.createTextNode(parseDate(date))
-  dayTitle.appendChild(dayText)
-
-  day.appendChild(dayTitle)
-  calendar.appendChild(day)
-  return day
-}
-
-/*
-  Todo
-    - Add start and end support
-    - Add pop-up modal
-    - Different colour support?
-    - (Maybe) try to make it look better?
-    - Add scroll to current day.
- */
-
-
-function addEvent (day, eventInfo) {
-  const event = document.createElement("div")
-  event.className = "event has-background-primary"
-  // Todo: Custom background / random background?
-
-  const time = document.createElement("span")
-  time.className = "time"
-  const timeText = document.createTextNode(eventInfo.time + ": ") // this probably isn't right
-  time.appendChild(timeText)
-  event.appendChild(time)
-
-  const eventText = document.createTextNode(eventInfo.name)
-  event.appendChild(eventText)
-
-  day.appendChild(event)
-}
-
-
-
-const d = addDay(new Date())
-addEvent(d, {
-  time: "17:00",
-  name: "Swimming Session",
-})
-
-addEvent(d, {
-  time: "17:00",
-  name: "Water Polo session",
-})
-
-addEvent(d, {
-  time: "17:00",
-  name: "session",
-})
-const d2 = addDay(new Date())
-addEvent(d2, {
-  time: "00:00",
-  name: "New day celebration event.",
-})
-
-
-addEvent(d2, {
-  time: "15:00",
-  name: "party.",
-})
-
-
-const d3 = addDay(new Date())
-addEvent(d3, {
-  time: "00:00",
-  name: "New day celebration event.",
-})
-
-
-addEvent(d3, {
-  time: "15:00",
-  name: "party.",
-})
-
-const dLast = addDay(new Date())
-addEvent(dLast, {
-  time: "00:00",
-  name: "Last day.",
-})
-
-
-addEvent(dLast, {
-  time: "15:00",
-  name: "ok.",
-})
-
-
-function eventClicked () {
-
-}
-
-function scrollToToday () {
-
-}
-
-
-function openModal (eventInfo) {
-
-}
-
-function closeModal () {
-
-
-}
 
 function parseDate (dateString) {
   const d = new Date(dateString);
   return `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
 }
+
+// Date stuff
+// Done to prevent polluting globals.
+// Not class because of I.E and it doesn't really make much of a difference.
+const calendar = {
+  displayDate: new Date(),
+  init () {
+    const calendar = document.getElementsByClassName("calendar")[0];
+    this.calendar = calendar
+    // Bind arrows
+    calendar.getElementsByClassName("next")[0].addEventListener("click", this.nextMonth.bind(this))
+    calendar.getElementsByClassName("prev")[0].addEventListener("click", this.prevMonth.bind(this))
+
+    // initial state
+    this.update()
+
+  },
+  prevMonth: function  () {
+    this.displayDate.setMonth(this.displayDate.getMonth() + 1)
+    this.update()
+  },
+  nextMonth: function () {
+    const currentMonth = this.displayDate.getMonth()
+    this.displayDate.setMonth( currentMonth+ 1)
+    this.update()
+  },
+
+  update: function () {
+    const monthInfo = this.calendar.getElementsByClassName("month-info")[0]
+    // Set month text
+    monthInfo.children[0].innerText = months[this.displayDate.getMonth()]
+    // account for <br> with 2
+    monthInfo.children[2].innerText = this.displayDate.getFullYear()
+},
+  startDay (month, year) {
+    return new Date(year, month, 1).getDay();
+  },
+  daysInMonth (month, year) {
+    // 0 wraps around to previous month. Hence, +1.
+    return new Date(year, month + 1, 0).getDate();
+  },
+
+
+}
+
+
+
+addEventListener("load", function () {
+
+  calendar.init()
+
+})

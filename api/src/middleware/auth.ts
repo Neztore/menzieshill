@@ -17,12 +17,16 @@ import { authLife } from '../../config'
 function makeMiddleware (requiredPerms?: Perms[]) {
     return async function checkAuth (req: Request, res: Response, next: NextFunction) {
         // For if auth is done, we're just checking member
-        if (req.user && requiredPerms) {
-            if (!hasPerms(req.user, requiredPerms)) {
-                res.status(errors.unauthorized.error.status);
-                return res.send(errors.forbidden)
+        if (req.user) {
+            if (requiredPerms) {
+                if (!hasPerms(req.user, requiredPerms)) {
+                    res.status(errors.unauthorized.error.status);
+                    return res.send(errors.forbidden)
+                } else {
+                    return next()
+                }
             } else {
-                return next()
+                next()
             }
         }
 

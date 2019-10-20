@@ -3,7 +3,7 @@ Global (Shared CSS)
 Copyright Menzieshill Whitehall Swimming and Water Polo club 2019.
  */
 
-/* Calendar */
+/* Calendar *//*
 .calendar {
     overflow-y: scroll;
     padding: 0 1em 1em;
@@ -33,4 +33,4 @@ Copyright Menzieshill Whitehall Swimming and Water Polo club 2019.
 
 .calendar .day .event .time {
     font-weight: bold;
-}
+}*/

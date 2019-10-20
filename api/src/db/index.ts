@@ -1,9 +1,12 @@
-import {Connection, createConnection, Repository} from "typeorm";
+import {Connection, createConnection, Repository, TreeRepository} from "typeorm";
+import { RootString } from "../util";
 import User from './entity/User.entity'
 import Auth from "./entity/Auth.entity";
 import Group from "./entity/Group.entity";
 import CalendarEvent from "./entity/Event.entity";
 import Cancellation from "./entity/Cancellation.entity";
+import Folder from "./entity/Folder.entity";
+import File from "./entity/File.entity";
 
 class Database {
     constructor () {
@@ -15,16 +18,20 @@ class Database {
     groups: Repository<Group>;
     events: Repository<CalendarEvent>;
     cancellations: Repository<Cancellation>;
+    files: Repository<File>;
+    folders: TreeRepository<Folder>;
 
     init () {
         createConnection().then(connection => {
 
             this._connection = connection;
-            this.users = this._connection.getRepository(User);
             this.auth = this._connection.getRepository(Auth);
+            this.users = this._connection.getRepository(User);
             this.groups = this._connection.getRepository(Group);
             this.events = this._connection.getRepository(CalendarEvent);
             this.cancellations = this._connection.getRepository(Cancellation);
+            this.folders = this._connection.getTreeRepository(Folder);
+            this.files = this._connection.getRepository(File);
 
             return this._connection
         }).catch(error => console.log(error));
@@ -147,6 +154,61 @@ class Database {
 
     checkCancellation (cancellation: Cancellation) {
         return this.cancellations.find({ when: cancellation.when, event: cancellation.event })
+    }
+
+    saveFolder (folder: Folder) {
+        return this.folders.save(folder)
+    }
+
+    deleteFolder (folder: Folder) {
+        return this.folders.remove(folder);
+    }
+
+    getFolder (id: number) {
+        return this.folders.findOne(id, {relations: ["files", "accessGroups", "children"]})
+    }
+    async getFolderRoot(rootName: RootString): Promise<Folder> {
+        const actualName = `${rootName}_ROOT`;
+        const roots = await this.folders.findRoots();
+
+        for (let counter = 0; counter < roots.length; counter++) {
+            if (roots[counter].name === actualName) {
+                const full = await this.getFolder(roots[counter].id);
+                if (!full) {
+                    // what??
+                    return roots[counter]
+                }
+                return full;
+            }
+        }
+        // It's not found. Create it.
+        const newRoot = new Folder();
+        newRoot.name = actualName;
+        await this.saveFolder(newRoot);
+        return newRoot;
+    }
+
+    async addFolder (parent: Folder, newFolder: Folder) {
+        newFolder.parent = parent;
+        return this.folders.save(newFolder);
+    }
+
+    async getFolderParents (folder: Folder) {
+        return this.folders
+            .createAncestorsQueryBuilder("folder", "folderClosure", folder)
+            .leftJoinAndSelect("folder.accessGroups", "accessGroups")
+            .getMany();
+    }
+    saveFile (file: File) {
+        return this.files.save(file)
+    }
+
+    getFile (fileLoc: string) {
+        return this.files.findOne(fileLoc, {relations: ["accessGroups", "creator"]});
+    }
+
+    deleteFile (file: File) {
+        return this.files.remove(file);
     }
 
 }

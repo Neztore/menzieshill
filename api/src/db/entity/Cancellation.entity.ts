@@ -20,7 +20,7 @@ export class Cancellation {
     @ManyToOne(() => User)
     cancelledBy: Partial<User>;
 
-    @ManyToOne(() => CalendarEvent, event => event.cancellations)
+   @ManyToOne(() => CalendarEvent, event => event.cancellations, {onDelete: "CASCADE"})
     event: CalendarEvent;
 
     // Many to many notifyGroups (Future)

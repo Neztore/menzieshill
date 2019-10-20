@@ -80,7 +80,7 @@ events.post('/', errorCatch(async (req: Request, res: Response)=>{
 // ALl these APIs depend on /:eventId
 events.all('/:eventId*', errorCatch(async (req: Request, res: Response, next: NextFunction)=>{
     if (validId(req.params.eventId)) {
-        const event = await Database.getEvent(req.params.eventId);
+        const event = await Database.getEvent(parseInt(req.params.eventId, 10));
         if (event) {
             req.event = event;
             return next();
@@ -123,18 +123,19 @@ function modifyEvent (event: CalendarEvent, body: any): CalendarEvent {
     }
 
     // Colour
-    if (body.colour && EventColour[body.colour]) {
-        const typed = body.colour as keyof typeof EventColour;
-        event.colour = EventColour[typed]
+    const typedColour = body.colour as keyof typeof EventColour;
+    if (typedColour && EventColour[typedColour]) {
+        event.colour = EventColour[typedColour]
     }
 
-    if (body.type && EventType[body.type]) {
-        const typed = body.type as keyof typeof EventType;
-        event.type = EventType[typed]
+    const typedType = body.type as keyof typeof EventType;
+    if (typedType && EventType[typedType]) {
+
+        event.type = EventType[typedType]
     }
 
-    if (body.repeat && Repeat[body.repeat]) {
-        const typedRepeat = body.repeat as keyof typeof Repeat;
+    const typedRepeat = body.repeat as keyof typeof Repeat;
+    if (typedRepeat && Repeat[typedRepeat]) {
         event.repeat = Repeat[typedRepeat]
     }
     return event
@@ -155,7 +156,7 @@ events.delete('/:eventId', errorCatch(async (req: Request, res: Response)=>{
 
 // Cancellations
 
-// Add cancellation TODO: Already exist check
+// Add cancellation
 events.post('/:eventId/cancel', errorCatch(async (req: Request, res: Response)=>{
     // Validation
         if (req.event && req.user) {
@@ -194,7 +195,7 @@ events.patch('/:eventId/cancel/:cancelId', errorCatch(async (req: Request, res: 
     // These two WILL be defined. They're checked to please typescript.
     if (req.event && req.user && validId(req.params.cancelId)) {
         // Event exists: Validate cancellation params.
-        const cancellation = await Database.getCancellation(req.params.cancelId);
+        const cancellation = await Database.getCancellation(parseInt(req.params.cancelId, 10));
         if (!cancellation) {
             return res.status(404).send(errorGenerator(404, "Cancellation not found."))
         }
@@ -238,7 +239,7 @@ function modifyCancellation (cancellation: Cancellation, body: any, event: Calen
 // Delete cancellation
 events.delete('/:eventId/cancel/:cancelId', errorCatch(async (req: Request, res: Response)=>{
     if (req.event && validId(req.params.cancelId)) {
-        const cancellation = await Database.getCancellation(req.params.cancelId);
+        const cancellation = await Database.getCancellation(parseInt(req.params.cancelId, 10));
         if (cancellation) {
             await Database.deleteCancellation(cancellation);
             res.send({success: true, message: "Deleted cancellation."})
