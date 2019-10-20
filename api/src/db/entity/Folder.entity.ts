@@ -1,36 +1,27 @@
 import {
     Entity,
     Tree,
-    Column,
-    PrimaryGeneratedColumn,
     TreeChildren,
     TreeParent,
-    OneToMany, JoinColumn, ManyToMany, JoinTable
+    OneToMany, PrimaryGeneratedColumn,
 } from "typeorm";
 import File from "./File.entity";
-import Group from "./Group.entity";
+import FSElement from "./FSElement.abstract.entity";
 
 @Entity()
 @Tree("closure-table")
-export class Folder {
-
+export class Folder extends FSElement{
+    // Contains all files held by THIS folder.
     @PrimaryGeneratedColumn()
     id: number;
-
-    @Column()
-    name: string;
 
     @OneToMany(()=>File, file =>file.folder)
     files: File[];
 
-    @ManyToMany(()=>Group)
-    @JoinTable()
-    accessGroups: Group[];
-
     @TreeChildren()
-    children: Element[];
+    children: Folder[];
 
     @TreeParent()
-    parent: Element;
+    parent: Folder;
 }
 export default Folder
