@@ -1,49 +1,43 @@
 // Global
 // Copyright Menzieshill Whitehall Swimming and Water Polo club 2019.
 console.log("%c Menzieshill Whitehall Swimming & WP site.", "font-size: 2em;")
-
-function bindControl () {
-  const controllers = document.querySelector(".page-control ul").children;
-  if (!controllers) { return console.error(`Failed to bind control for sub-page.`) }
-
-  // Set initial
-  showContent(0)
-
-  for (let i=0; i<controllers.length;i++) {
-    controllers[i].addEventListener("click", function () {
-
-      for (let c =0; c < controllers.length; c++) {
-        if (c===i) {
-          controllers[c].className = "is-active"
-        } else {
-          controllers[c].className = ""
-        }
-      }
-
-      showContent(i)
-    })
-  }
-}
-
-function showContent (pos) {
-  const content = document.getElementsByClassName("page-content")[0]
-  if (!content) { return console.error(`Failed to bind content for sub-page.`) }
-
-  for (let i =0; i<content.children.length; i++) {
-    if (i===pos) {
-      content.children[i].style.display = "block"
-    } else {
-      content.children[i].style.display = "none"
-    }
-  }
-}
+console.log("%c Please do NOT type anything here, unless you know exactly what you are doing.", "font-size: 1.5em; color: red; font-weight: bold;")
+console.log("%c The console is often used to trick people into giving other people access to their account.", "font-size: 1.25em; color: orange;")
 // IE detector.
-const ua = window.navigator.userAgent;
-const msie = ua.indexOf("MSIE ");
-if (msie > 0) {
+function getIEVersion() {
+  var sAgent = window.navigator.userAgent;
+  var Idx = sAgent.indexOf("MSIE");
+
+  // If IE, return version number.
+  if (Idx > 0)
+    return parseInt(sAgent.substring(Idx+ 5, sAgent.indexOf(".", Idx)));
+
+  // If IE 11 then look for Updated user agent string.
+  else if (!!navigator.userAgent.match(/Trident\/7\./))
+    return 11;
+
+  else
+    return 0; //It is not IE
+}
+if (getIEVersion > 0) {
   alert("We've noticed you are using Internet explorer.\nPlease note that some features on this site are not supported by your browser.\n\nIf possible, please upgrade to a newer browser.\nThanks :)")
+  console.log("%c Internet explorer is not supported: Please upgrade!", "font-size: 2em; color: red")
+}
+
+
+function createErrorMessage (msg) {
+  // TODO: Better error system
+  console.error(msg)
 }
 
 
 
-window.addEventListener("load", bindControl)
+// Binds all close buttons
+document.addEventListener('DOMContentLoaded', () => {
+  (document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
+    $notification = $delete.parentNode;
+    $delete.addEventListener('click', () => {
+      $notification.parentNode.removeChild($notification);
+    });
+  });
+});

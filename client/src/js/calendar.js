@@ -9,9 +9,9 @@ function parseDate (dateString) {
 
 // Date stuff
 // Done to prevent polluting globals.
-// Not class because of I.E and it doesn't really make much of a difference.
 const calendar = {
   displayDate: new Date(),
+  selectedDate: new Date(),
   init () {
     const calendar = document.getElementsByClassName("calendar")[0];
     this.calendar = calendar;
@@ -32,7 +32,8 @@ const calendar = {
     this.displayDate.setMonth( currentMonth+ 1)
     this.update()
   },
-
+  // Don't ask me how this works.
+  // Honestly? I don't know. Trial and error till the numbers worked.
   update: function () {
     const monthInfo = this.calendar.getElementsByClassName("month-info")[0]
     // Set month text
@@ -43,9 +44,8 @@ const calendar = {
     const columns = [];
 
     // Better way to remove?
-    while (daysContainer.children.length !== 0) {
-      console.log("Remove child")
-      daysContainer.removeChild(daysContainer.children[0])
+    while (daysContainer.firstChild) {
+      daysContainer.removeChild(daysContainer.firstChild)
     }
 
     for (let counter = 0; counter < 7; counter++) {
@@ -61,30 +61,61 @@ const calendar = {
       columns.push(daysList)
     }
 
-    const initial = this.startDay(this.displayDate.getFullYear(), this.displayDate.getMonth());
+    let initial = this.startDay(this.displayDate.getFullYear(), this.displayDate.getMonth());
     const endDay = this.daysInMonth(this.displayDate.getFullYear(), this.displayDate.getMonth());
 
-    // Add blanks
-    for (let count = 0; count < initial - 1; count++) {
-      const newDay = document.createElement("li");
-      newDay.innerText = "-";
-      columns[count].appendChild(newDay)
+
+    if (initial === 0) {
+      // sunday.
+      initial = 7
     }
+    initial = initial - 1
+    // Add blanks
 
+    let day = 0
+    for (let counter = 0; counter <= (endDay + (initial - 1)); counter ++) {
+      if ((counter) < initial) {
+        // Blank
+        const newDay = document.createElement("li");
+        newDay.innerText = "-";
+        newDay.className = "blank"
+        columns[day].appendChild(newDay)
+      } else {
 
-    let day = initial - 1;
-    for (let counter = initial + 1; counter <= endDay + initial; counter ++) {
-      const newDay = document.createElement("li");
-      newDay.innerText = counter - initial;
-      if (!columns[day]) console.log("!!!", day)
-      columns[day].appendChild(newDay);
+        const newDay = document.createElement("li");
 
+        const dayOfMonth = (counter - initial) + 1
+        newDay.innerText = dayOfMonth
 
+        // Use this to check for events to add / selections.
+        const date = new Date(this.displayDate.getFullYear(), this.displayDate.getMonth(), dayOfMonth)
+        this.setupDay(newDay, date)
+
+        columns[day].appendChild(newDay);
+      }
       if (day===6) {
         day = 0
       } else day++;
     }
 },
+
+  // Add click events etc.
+  async setupDay(dayElement, date) {
+    if (this.selectedDate.toDateString() === date.toDateString()) {
+      dayElement.className = "active"
+    }
+    const that = this
+    dayElement.addEventListener("click", function () {
+      that.selectedDate = date
+      that.update()
+    })
+
+    // Check for events
+    //TODO: Add start,end dates.
+    const events = await Api.getEvents()
+
+  },
+
   startDay (year, month) {
     return new Date(year, month, 1).getDay();
   },

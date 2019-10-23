@@ -60,6 +60,7 @@ body {font-family: Verdana, sans-serif;}
     padding: 10px 0;
     background: #eee;
     margin: 0;
+
 }
 
 .days li {
@@ -67,13 +68,20 @@ body {font-family: Verdana, sans-serif;}
     text-align: center;
     margin-bottom: 5px;
     color: #777;
+    padding: 0.4em 0;
+    cursor: pointer;
+
 }
 
 /* Highlight the "current" day */
-.days li .active {
-    padding: 5px;
+.days ul .active {
     background: #1abc9c;
-    color: white !important
+    color: white !important;
+    border-radius: 10px;
+}
+
+.days ul .blank {
+    visibility: hidden;
 }
 
 .noselect {
