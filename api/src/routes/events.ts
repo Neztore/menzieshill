@@ -11,6 +11,11 @@ const events = Router();
 
 // Note - I did some testing. 100 Events is about 25kb, and we won't even have nearly that many.
 // Get all events around current date.
+events.use(function (_req, _res, next) {
+   console.log(`Event request.`)
+    next();
+});
+
 events.get('/', errorCatch(async (req: Request, res: Response)=>{
     // Defaults
     let min: Date = new Date();

@@ -34,7 +34,8 @@ const calendar = {
   },
   // Don't ask me how this works.
   // Honestly? I don't know. Trial and error till the numbers worked.
-  update: function () {
+  update: async function () {
+    const events = await Api.getEvents()
     const monthInfo = this.calendar.getElementsByClassName("month-info")[0]
     // Set month text
     monthInfo.children[0].innerText = months[this.displayDate.getMonth()];
@@ -112,7 +113,7 @@ const calendar = {
 
     // Check for events
     //TODO: Add start,end dates.
-    const events = await Api.getEvents()
+
 
   },
 

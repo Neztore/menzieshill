@@ -26,8 +26,28 @@ if (getIEVersion > 0) {
 
 
 function createErrorMessage (msg) {
-  // TODO: Better error system
-  console.error(msg)
+  // TODO: Better error system - sentry
+  console.error(msg);
+
+  const notification = document.createElement("div")
+  notification.className = "notification is-warning"
+
+  const title = document.createElement("h1")
+  title.className  = "is-size-5"
+
+  title.innerText = "Oops! Something went wrong."
+  notification.appendChild(title)
+
+  const errorText = document.createTextNode(""+msg)
+  notification.appendChild(errorText)
+
+  const closeButton = document.createElement("button");
+  closeButton.className = "delete"
+  closeButton["aria-label"] = "close"
+  notification.appendChild(closeButton)
+
+  document.body.prepend(notification)
+
 }
 
 

@@ -27,7 +27,7 @@ import files from './routes/files'
 // Set up
 const app = express();
 sentry.init({ dsn: sentryDsn });
-
+// TODO: Set CORS
 
 
 // Global middleware
@@ -37,17 +37,25 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 
+// Global
+
+app.use(function(_req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+  next();
+});
+
 // Routes
 
 // Routes NOT requiring auth (or only partly requiring login).
 app.use('/users', users);
 app.use('/posts', posts);
 app.use('/files', files);
+app.use('/events', events);
 
 // Routes requiring auth
 app.use(auth());
 app.use('/groups', groups);
-app.use('/events', events);
+
 
 
 app.get('/', (_req, res) => res.send({
