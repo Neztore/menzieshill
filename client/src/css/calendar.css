@@ -9,6 +9,10 @@ body {font-family: Verdana, sans-serif;}
     text-align: center;
 }
 
+.specialColour {
+    background: #1abc9c;
+}
+
 /* Month list */
 .month ul {
     margin: 0;
@@ -92,4 +96,22 @@ body {font-family: Verdana, sans-serif;}
     -ms-user-select: none; /* Internet Explorer/Edge */
     user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Opera and Firefox */
+}
+
+.events-display .events-padding {
+    padding: 0 1em 1em 0;
+}
+
+.events-display .notification {
+    margin-bottom: 0.5em;
+    cursor: pointer;
+}
+
+.events-display .time {
+    margin-left: 0.75em;
+}
+
+
+.events-display .event {
+
 }

@@ -12,6 +12,8 @@ function parseDate (dateString) {
 const calendar = {
   displayDate: new Date(),
   selectedDate: new Date(),
+  events: [], // Array of ALL events.
+  loadedMonths: [],
   init () {
     const calendar = document.getElementsByClassName("calendar")[0];
     this.calendar = calendar;
@@ -90,6 +92,7 @@ const calendar = {
 
         // Use this to check for events to add / selections.
         const date = new Date(this.displayDate.getFullYear(), this.displayDate.getMonth(), dayOfMonth)
+        const ev = await this.getEventsOnDay(date);
         this.setupDay(newDay, date)
 
         columns[day].appendChild(newDay);
@@ -98,12 +101,56 @@ const calendar = {
         day = 0
       } else day++;
     }
+
+    const eventsDisplay = document.getElementsByClassName("events-display")[0];
+    const dayHeader = eventsDisplay.getElementsByTagName("h1")[0]
+    console.log(dayHeader)
+    dayHeader.innerText = this.selectedDate.toDateString();
+    const eventsContainer = eventsDisplay.getElementsByClassName("events-padding")[0]
+
+    const hours = []
+    for (const event of await this.getEventsOnDay(this.selectedDate)) {
+      const timeString = new Date(event.when).toLocaleTimeString()
+      const processedTime = timeString.substr(0, 4) + " " + timeString.substr(8, 9)
+
+      // Get existing one for this hour, if it exists.
+      let existing = hours.find((ele)=> ele.attributes.time.textContent === processedTime)
+      if (!existing) {
+        // create new
+        existing = document.createElement("div")
+        existing.setAttribute("time", processedTime)
+        existing.className = "time"
+
+        const timeText = document.createElement("h5")
+        timeText.className = "is-size-5"
+        timeText.innerText = processedTime
+        existing.appendChild(timeText);
+
+        eventsContainer.appendChild(existing)
+        hours.push(existing);
+      }
+      const eventItem = document.createElement("div")
+      const colourClass = this.colourMappings[event.colour]
+      eventItem.className = `notification has-background-${colourClass}`
+      eventItem.innerText = event.name
+      existing.appendChild(eventItem)
+
+      existing.addEventListener("click", function () {
+        this.viewEvent(event)
+      })
+
+    }
+
+
 },
 
   // Add click events etc.
-  async setupDay(dayElement, date) {
+  async setupDay(dayElement, date, dayEvents) {
     if (this.selectedDate.toDateString() === date.toDateString()) {
       dayElement.className = "active"
+      // Setup selected day.
+      const selectedEvents = await this.getEventsOnDay(this.selectedDate);
+
     }
     const that = this
     dayElement.addEventListener("click", function () {
@@ -117,6 +164,25 @@ const calendar = {
 
   },
 
+  viewEvent (eventInfo) {
+
+  },
+  async getEventsOnDay(date) {
+    return [
+      {
+        "id": 1,
+        "name": "Test event",
+        "when": "2019-10-24T19:35:46.300Z",
+        "description": "second block!",
+        "colour": "White",
+        "type": "WaterPolo",
+        "repeat": "None",
+        "created": "2019-10-24T18:36:07.116Z",
+        "cancellations": []
+      }
+    ]
+  },
+
   startDay (year, month) {
     return new Date(year, month, 1).getDay();
   },
@@ -124,7 +190,16 @@ const calendar = {
     // 0 wraps around to previous month. Hence, +1.
     return new Date(year, month + 1, 0).getDate();
   },
-
+  colourMappings: {
+    LightGrey: "grey-light",
+    Turqoise: "primary",
+    Yellow: "warning",
+    Green: "success",
+    White: "white",
+    Black: "black",
+    Blue: "info",
+    Red: "danger"
+  }
 
 };
 

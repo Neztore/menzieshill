@@ -1,18 +1,38 @@
 const Api = {}
 const baseUrl = "http://localhost:3000"
-Api._cache = {};
+
+Api._cache = {
+  events: {}
+};
 
 
 // TODO: Add date support & caching.
-Api.getEvents = async function  () {
+Api.getEvents = async function  (startDate, endDate) {
+  let url = "/events?";
+  if (startDate||endDate) {
+    if (startDate) {
+      url += `min=${encodeURIComponent(startDate.toJSON())}&`
+    }
+    if (endDate) {
+      url += `max=${encodeURIComponent(endDate.toJSON())}`
+    }
+  }
 
-    const events = await this.get("/events")
+  // Basic URL based caching.
+  if (this._cache["events"][url]) {
+    console.log(`Cache hit!`)
+    //return this._cache["events"][url]
+  }
+
+
+  const events = await this.get(url)
 
   if (events.error) {
     createErrorMessage(events.error.message)
     throw new Error(events.error.message)
   }
-  this._cache.events = events;
+
+  this._cache["events"][url] = events;
   return events
 }
 
