@@ -21,7 +21,7 @@ Api.getEvents = async function  (startDate, endDate) {
   // Basic URL based caching.
   if (this._cache["events"][url]) {
     console.log(`Cache hit!`)
-    //return this._cache["events"][url]
+    return this._cache["events"][url]
   }
 
 
@@ -38,16 +38,16 @@ Api.getEvents = async function  (startDate, endDate) {
 
 Api.get = function (url, options) {
   if (!options) options = {}
-  options.method = "GET"
+  options.method = "GET";
   return this._makeRequest(url, options)
-}
+};
 
 
 Api._makeRequest = async function (url, options) {
-  const startChar = url.substr(0, 1)
+  const startChar = url.substr(0, 1);
 
-  url = (startChar === '/') ? `${baseUrl}${url}` : `/${url}`
-  const req = await fetch(url, options)
+  url = (startChar === '/') ? `${baseUrl}${url}` : `/${url}`;
+  const req = await fetch(url, options);
   console.log(req)
   const json = await req.json();
   console.log(json)

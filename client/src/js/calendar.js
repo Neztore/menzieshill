@@ -37,7 +37,7 @@ const calendar = {
   // Don't ask me how this works.
   // Honestly? I don't know. Trial and error till the numbers worked.
   update: async function () {
-    const events = await Api.getEvents()
+    //const events = await Api.getEvents()
     const monthInfo = this.calendar.getElementsByClassName("month-info")[0]
     // Set month text
     monthInfo.children[0].innerText = months[this.displayDate.getMonth()];
@@ -46,10 +46,7 @@ const calendar = {
     const daysContainer = this.calendar.getElementsByClassName("days")[0];
     const columns = [];
 
-    // Better way to remove?
-    while (daysContainer.firstChild) {
-      daysContainer.removeChild(daysContainer.firstChild)
-    }
+    removeChildren(daysContainer)
 
     for (let counter = 0; counter < 7; counter++) {
       // For each column
@@ -81,19 +78,19 @@ const calendar = {
         // Blank
         const newDay = document.createElement("li");
         newDay.innerText = "-";
-        newDay.className = "blank"
+        newDay.className = "blank";
         columns[day].appendChild(newDay)
       } else {
 
         const newDay = document.createElement("li");
 
-        const dayOfMonth = (counter - initial) + 1
-        newDay.innerText = dayOfMonth
+        const dayOfMonth = (counter - initial) + 1;
+        newDay.innerText = dayOfMonth;
 
         // Use this to check for events to add / selections.
         const date = new Date(this.displayDate.getFullYear(), this.displayDate.getMonth(), dayOfMonth)
         const ev = await this.getEventsOnDay(date);
-        this.setupDay(newDay, date)
+        this.setupDay(newDay, date);
 
         columns[day].appendChild(newDay);
       }
@@ -103,11 +100,13 @@ const calendar = {
     }
 
     const eventsDisplay = document.getElementsByClassName("events-display")[0];
-    const dayHeader = eventsDisplay.getElementsByTagName("h1")[0]
-    console.log(dayHeader)
-    dayHeader.innerText = this.selectedDate.toDateString();
-    const eventsContainer = eventsDisplay.getElementsByClassName("events-padding")[0]
 
+    const dayHeader = eventsDisplay.getElementsByTagName("h1")[0];
+
+    dayHeader.innerText = this.selectedDate.toDateString();
+
+    const eventsContainer = eventsDisplay.getElementsByClassName("events-padding")[0]
+    removeChildren(eventsContainer)
     const hours = []
     for (const event of await this.getEventsOnDay(this.selectedDate)) {
       const timeString = new Date(event.when).toLocaleTimeString()
@@ -117,23 +116,23 @@ const calendar = {
       let existing = hours.find((ele)=> ele.attributes.time.textContent === processedTime)
       if (!existing) {
         // create new
-        existing = document.createElement("div")
-        existing.setAttribute("time", processedTime)
-        existing.className = "time"
+        existing = document.createElement("div");
+        existing.setAttribute("time", processedTime);
+        existing.className = "time";
 
-        const timeText = document.createElement("h5")
-        timeText.className = "is-size-5"
-        timeText.innerText = processedTime
+        const timeText = document.createElement("h5");
+        timeText.className = "is-size-5";
+        timeText.innerText = processedTime;
         existing.appendChild(timeText);
 
-        eventsContainer.appendChild(existing)
+        eventsContainer.appendChild(existing);
         hours.push(existing);
       }
-      const eventItem = document.createElement("div")
-      const colourClass = this.colourMappings[event.colour]
+      const eventItem = document.createElement("div");
+      const colourClass = this.colourMappings[event.colour];
       eventItem.className = `notification has-background-${colourClass}`
-      eventItem.innerText = event.name
-      existing.appendChild(eventItem)
+      eventItem.innerText = event.name;
+      existing.appendChild(eventItem);
 
       existing.addEventListener("click", function () {
         this.viewEvent(event)
@@ -148,13 +147,10 @@ const calendar = {
   async setupDay(dayElement, date, dayEvents) {
     if (this.selectedDate.toDateString() === date.toDateString()) {
       dayElement.className = "active"
-      // Setup selected day.
-      const selectedEvents = await this.getEventsOnDay(this.selectedDate);
-
     }
-    const that = this
+    const that = this;
     dayElement.addEventListener("click", function () {
-      that.selectedDate = date
+      that.selectedDate = date;
       that.update()
     })
 
@@ -165,7 +161,8 @@ const calendar = {
   },
 
   viewEvent (eventInfo) {
-
+    const modal = document.createElement("div")
+    modal.className = ""
   },
   async getEventsOnDay(date) {
     return [
@@ -210,3 +207,10 @@ addEventListener("load", function () {
   calendar.init()
 
 });
+
+function removeChildren(element) {
+  while (element.firstChild) {
+    element.removeChild(element.firstChild)
+  }
+
+}
