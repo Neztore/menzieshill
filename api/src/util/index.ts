@@ -101,9 +101,13 @@ const validName = (username: string|undefined) => username && !isEmpty(username)
 const validFileName = (username: string|undefined) => username && !isEmpty(username) && isWhitelisted(username, whitelistChars + " ") && isLength(username, { min: 1, max: 30 });
 const validPassword = (password: string|undefined) => password && !isEmpty(password) && isAscii(password) && isLength(password, { min: 8, max: 50 });
 const validId = (id: string|undefined) => id && !isEmpty(id) && isInt(id) && parseInt(id, 10) > 0;
+const validString = (username: string|undefined, length?: number) => { if (length) {
+    return username && !isEmpty(username) && isLength(username, { min: 3, max: length || 0 })
+} else return username && !isEmpty(username);
+};
 
-const cleanString = (str: string|undefined)=> {
-    if (!str) return false;
+
+const cleanString = (str: string)=> {
     return escape(stripLow(trim(str), true))
 };
 type RootString = "archive"|"photos"|"docs"
@@ -125,6 +129,7 @@ export {
     validUsername,
     cleanString,
     validId,
+    validString,
     validFileName,
     RootString
 

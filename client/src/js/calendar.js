@@ -2,11 +2,6 @@
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October" , "November", "December"];
 
 
-function parseDate (dateString) {
-  const d = new Date(dateString);
-  return `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
-}
-
 // Date stuff
 // Done to prevent polluting globals.
 const calendar = {

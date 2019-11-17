@@ -49,7 +49,10 @@ function createErrorMessage (msg) {
   document.body.prepend(notification)
 
 }
-
+function parseDate (dateString) {
+  const d = new Date(dateString);
+  return `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
+}
 
 
 // Binds all close buttons

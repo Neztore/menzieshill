@@ -27,5 +27,9 @@ app.get('/waterpolo', (req, res) =>
   res.sendFile(path.join(pagePath, "waterpolo.html"))
 )
 
+app.get('/posts/*', (req, res) =>
+  res.sendFile(path.join(pagePath, "post.html"))
+)
+
 
 app.listen(port, () => console.log(`Client listening: port ${port}!`))

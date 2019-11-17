@@ -225,9 +225,8 @@ events.patch('/:eventId/cancel/:cancelId', errorCatch(async (req: Request, res: 
 }));
 
 function modifyCancellation (cancellation: Cancellation, body: any, event: CalendarEvent) {
-    const reason = cleanString(body.reason);
-    if (reason) {
-        cancellation.reason = reason
+    if (body.reason && typeof body.reason === "string") {
+        cancellation.reason = cleanString(body.reason);
     }
     // Only required if event is a repeatable.
     if (body.when && event.repeat !== Repeat.None) {

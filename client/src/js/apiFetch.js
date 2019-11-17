@@ -2,7 +2,6 @@ const Api = {}
 const baseUrl = "http://localhost:3000"
 
 Api._cache = {
-  events: {}
 };
 
 
@@ -19,9 +18,8 @@ Api.getEvents = async function  (startDate, endDate) {
   }
 
   // Basic URL based caching.
-  if (this._cache["events"][url]) {
-    console.log(`Cache hit!`)
-    return this._cache["events"][url]
+  if (this._cache[url]) {
+    return this._cache[url]
   }
 
 
@@ -32,8 +30,24 @@ Api.getEvents = async function  (startDate, endDate) {
     throw new Error(events.error.message)
   }
 
-  this._cache["events"][url] = events;
+  this._cache[url] = events;
   return events
+}
+
+Api.getPosts = async function (page) {
+
+  const url = page ? `/posts/list/${page}` : `/posts/list`
+  if (this._cache[url]) {
+    return this._cache[url]
+  }
+
+  const posts = await this.get(url)
+  if (posts.success) {
+    this._cache[url] = posts.posts;
+    return posts.posts
+  } else {
+    createErrorMessage(posts.error.message)
+  }
 }
 
 Api.get = function (url, options) {

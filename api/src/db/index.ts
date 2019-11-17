@@ -7,6 +7,7 @@ import CalendarEvent from "./entity/Event.entity";
 import Cancellation from "./entity/Cancellation.entity";
 import Folder from "./entity/Folder.entity";
 import File from "./entity/File.entity";
+import Post from "./entity/Post.entity";
 
 class Database {
     constructor () {
@@ -20,6 +21,7 @@ class Database {
     cancellations: Repository<Cancellation>;
     files: Repository<File>;
     folders: TreeRepository<Folder>;
+    posts: Repository<Post>;
 
     init () {
         createConnection().then(connection => {
@@ -32,6 +34,7 @@ class Database {
             this.cancellations = this._connection.getRepository(Cancellation);
             this.folders = this._connection.getTreeRepository(Folder);
             this.files = this._connection.getRepository(File);
+            this.posts = this._connection.getRepository(Post);
 
             return this._connection
         }).catch(error => console.log(error));
@@ -209,6 +212,24 @@ class Database {
 
     deleteFile (file: File) {
         return this.files.remove(file);
+    }
+
+    savePost (newPost: Post) {
+        return this.posts.save(newPost);
+    }
+
+    getPosts(start: number, amount: number) {
+        return this.posts.find({relations: ["author"], skip: start, take: amount, order: {
+            created: "DESC"
+            }})
+    }
+
+    getPost (id: number) {
+        return this.posts.findOne(id, {relations: ["author"]});
+    }
+
+    deletePost(post: Post) {
+        return this.posts.remove(post);
     }
 
 }

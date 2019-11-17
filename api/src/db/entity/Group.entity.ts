@@ -1,5 +1,6 @@
 import {Entity, Column, PrimaryGeneratedColumn,ManyToMany} from "typeorm";
 import User from "./User.entity";
+import Post from "./Post.entity";
 
 // Must update both list & class.
 // List is the list of Permissions that are accepted via. web request
@@ -69,6 +70,10 @@ export class Group {
 
     @ManyToMany(() => User, (user: User) => user.groups)
     users: User[];
+
+    @ManyToMany(() => Post, (post: Post) => post.groups)
+    posts: Post[];
+
 }
 
 

@@ -11,3 +11,16 @@ Copyright Menzieshill Whitehall Swimming and Water Polo club 2019.
 .text-special-overflow {
     text-overflow: ellipsis;
 }
+.word-break {
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
+    word-break: break-word;
+}
+.posts-parent .card-content {
+    padding: 1rem
+}
+
+.posts-parent .card {
+    border-radius: 5px;
+}
