@@ -7,8 +7,8 @@ const months = ["January", "February", "March", "April", "May", "June", "July", 
 const calendar = {
   displayDate: new Date(),
   selectedDate: new Date(),
-  events: [], // Array of ALL events.
-  loadedMonths: [],
+  events: {}, // Key: Month-Year, value: Array of events
+  recurringEvents: [], // ALL recurring events in an array.
   init () {
     const calendar = document.getElementsByClassName("calendar")[0];
     this.calendar = calendar;
@@ -32,7 +32,6 @@ const calendar = {
   // Don't ask me how this works.
   // Honestly? I don't know. Trial and error till the numbers worked.
   update: async function () {
-    //const events = await Api.getEvents()
     const monthInfo = this.calendar.getElementsByClassName("month-info")[0]
     // Set month text
     monthInfo.children[0].innerText = months[this.displayDate.getMonth()];
@@ -159,22 +158,39 @@ const calendar = {
     const modal = document.createElement("div")
     modal.className = ""
   },
+
   async getEventsOnDay(date) {
-    return [
-      {
-        "id": 1,
-        "name": "Test event",
-        "when": "2019-10-24T19:35:46.300Z",
-        "description": "second block!",
-        "colour": "White",
-        "type": "WaterPolo",
-        "repeat": "None",
-        "created": "2019-10-24T18:36:07.116Z",
-        "cancellations": []
+    const monthString = date.getMonth() + date.getFullYear()
+  // tODO: Pretty sure server should do recurring stuff.
+    if (!this.events[monthString]) {
+      // It hasn't been loaded yet - load it.
+      const monthEvents = await this.getEventsInMonth(date)
+      if (!monthEvents.error) {
+        const recurring = []
+        const normal = []
+        for (let e of monthEvents) {
+          if (e.repeat === "None") {
+            normal.push(e)
+          } else {
+            recurring.push(e)
+          }
+        }
+        this.events[monthString]= normal
+
       }
-    ]
+    }
+    const eventsOnDay = []
+    for (let event of this.events[monthString]) {
+
+    }
+
   },
 
+  getEventsInMonth (date) {
+    const start = new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0, 1)
+    const end = new Date(date.getFullYear(), date.getMonth() + 1, 0, 0, 0, 0, 0)
+    return Api.getEvents(start, end)
+  },
   startDay (year, month) {
     return new Date(year, month, 1).getDay();
   },

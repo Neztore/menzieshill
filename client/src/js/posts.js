@@ -57,8 +57,8 @@ const Posts = {
         const text = document.createElement("p")
         text.className = "is-size-6"
       let contentString = postInfo.content
-        if (contentString > 100) {
-          contentString = postInfo.content.substr(0, 100);
+        if (contentString.length > 150) {
+          contentString = postInfo.content.substr(0, 150);
           contentString += "..."
         }
         text.innerText = contentString
@@ -78,7 +78,7 @@ const Posts = {
         readMore.className = "card-footer-item"
 
         const link = document.createElement("a")
-        link.href = `${baseUrl}/posts/${postInfo.id}`
+        link.href = `/posts/${postInfo.id}`
         link.innerText = "More"
         readMore.appendChild(link)
 

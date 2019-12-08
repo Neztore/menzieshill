@@ -10,10 +10,13 @@ const jsPath = path.join(srcPath, "js")
 const cssPath = path.join(srcPath, "css")
 const imgPath = path.join(srcPath, "img")
 const pagePath = path.join(srcPath, "pages")
+const sharedPath = path.join(srcPath, "shared")
 
 app.use('/js', express.static(jsPath))
 app.use('/css', express.static(cssPath))
 app.use('/img', express.static(imgPath))
+app.use('/shared', express.static(sharedPath))
+
 
 app.get('/', (req, res) =>
 res.sendFile(path.join(pagePath, "index.html"))
@@ -29,6 +32,10 @@ app.get('/waterpolo', (req, res) =>
 
 app.get('/posts/*', (req, res) =>
   res.sendFile(path.join(pagePath, "post.html"))
+)
+
+app.get('/archive', (req, res) =>
+  res.sendFile(path.join(pagePath, "archive.html"))
 )
 
 

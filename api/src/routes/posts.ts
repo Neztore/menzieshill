@@ -61,9 +61,9 @@ posts.post('/', errorCatch(async (req: Request, res: Response) =>{
 }));
 
 posts.patch('/:postId', errorCatch(async (req: Request, res: Response) =>{
-    if (!req.user) return;
-    if (validId(req.params.id)) {
-        const post = await Database.getPost(parseInt(req.params.id, 10));
+    if (!req.user) return console.error("No user.");
+    if (validId(req.params.postId)) {
+        const post = await Database.getPost(parseInt(req.params.postId, 10));
         if (!post) {
             return res.status(404).send(errorGenerator(404, "Post not found."))
         }
@@ -79,7 +79,7 @@ posts.patch('/:postId', errorCatch(async (req: Request, res: Response) =>{
             return res.status(400).send(errorGenerator(400, "Bad group id provided", {badIds: errors}))
         }
 
-        if (!post.title || post.content) {
+        if (!post.title || !post.content) {
             return res.status(400).send(errorGenerator(400, "You must provide both title and content for this post."))
         }
         post.author = req.user;
@@ -88,7 +88,7 @@ posts.patch('/:postId', errorCatch(async (req: Request, res: Response) =>{
         res.send({success: true, message: "Successfully updated post", result})
 
     } else {
-
+        res.status(400).send(errorGenerator(400, "Bad post id."))
     }
 
 }));
