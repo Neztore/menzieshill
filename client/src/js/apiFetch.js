@@ -1,5 +1,5 @@
-const Api = {}
-const baseUrl = "http://localhost:3000"
+var Api = {}
+var BaseUrl = "http://localhost:3000"
 
 Api._cache = {
 };
@@ -34,6 +34,26 @@ Api.getEvents = async function  (startDate, endDate) {
   return events
 }
 
+Api.getGroups = async function  () {
+  let url = "/groups";
+
+  if (this._cache[url]) {
+    return this._cache[url]
+  }
+
+
+  const groups = await this.get(url)
+
+  if (groups.error) {
+    createErrorMessage(groups.error.message)
+    throw new Error(groups.error.message)
+  }
+
+  this._cache[url] = groups;
+  return groups
+}
+
+
 Api.getPosts = async function (page) {
 
   const url = page ? `/posts/list/${page}` : `/posts/list`
@@ -56,14 +76,66 @@ Api.get = function (url, options) {
   return this._makeRequest(url, options)
 };
 
+Api.post = function (url, options) {
+  try {
+    if (!options) options = {}
+    options.method = "POST";
+    options.credentials = "include"
+
+    // POST Body processing
+    if (options.body && typeof options.body !== "string") {
+      options.body = JSON.stringify(options.body)
+      if (!options.headers) options.headers = {}
+      options.headers["Content-Type"] = "application/json"
+    }
+
+    return this._makeRequest(url, options)
+  } catch (e) {
+    console.error(e)
+    createErrorMessage(e.message)
+  }
+};
+
+Api.patch = function (url, options) {
+  try {
+    if (!options) options = {}
+    options.method = "PATCH";
+    options.credentials = "include"
+
+    // PATCH Body processing
+    if (options.body && typeof options.body !== "string") {
+      options.body = JSON.stringify(options.body)
+      if (!options.headers) options.headers = {}
+      options.headers["Content-Type"] = "application/json"
+    }
+
+    return this._makeRequest(url, options)
+  } catch (e) {
+    console.error(e)
+    createErrorMessage(e.message)
+  }
+};
+
+Api.delete = function (url, options) {
+  try {
+    if (!options) options = {}
+    options.method = "DELETE";
+    options.credentials = "include"
+
+    return this._makeRequest(url, options)
+  } catch (e) {
+    console.error(e)
+    createErrorMessage(e.message)
+  }
+};
+
 
 Api._makeRequest = async function (url, options) {
   const startChar = url.substr(0, 1);
+  options.credentials = "include"
 
-  url = (startChar === '/') ? `${baseUrl}${url}` : `/${url}`;
+  url = (startChar === '/') ? `${BaseUrl}${url}` : `/${url}`;
   const req = await fetch(url, options);
-  console.log(req)
   const json = await req.json();
-  console.log(json)
   return json
 }

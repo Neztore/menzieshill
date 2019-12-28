@@ -11,10 +11,6 @@ const events = Router();
 
 // Note - I did some testing. 100 Events is about 25kb, and we won't even have nearly that many.
 // Get all events around current date.
-events.use(function (_req, _res, next) {
-   console.log(`Event request.`)
-    next();
-});
 
 events.get('/', errorCatch(async (req: Request, res: Response)=>{
     // Defaults
@@ -58,8 +54,15 @@ events.get('/', errorCatch(async (req: Request, res: Response)=>{
         max.setUTCHours(0);
         max.setUTCMinutes(0);
     }
+    const normalEvents = await Database.getEvents(min, max);
 
-    res.send(await Database.getEvents(min, max))
+    // Min, max are only used for cancellations.
+    const recurringEvents = await Database.getRecurringEvents(min, max);
+    res.send({
+        recurring: recurringEvents,
+        events: normalEvents,
+        success: true
+    })
 }));
 
 
@@ -79,7 +82,6 @@ events.post('/', errorCatch(async (req: Request, res: Response)=>{
         await Database.modifyEvent(newEvent);
         res.send({success: true, message: `Successfully created Event ${newEvent.name}!`, event: newEvent})
     }
-
 }));
 
 // ALl these APIs depend on /:eventId
@@ -113,9 +115,10 @@ function modifyEvent (event: CalendarEvent, body: any): CalendarEvent {
     if (validName(body.name)) {
         event.name = trim(body.name)
     }
-    const descOk = cleanString(body.description);
-    if (descOk) {
-        event.description = descOk
+
+    if (body.description && typeof body.description === "string") {
+        const desc = cleanString(body.description);
+        event.description = desc
     }
 
     // Date
@@ -125,6 +128,14 @@ function modifyEvent (event: CalendarEvent, body: any): CalendarEvent {
         if (d.getTime() - Date.now() > 0 || d.getTime() - Date.now() < 473364000000) {
             event.when = new Date(body.when)
         }
+    }
+    if (body.length !== undefined && isNaN(body.length)) {
+        const length = parseInt(body.length, 10);
+        if (length > 24 || length <= 0) {
+            event.length = 2 // we ignore the given, invalid values.
+        }
+    } else {
+        event.length = 2
     }
 
     // Colour
@@ -237,6 +248,8 @@ function modifyCancellation (cancellation: Cancellation, body: any, event: Calen
                 cancellation.when = parsed
             }
         }
+    } else {
+        cancellation.when = event.when
     }
 }
 

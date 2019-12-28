@@ -27,18 +27,6 @@ import {checkExists, generateFileExtra, getPath, removeFile, storage} from "../u
 import File from "../db/entity/File.entity";
 import User from "../db/entity/User.entity";
 
-// !! Public: Auth middleware isn't loaded.
-files.get('/photos', errorCatch(async (_req: Request, res: Response): Promise<any> => {
-    res.send(await Database.getFolderRoot('photos'))
-}));
-
-files.get('/archive', errorCatch(async (_req: Request, res: Response): Promise<any> => {
-    res.send(await Database.getFolderRoot('archive'))
-}));
-
-files.get('/docs', errorCatch(async (_req: Request, res: Response): Promise<any> => {
-    res.send(await Database.getFolderRoot('docs'))
-}));
 
 files.use(async function (req, _res, next) {
     if (req.cookies && req.cookies.token && !isEmpty(req.cookies.token) && isLength(req.cookies.token, {min: 100, max: 100})) {
@@ -51,11 +39,35 @@ files.use(async function (req, _res, next) {
     next()
 });
 
+files.get('/photos', errorCatch(async (req: Request, res: Response): Promise<any> => {
+    const folder = await Database.getFolderRoot('photos');
+    checkChildrenPermissions(folder, req.user);
+    res.send(folder)
+}));
+
+files.get('/archive', errorCatch(async (req: Request, res: Response): Promise<any> => {
+    const folder = await Database.getFolderRoot('archive');
+    checkChildrenPermissions(folder, req.user);
+    res.send(folder)
+}));
+
+files.get('/docs', errorCatch(async (req: Request, res: Response): Promise<any> => {
+    const folder = await Database.getFolderRoot('docs');
+    checkChildrenPermissions(folder, req.user);
+    res.send(folder)
+}));
+
+
+// Get folder
 files.get('/:folderId', errorCatch(async (req: Request, res: Response): Promise<any> => {
     if (validId(req.params.folderId)) {
         const folder = await Database.getFolder(parseInt(req.params.folderId, 10));
         if (folder) {
             if (await canAccessFolder(req.user, folder)) {
+                // They can get the folder. Now we check children.
+                // Shows the different ways this can be called.
+               checkChildrenPermissions(folder, req.user);
+
                 res.send(folder)
             } else {
                 res.status(Errors.forbidden.error.status).send(Errors.forbidden)
@@ -67,6 +79,30 @@ files.get('/:folderId', errorCatch(async (req: Request, res: Response): Promise<
         res.status(400).send(errorGenerator(400, "Bad folder id."))
     }
 }));
+
+// Get file
+files.get('/:parent/:loc', errorCatch(async (req: Request, res: Response): Promise<any> => {
+    if (validFileName(req.params.loc)) {
+        const file = await Database.getFile(req.params.loc);
+        if (file) {
+            if (!await canAccessFile(req.user, file)) return res.status(Errors.forbidden.error.status).send(errorGenerator(Errors.forbidden.error.status, "You do not have access to that file."));
+            const exists = await checkExists(file.loc);
+            if (exists) {
+                const path = getPath(file.loc);
+                res.sendFile(path);
+            } else {
+                throw new Error("Image file not found for file " + file.loc)
+            }
+        } else {
+            res.status(400).send(errorGenerator(400, "Invalid file loc."))
+        }
+    } else {
+        res.status(400).send(errorGenerator(400, "Invalid file loc."))
+    }
+
+}));
+
+
 
 files.use(auth([Perms.ManageFiles]));
 // Create folder
@@ -144,8 +180,13 @@ files.delete('/:folderId', errorCatch(async (req: Request, res: Response): Promi
         await Promise.all(promises);
 
         // All 'real' files are gone. Remove folder too.
-        await Database.deleteFolder(folder);
-        return res.send({success: true, message: "Folder removed."});
+        const r = await Database.deleteFolder(folder);
+        if (r === false) {
+            return res.send({success: false, error: {status: 0, message: "Only empty folders can be deleted. Please empty it first."}});
+        } else {
+            return res.send({success: true, message: "Folder removed."});
+        }
+
     } else {
         return res.status(400).send(errorGenerator(400, "Invalid folder id."))
     }
@@ -242,7 +283,7 @@ files.patch('/:parent/files/:loc', errorCatch(async (req: Request, res: Response
 }));
 
 // Delete file
-files.delete('/:parent/files/:loc', errorCatch(async (req: Request, res: Response): Promise<any> => {
+files.delete('/:parent/:loc', errorCatch(async (req: Request, res: Response): Promise<any> => {
     if (validFileName(req.params.loc)) {
         const file = await Database.getFile(req.params.loc);
         if (file) {
@@ -257,27 +298,7 @@ files.delete('/:parent/files/:loc', errorCatch(async (req: Request, res: Respons
     }
 
 }));
-// Get file
-files.get('/:parent/files/:loc', errorCatch(async (req: Request, res: Response): Promise<any> => {
-    if (validFileName(req.params.loc)) {
-        const file = await Database.getFile(req.params.loc);
-        if (file) {
-            if (!await canAccessFile(req.user, file)) return res.status(Errors.forbidden.error.status).send(errorGenerator(Errors.forbidden.error.status, "You do not have access to that file."));
-            const exists = await checkExists(file.loc);
-            if (exists) {
-                const path = getPath(file.loc);
-                res.sendFile(path);
-            } else {
-                throw new Error("Image file not found for file " + file.loc)
-            }
-        } else {
-            res.status(400).send(errorGenerator(400, "Invalid file loc."))
-        }
-    } else {
-        res.status(400).send(errorGenerator(400, "Invalid file loc."))
-    }
 
-}));
 // Get meta data
 files.get('/:parent/files/:loc/info', errorCatch(async (req: Request, res: Response): Promise<any> => {
     if (validFileName(req.params.loc)) {
@@ -302,12 +323,14 @@ async function deleteFile(file: File) {
 
 async function modifyItem (folder: Folder|File, body: any) {
     const errors: string[] = [];
-
-    if (body.name && validName(body.name)) {
-        folder.name = trim(body.name)
-    } else {
-        errors.push(`Invalid item name.`)
+    if (body.name) {
+        if (validName(body.name) && trim(body.name) !== "") {
+            folder.name = trim(body.name)
+        } else {
+            errors.push(`Invalid item name.`)
+        }
     }
+
 
     if (body.accessGroups && Array.isArray(body.accessGroups)) {
         const validGroups: Group[] = [];
@@ -327,10 +350,11 @@ async function modifyItem (folder: Folder|File, body: any) {
             }
         }
         folder.accessGroups = validGroups;
-        return errors;
-    }
-}
 
+    }
+    return errors;
+}
+// TODO: Add admin check - Admins can access all files.
 async function canAccessFile(user: User|undefined, file: File): Promise<boolean> {
     if (hasGroups(user, file.accessGroups)) {
         return await canAccessFolder(user, file.folder);
@@ -339,6 +363,14 @@ async function canAccessFile(user: User|undefined, file: File): Promise<boolean>
 
 
 async function canAccessFolder(user: User|undefined, folder: Folder): Promise<boolean> {
+    if (!folder.accessGroups) {
+        const fetched = await Database.getFolder(folder.id);
+        if (fetched) {
+            folder = fetched
+        } else {
+            throw new Error("Failed to navigate tree for parent permissions.")
+        }
+    }
     if (hasGroups(user, folder.accessGroups)) {
         // They can on THIS item. Check parents.
         const parents = await Database.getFolderParents(folder);
@@ -350,6 +382,29 @@ async function canAccessFolder(user: User|undefined, folder: Folder): Promise<bo
         // we made it here. they're ok
         return true
     } else return false
+}
+
+function checkChildrenPermissions(folder: Folder, user: User | undefined) {
+    function checkItemsAccess(items: Array<File>): Array<File>
+    function checkItemsAccess(items: Array<Folder>): Array<Folder>
+    function checkItemsAccess(items: Array<File|Folder>): Array<File|Folder> {
+        const returnArr = [];
+        if (items && Array.isArray(items)) {
+            for (let item of items) {
+                if (hasGroups(user,item.accessGroups )) {
+                    returnArr.push(item)
+                }
+            }
+        }
+        return returnArr
+    }
+
+
+    const children = checkItemsAccess(folder.children);
+    const files = checkItemsAccess(folder.files);
+
+    folder.children = children;
+    folder.files = files;
 }
 
 

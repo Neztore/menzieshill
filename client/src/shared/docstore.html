@@ -3,30 +3,45 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <script src="/js/docstore.js"></script>
-    <script src="/js/apiFetch.js"></script>
+    <script src="/shared/docstore/docstore.js"></script>
+    <script src="/shared/docstore/docmodal.js"></script>
     <link rel="stylesheet" type="text/css" href="/css/bulma.min.css">
+    <link rel="stylesheet" type="text/css" href="/shared/docstore/docstore.css">
+    <link rel="stylesheet" type="text/css" href="/css/icons.css">
 </head>
 <body>
-<table class="table">
-    <thead>
-    <tr>
-        <th></th>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Created</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <th>C</th>
-        <th>I</th>
-        <td>FileName</td>
-        <td>File type</td>
-        <td>01/01/2018</td>
+<div class="docstore-parent">
 
-    </tr>
-    </tbody>
-</table>
+    <div class="level">
+        <div class="level-left">
+            <div class="level-item">
+                <button class="button add-files">Add file(s)</button>
+            </div>
+        </div>
+
+        <div class="level-left">
+            <div class="level-item">
+                <button class="button add-folder">Add folder</button>
+            </div>
+        </div>
+    </div>
+    <div class="trail breadcrumb">
+
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th></th>
+            <th class="name-heading">Name</th>
+            <th>Type</th>
+            <th>Created</th>
+            <th><span class="icon-cog icon"></span></th>
+        </tr>
+        </thead>
+        <tbody class="data">
+        </tbody>
+    </table>
+</div>
+
 </body>
 </html>

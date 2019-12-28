@@ -50,13 +50,16 @@ export class CalendarEvent {
     @Column({type: "timestamptz"})
     when: Date;
 
+    @Column() // Hours
+    length: number;
+
     @Column({  type: "text", nullable: true })
     description?: string;
 
     @Column({
         type: "enum",
         enum: EventColour,
-        default: EventColour.Turqoise
+        default: EventColour.Blue
     })
     colour: EventColour;
 
@@ -80,6 +83,7 @@ export class CalendarEvent {
 
     @OneToMany(() => Cancellation, cancellation => cancellation.event)
     cancellations: Cancellation[];
+
 
 
 

@@ -8,7 +8,7 @@ export abstract class FSElement {
     @CreateDateColumn()
     created: Date;
 
-    @ManyToMany(()=>Group)
+    @ManyToMany(()=>Group, {eager: true})
     @JoinTable()
     accessGroups: Group[];
 }

@@ -48,7 +48,7 @@ function getPerms (User: User, override?: boolean) {
 function hasGroups(user: User | undefined, requiredGroups: Group[]): boolean {
     if (!user && requiredGroups.length === 0) {
         return true
-        // They aren't logged in. gtfo.
+        // They aren't logged in.
     } else if (!user && requiredGroups.length !== 0) {
         return false
     } else if (user) {
@@ -60,6 +60,10 @@ function hasGroups(user: User | undefined, requiredGroups: Group[]): boolean {
                 if (user.groups[counter].id === required.id) {
                     found = true
                 }
+                if (user.groups[counter].admin) {
+                    return true // technically not true, but they're an admin so who cares. //TODO: Make sure this doesn't conflict with future stuff e.g notifications
+                }
+                counter++
             }
             if (!found) {
                 // They don't have it.
@@ -107,7 +111,7 @@ const validString = (username: string|undefined, length?: number) => { if (lengt
 };
 
 
-const cleanString = (str: string)=> {
+const cleanString = (str: string): string=> {
     return escape(stripLow(trim(str), true))
 };
 type RootString = "archive"|"photos"|"docs"

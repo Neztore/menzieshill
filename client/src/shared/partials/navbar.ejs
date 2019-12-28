@@ -1,25 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Menzieshill Whitehall home</title>
-    <link rel="stylesheet" type="text/css" href="/css/index.css">
-    <link rel="stylesheet" type="text/css" href="/css/global.css">
-    <link rel="stylesheet" type="text/css" href="/css/bulma.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/calendar.css">
-
-    <script src="/js/index.js"></script>
-    <script src="/js/apiFetch.js"></script>
-</head>
-<body>
-<noscript><h1 class="notification is-warning compat-warn">Please enable Javascript to make use of all the features on this site.</h1></noscript>
+<!-- TODO: Make selected 'page' dynamic -->
 <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
         <a class="navbar-item" href="/">
-            <img src="/img/logo.jpg" >
+            <img src="/img/logo.jpg"  alt="Logo">
         </a>
+        <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="main-navbar">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+
     </div>
-    <div class="navbar-menu">
+
+    <div class="navbar-menu" id="main-navbar">
         <div class="navbar-start">
             <a class="navbar-item" href="/">
                 Home
@@ -66,10 +59,30 @@
     </div>
 </nav>
 
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
 
-    <iframe src = "../shared/docstore.html?root=archive" class="docstore">
-        Sorry your browser does not support inline frames.
-    </iframe>
+    // Get all "navbar-burger" elements
+    const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
 
-</body>
-</html>
+    // Check if there are any navbar burgers
+    if ($navbarBurgers.length > 0) {
+
+      // Add a click event on each of them
+      $navbarBurgers.forEach( el => {
+        el.addEventListener('click', () => {
+
+          // Get the target from the "data-target" attribute
+          const target = el.dataset.target;
+          const $target = document.getElementById(target);
+
+          // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+          el.classList.toggle('is-active');
+          $target.classList.toggle('is-active');
+
+        });
+      });
+    }
+
+  });
+</script>

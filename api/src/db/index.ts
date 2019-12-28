@@ -3,14 +3,16 @@ import { RootString } from "../util";
 import User from './entity/User.entity'
 import Auth from "./entity/Auth.entity";
 import Group from "./entity/Group.entity";
-import CalendarEvent from "./entity/Event.entity";
+import CalendarEvent, {Repeat} from "./entity/Event.entity";
 import Cancellation from "./entity/Cancellation.entity";
 import Folder from "./entity/Folder.entity";
 import File from "./entity/File.entity";
 import Post from "./entity/Post.entity";
+import { EventEmitter } from 'events';
 
-class Database {
+class Database extends EventEmitter {
     constructor () {
+        super();
         this.init()
     }
     _connection: Connection;
@@ -25,7 +27,7 @@ class Database {
 
     init () {
         createConnection().then(connection => {
-
+            console.log(`DB online.`);
             this._connection = connection;
             this.auth = this._connection.getRepository(Auth);
             this.users = this._connection.getRepository(User);
@@ -35,7 +37,7 @@ class Database {
             this.folders = this._connection.getTreeRepository(Folder);
             this.files = this._connection.getRepository(File);
             this.posts = this._connection.getRepository(Post);
-
+            this.emit('ready');
             return this._connection
         }).catch(error => console.log(error));
     }
@@ -125,12 +127,26 @@ class Database {
         return this.events.createQueryBuilder('event')
             .where('event.when >= :min', {min})
             .andWhere('event.when <= :max', {max})
+            .where('event.repeat = :none', {none: Repeat.None})
             .leftJoinAndSelect("event.cancellations", "cancellation", "cancellation.when >= :min AND cancellation.when <= :max", { min, max})
+            .leftJoinAndSelect("cancellation.cancelledBy", "cancelledBy")
             .orderBy("event.when", "ASC")
             .limit(500) // We should never hit this, but just incase.
             .getMany();
-
     }
+
+
+    getRecurringEvents (min: Date, max: Date): Promise<CalendarEvent[]> {
+        return this.events.createQueryBuilder('event')
+            .where('event.repeat <> :none', {none: Repeat.None})
+            .leftJoinAndSelect("event.cancellations", "cancellation", "cancellation.when >= :min AND cancellation.when <= :max", { min, max})
+            .leftJoinAndSelect("cancellation.cancelledBy", "cancelledBy")
+            .orderBy("event.when", "ASC")
+            .limit(500) // We should never hit this, but just incase.
+            .getMany();
+    }
+    
+
     getEvent (eventId: number) {
         return this.events.findOne(eventId)
     }
@@ -163,12 +179,32 @@ class Database {
         return this.folders.save(folder)
     }
 
-    deleteFolder (folder: Folder) {
-        return this.folders.remove(folder);
+    /*
+        So, as it turns out TypeOrm closure tables don't support automatically removing closure table references.
+        And, since they were so kind to not add references in the documentation regarding this issue (which goes back 2+ years)
+        until after I started fucking using them, this function is a lot more complicated than it should be.
+     */
+    // TODO: Add recycle bin, or equivalent. This could be done by adding another root - The bin.
+    async deleteFolder (folder: Folder) {
+        const desc = await this.folders.findDescendants(folder);
+        if (desc.length !== 0) {
+            if (desc[0].id !== folder.id) {
+                return false
+            }
+        }
+        await this._connection
+            .createQueryBuilder()
+            .delete()
+            .from("folder_closure")
+            .where('"id_descendant" = :id', { id: folder.id })
+            //.orWhere("id_ancestor = :id", { id: folder.id })
+            .execute();
+
+        return this.folders.remove(folder)
     }
 
     getFolder (id: number) {
-        return this.folders.findOne(id, {relations: ["files", "accessGroups", "children"]})
+        return this.folders.findOne(id, {relations: ["files", "children", "parent"]})
     }
     async getFolderRoot(rootName: RootString): Promise<Folder> {
         const actualName = `${rootName}_ROOT`;
@@ -207,7 +243,7 @@ class Database {
     }
 
     getFile (fileLoc: string) {
-        return this.files.findOne(fileLoc, {relations: ["accessGroups", "creator"]});
+        return this.files.findOne(fileLoc, {relations: ["accessGroups", "creator", "folder"]});
     }
 
     deleteFile (file: File) {

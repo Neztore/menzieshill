@@ -16,6 +16,8 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import auth from './middleware/auth'
 import 'reflect-metadata'
+import db from './db'
+import cors from 'cors'
 
 // Routes
 import users from './routes/users'
@@ -28,7 +30,10 @@ import files from './routes/files'
 const app = express();
 sentry.init({ dsn: sentryDsn });
 // TODO: Set CORS
-
+app.use(cors({
+  origin: ["localhost", "http://localhost", "https://localhost"],
+  credentials: true
+}));
 
 // Global middleware
 app.use(sentry.Handlers.requestHandler());
@@ -39,10 +44,6 @@ app.use(cookieParser());
 
 // Global
 
-app.use(function(_req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
-  next();
-});
 
 // Routes
 
@@ -79,5 +80,7 @@ process.on('uncaughtException', err => {
   process.exit(1) //mandatory (as per the Node.js docs)
 });
 
+db.once('ready', function () {
+  app.listen(port, () => console.log(`Menzieshill API starting on ${port}.`));
+});
 
-app.listen(port, () => console.log(`Menzieshill API starting on ${port}.`));

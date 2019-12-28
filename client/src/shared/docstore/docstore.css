@@ -1,0 +1,34 @@
+.data tr:hover {
+    background: #efefef;
+}
+
+.data tr:hover {
+    background: #efefef;
+}
+
+.data td:nth-child(2) {
+    cursor: pointer;
+}
+
+.data {
+    border-bottom: 1px solid #0a0a0a;
+}
+/*Affects all apart from last child.*/
+.docstore-parent .trail li:nth-last-child(n+2)  {
+    cursor: pointer;
+    color: blue;
+}
+
+
+.docstore-parent .table{
+    width: 100%;
+}
+.docstore-parent {
+    width: 50%;
+    padding-left: 0.3em;
+}
+
+.docstore-parent .icon-cog {
+    cursor: pointer;
+}
+

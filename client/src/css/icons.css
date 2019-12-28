@@ -1,0 +1,51 @@
+@font-face {
+  font-family: 'icomoon';
+  src:  url('/css/fonts/icomoon.eot?siglxu');
+  src:  url('/css/fonts/icomoon.eot?siglxu#iefix') format('embedded-opentype'),
+    url('/css/fonts/icomoon.ttf?siglxu') format('truetype'),
+    url('/css/fonts/icomoon.woff?siglxu') format('woff'),
+    url('/css/fonts/icomoon.svg?siglxu#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-check:before {
+  content: "\f00c";
+}
+.icon-times-circle:before {
+  content: "\f057";
+}
+.icon-folder-open:before {
+  content: "\f07c";
+}
+.icon-user-circle:before {
+  content: "\f2bd";
+}
+.icon-cog:before {
+  content: "\e994";
+}
+.icon-rocket:before {
+  content: "\e9a5";
+}
+.icon-facebook:before {
+  content: "\ea90";
+}
+.icon-facebook2:before {
+  content: "\ea91";
+}

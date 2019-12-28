@@ -4,6 +4,8 @@ const path = require("path")
 const app = express()
 const port = 80;
 
+app.set('view engine', 'ejs');
+
 const srcPath = path.join(__dirname, "src")
 
 const jsPath = path.join(srcPath, "js")
@@ -17,25 +19,30 @@ app.use('/css', express.static(cssPath))
 app.use('/img', express.static(imgPath))
 app.use('/shared', express.static(sharedPath))
 
-
+// TODO: Move to app.render for caching of generated pages.
+// No point in doing it now - will just make development harder.
 app.get('/', (req, res) =>
-res.sendFile(path.join(pagePath, "index.html"))
+res.render(path.join(pagePath, "index.ejs"))
 )
 
 app.get('/swimming', (req, res) =>
-  res.sendFile(path.join(pagePath, "swimming.html"))
+  res.render(path.join(pagePath, "swimming.ejs"))
 )
 
 app.get('/waterpolo', (req, res) =>
-  res.sendFile(path.join(pagePath, "waterpolo.html"))
+  res.render(path.join(pagePath, "waterpolo.ejs"))
 )
 
 app.get('/posts/*', (req, res) =>
-  res.sendFile(path.join(pagePath, "post.html"))
+  res.render(path.join(pagePath, "post.ejs"))
 )
 
 app.get('/archive', (req, res) =>
-  res.sendFile(path.join(pagePath, "archive.html"))
+  res.render(path.join(pagePath, "archive.ejs"))
+)
+
+app.get('/login', (req, res) =>
+  res.render(path.join(pagePath, "login.ejs"))
 )
 
 

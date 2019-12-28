@@ -1,11 +1,9 @@
 // Manages the display of posts.
 // TODO: Add page dependent settings.
-console.log("posts")
 const Posts = {
     page: 0,
     init () {
         this.addPosts();
-        console.log("init")
         this.postsContainer = document.getElementsByClassName("posts-parent")[0]
     },
     // Every new one add column
@@ -31,7 +29,6 @@ const Posts = {
         }
     },
     addPost (postInfo, parent) {
-        console.log(`Add post `, parent)
       // Todo: Add facebook/image support;
         const column = document.createElement("div")
         column.className = "column is-one-quarter"

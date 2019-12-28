@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Menzieshill Whitehall home</title>
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <link rel="stylesheet" type="text/css" href="/css/global.css">
+    <link rel="stylesheet" type="text/css" href="/css/bulma.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/calendar.css">
+
+    <script src="/js/index.js"></script>
+    <script src="/js/apiFetch.js"></script>
+</head>
+<body>
+<noscript><h1 class="notification is-warning compat-warn">Please enable Javascript to make use of all the features on this site.</h1></noscript>
+<%- include('../shared/partials/navbar.ejs'); %>
+
+
+    <iframe src = "../shared/docstore.html?root=archive" class="docstore">
+        Sorry your browser does not support inline frames.
+    </iframe>
+<%- include('../shared/partials/footer.ejs'); %>
+</body>
+</html>

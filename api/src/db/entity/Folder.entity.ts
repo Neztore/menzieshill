@@ -18,7 +18,9 @@ export class Folder extends FSElement{
     @OneToMany(()=>File, file =>file.folder)
     files: File[];
 
-    @TreeChildren()
+    @TreeChildren({
+      //  cascade: ["remove"]
+    })
     children: Folder[];
 
     @TreeParent()
