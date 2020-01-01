@@ -4,3 +4,6 @@
 .login-container .end-space {
     margin-top: 1em;
 }
+.has-text-grey {
+ !important;
+}

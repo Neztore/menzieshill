@@ -88,73 +88,7 @@
     </div>
 </section>
 
-<section class="section">
-    <!-- Calandar? !-->
-    <h1 class="title has-text-centered">Calendar</h1>
-
-    <div class="columns">
-        <div class="column is-half ">
-            <div class="calendar">
-                <div class="month noselect">
-                    <ul>
-                        <li class="prev">&#10094;</li>
-                        <li class="next">&#10095;</li>
-                        <li class="month-info">
-                            <span>Month</span><br>
-                            <span style="font-size:18px">Year</span>
-                        </li>
-                    </ul>
-                </div>
-
-
-                <div class="weekdays columns has-text-centered is-mobile">
-                    <div class="column">
-                        <span class="weekday">Mo</span>
-                    </div>
-
-                    <div class="column">
-                        <span class="weekday">Tu</span>
-                    </div>
-
-                    <div class="column">
-                        <span class="weekday">We</span>
-                    </div>
-                    <div class="column">
-                        <span class="weekday">Th</span>
-                    </div>
-
-                    <div class="column">
-                        <span class="weekday">Fr</span>
-                    </div>
-                    <div class="column">
-                        <span class="weekday">Sa</span>
-                    </div>
-                    <div class="column">
-                        <span class="weekday">Su</span>
-                    </div>
-                </div>
-
-
-                <div class="days columns has-text-centered is-mobile">
-
-                </div>
-
-
-            </div>
-        </div>
-        <div class="column is-half">
-            <div class="events-display">
-                <!-- Current date info. -->
-                <h1 class="is-size-2 has-text-centered specialColour has-text-white">Sat Oct 26 2019</h1>
-                <div class="has-background-light events-padding">
-
-                </div>
-
-            </div>
-        </div>
-
-    </div>
-</section>
+<%- include('../shared/partials/calendar.ejs'); %>
 
 <section class="section">
     <!-- "Recent posts" -->

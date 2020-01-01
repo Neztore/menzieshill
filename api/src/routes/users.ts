@@ -34,29 +34,29 @@ users.post('/register', errorCatch(async (req: Request, res: Response): Promise<
     let { username, password, email, firstName, lastName } = req.body;
 
     if (!validUsername(username)) {
-        errors.push('Username must be between 3 and 20 characters and contain only letters, numbers and the symbols ".", "-" or "_".');
+        errors.push({field: "username", msg: 'Username must be between 3 and 20 characters and contain only letters, numbers and the symbols ".", "-" or "_".'});
     } else {
         username = trim(escape(username))
     }
 
     if (!validPassword(password)) {
-        errors.push("Password must be between 8 and 50 characters.")
+        errors.push({field: "password", msg: "Password must be between 8 and 50 characters."})
     }
 
     if (!email || isEmpty(email) || !isEmail(email)) {
-        errors.push("Invalid email: Please check it and try again.")
+        errors.push({field: "email", msg: "Invalid email: Please check it and try again."})
     } else {
         email = normalizeEmail(email)
     }
 
     if (!firstName || isEmpty(firstName) || !isAlpha(firstName)) {
-        errors.push("Invalid first name: Please check it and try again.")
+        errors.push({field: "firstName", msg: "Invalid first name: Please check it and try again."})
     } else {
         firstName = trim(escape(firstName))
     }
 
     if (!lastName || isEmpty(lastName) || !isAlpha(lastName)) {
-        errors.push("Invalid last name: Please check it and try again.")
+        errors.push({field: "lastName", msg: "Invalid last name: Please check it and try again."})
     } else {
         lastName = trim(escape(lastName))
     }
@@ -68,8 +68,10 @@ users.post('/register', errorCatch(async (req: Request, res: Response): Promise<
         // No errors. Continue.
         // Check for already existing user
         const exists = await Database.checkUserExists(username, email);
+
         if (exists) {
-            res.status(400).send(errorGenerator(400, "Username or email is already associated with an existing account."))
+            const msg = exists.username === username ? {field: "username", msg: "Username is already in use by another account."}:{field: "email", msg:"This email is already in use on another account."};
+            res.status(400).send(errorGenerator(400, "Username or email is already associated with an existing account.", {errors: [msg]}))
         } else {
 
             // Hash - 12 hash rounds.
@@ -96,7 +98,6 @@ users.post('/register', errorCatch(async (req: Request, res: Response): Promise<
 }));
 
 users.post('/login', errorCatch(async (req: Request, res: Response) => {
-    console.log(`w`)
     // Validations - Username can be username OR email.
     let { username, password } = req.body;
     const errors = [];
@@ -113,7 +114,7 @@ users.post('/login', errorCatch(async (req: Request, res: Response) => {
 
     if (errors.length !== 0) {
         // There are errors: Return them
-        return res.status(400).send(errorGenerator(400, "Bad registration information", {errors: errors}));
+        return res.status(400).send(errorGenerator(400, "Invalid username or password.", {errors: errors}));
     }
     // Actual logic
 
@@ -153,15 +154,14 @@ users.post('/login', errorCatch(async (req: Request, res: Response) => {
 
             // Send cookie to client
             res
-                .status(201)
                 .cookie('token', token, {
                 httpOnly: true,
                 /* A week */
                 expires: new Date(Date.now() + 604800000),
                 //secure: true During dev we have no https. Probably should enable in future.
-            })
+            });
                 // TODO: Make this compatible with client somehow.
-                .redirect(301, '/home')
+                res.send({success: true, message: "Logged in as " + user.username})
 
 
         } else {

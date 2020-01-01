@@ -41,6 +41,10 @@ app.get('/archive', (req, res) =>
   res.render(path.join(pagePath, "archive.ejs"))
 )
 
+app.get('/register', (req, res) =>
+  res.render(path.join(pagePath, "register.ejs"))
+)
+
 app.get('/login', (req, res) =>
   res.render(path.join(pagePath, "login.ejs"))
 )

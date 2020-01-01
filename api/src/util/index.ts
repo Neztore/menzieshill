@@ -1,10 +1,11 @@
 // Some shared things
-import {errorCatch, errorHandler, errors, errorGenerator} from "./errors";
-import { randomBytes } from "crypto";
+import {errorCatch, errorGenerator, errorHandler, errors} from "./errors";
+import {randomBytes} from "crypto";
 import User from "../db/entity/User.entity";
-import {isAscii, isEmpty, isLength, isWhitelisted, trim, stripLow, escape} from "validator";
+import {escape, isAscii, isEmpty, isInt, isLength, isWhitelisted, stripLow, trim} from "validator";
 import Group, {Permission} from "../db/entity/Group.entity";
-import isInt = require("validator/lib/isInt");
+import fetch from 'node-fetch'
+import { recaptchaToken } from '../../config'
 
 // Len: length in letters.
 function generateToken (): Promise<string> {
@@ -110,6 +111,34 @@ const validString = (username: string|undefined, length?: number) => { if (lengt
 } else return username && !isEmpty(username);
 };
 
+function checkRecaptcha(token) {
+    return post(`https://www.google.com/recaptcha/api/siteverify`, { //recaptchaToken
+        body: {
+
+        }
+    })
+}
+
+
+function post(url:string, options:any) {
+        if (!options) options = {};
+        options.method = "POST";
+        // POST Body processing
+        if (options.body && typeof options.body !== "string") {
+            options.body = JSON.stringify(options.body);
+            if (!options.headers) options.headers = {};
+            options.headers["Content-Type"] = "application/json"
+        }
+        return makeRequest(url, options)
+}
+
+
+async function makeRequest(url: string, options: any) {
+    const req = await fetch(url, options);
+    return await req.json()
+}
+
+
 
 const cleanString = (str: string): string=> {
     return escape(stripLow(trim(str), true))
@@ -135,7 +164,9 @@ export {
     validId,
     validString,
     validFileName,
-    RootString
+    RootString,
+    makeRequest,
+    post
 
 }
 

@@ -2,52 +2,57 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Register</title>
     <link rel="stylesheet" type="text/css" href="/css/global.css">
     <link rel="stylesheet" type="text/css" href="/css/bulma.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/login.css">
+    <link rel="stylesheet" type="text/css" href="/css/register.css">
 
     <script src="/js/index.js"></script>
     <script src="/js/apiFetch.js"></script>
-    <script src="/js/login.js"></script>
+    <script src="/js/register.js"></script>
 </head>
 <body>
-<noscript><h1 class="notification is-warning compat-warn">Please enable Javascript to make use of all the features on this site.</h1></noscript>
 <%- include('../shared/partials/navbar.ejs'); %>
 <section class="section">
     <div class="columns">
 
-        <div class="column is-5 is-offset-4">
+        <div class="column is-half is-offset-one-quarter">
 
 
             <div class="login-container box">
                 <h1 class="is-size-2 has-text-centered">Register</h1>
-                <p class="has-text-centered">Fill out this form to create an account on our website, which is useful for keeping up to date but mainly for admins.</p>
+                <p class="has-text-centered">Fill out this form to create an account on our website, which is useful for keeping up to date.</p>
                 <hr>
         <form class="form control">
             <label class="label" for="first-name">Full name</label>
-            <div class="field is-grouped">
-                <div class="control">
-                    <input class="input" type="text" placeholder="First name" id="first-name" name="firstName">
-                    <p class="help"></p>
-                </div>
-                <div class="control">
-                    <input class="input" type="text" placeholder="Second name" id="second-name" name="lastName">
-                    <p class="help"></p>
+            <div class="field is-horizontal">
+                <div class="field-body">
+                    <div class="field">
+                        <div class="control is-expanded">
+                            <input class="input" type="text" placeholder="First name" id="first-name" max="30">
+                        </div>
+                    </div>
+                    <div class="field">
+                    <div class="control is-expanded">
+                        <input class="input" type="text" placeholder="Second name" id="last-name" max="30">
+                    </div>
+                    </div>
                 </div>
             </div>
 
             <div class="field">
                 <label class="label" for="email">Email address</label>
                 <div class="control">
-                    <input class="input" type="email" placeholder="username@domain.com" name="email" id="email">
+                    <input class="input" type="email" placeholder="username@domain.com" id="email" max="50">
+                    <p class="help">This must be unique - no other account can use it.</p>
                 </div>
             </div>
 
             <div class="field">
                 <label class="label" for="password">Password</label>
                 <div class="control">
-                    <input class="input" type="password" placeholder="Should be long & complex." name="password" id="password">
+                    <input class="input" type="password" placeholder="Your password" name="password" id="password" min="6">
+                    <p class="help">This should be more than 6 characters and complex.</p>
                 </div>
             </div>
 
@@ -67,14 +72,26 @@
 
             <div class="field">
                 <div class="control">
-                    <button class="button is-link">Submit</button>
+                    <label class="checkbox" for="terms-agreement">
+                        <input type="checkbox" id="terms-agreement" name="terms" value="terms-agreed"> <!-- Isn't sent to server. Is used for client side.-->
+                        I agree to the <a href="/terms">terms and conditions.</a>
+                    </label>
+                </div>
+            </div>
+
+
+            <div class="field">
+                <div class="control">
+                    <input class="button is-link" type="submit" disabled id="submit" value="Submit"/>
                 </div>
 
             </div>
 
 
+
         </form>
     </div>
+            <p class="has-text-centered has-text-grey"><a href="/login">Login</a></p>
         </div>
     </div>
 </section>
