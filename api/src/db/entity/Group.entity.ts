@@ -49,6 +49,7 @@ export class Group {
     @Column({  default: "false"})
     manageEvents: boolean;
 
+
     // Can create, edit and delete images and files.
     @Column({  default: "false"})
     manageFiles: boolean;

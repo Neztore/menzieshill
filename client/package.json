@@ -5,13 +5,27 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start": "node server.js",
+    "dev": "parcel watch src/admin/index.html --public-url=/admin",
+    "build": "parcel build src/admin/index.html"
   },
   "author": "Josh Muir",
   "license": "UNLICENSED",
   "dependencies": {
+    "@types/react": "^16.9.17",
+    "@types/react-dom": "^16.9.4",
+    "@types/react-router-dom": "^5.1.3",
+    "babel-polyfill": "^6.26.0",
     "ejs": "^3.0.1",
     "eslint-config-standard": "^14.1.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-router-dom": "^5.1.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.3",
+    "@babel/preset-env": "^7.8.3",
+    "typescript": "^3.7.5"
   }
 }

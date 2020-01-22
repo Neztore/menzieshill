@@ -1,6 +1,9 @@
 var Api = {}
 var BaseUrl = "http://localhost:3000"
 
+if (typeof module !== 'undefined') {
+  module.exports = Api
+}
 Api._cache = {
 };
 

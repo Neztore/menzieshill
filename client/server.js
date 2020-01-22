@@ -14,15 +14,26 @@ const imgPath = path.join(srcPath, "img")
 const pagePath = path.join(srcPath, "pages")
 const sharedPath = path.join(srcPath, "shared")
 
+const distPath = path.join(__dirname, "dist")
+
 app.use('/js', express.static(jsPath))
 app.use('/css', express.static(cssPath))
 app.use('/img', express.static(imgPath))
 app.use('/shared', express.static(sharedPath))
+app.use('/admin', express.static(distPath))
+
+
+
 
 // TODO: Move to app.render for caching of generated pages.
 // No point in doing it now - will just make development harder.
 app.get('/', (req, res) =>
 res.render(path.join(pagePath, "index.ejs"))
+)
+
+app.get('/admin/*', (req, res) =>
+  res.sendFile(path.join(distPath, "index.html"))
+
 )
 
 app.get('/swimming', (req, res) =>

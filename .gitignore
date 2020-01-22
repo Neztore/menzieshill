@@ -94,3 +94,5 @@ api/build/
 api/ormconfig.js
 
 api/config.js
+
+client/dist/

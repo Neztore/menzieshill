@@ -111,12 +111,16 @@ const validString = (username: string|undefined, length?: number) => { if (lengt
 } else return username && !isEmpty(username);
 };
 
-function checkRecaptcha(token) {
-    return post(`https://www.google.com/recaptcha/api/siteverify`, { //recaptchaToken
-        body: {
 
+async function checkRecaptcha(token: string): Promise<boolean|string> {
+    const res = await  post(`https://www.google.com/recaptcha/api/siteverify`, { //recaptchaToken
+        body: {
+            secret: recaptchaToken,
+            response: token
         }
-    })
+    });
+    return res.success;
+
 }
 
 
@@ -156,6 +160,7 @@ export {
     Perms,
     hasPerms,
     hasGroups,
+    checkRecaptcha,
 
     validName,
     validPassword,

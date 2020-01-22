@@ -10,7 +10,7 @@
     <script src="/js/index.js"></script>
     <script src="/js/apiFetch.js"></script>
     <script src="/js/login.js"></script>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+   <!-- <script src="https://www.google.com/recaptcha/api.js" async defer></script>-->
 </head>
 <body>
 <%- include('../shared/partials/navbar.ejs'); %>
@@ -48,13 +48,17 @@
                             </label>
                         </div>
                     </div>
-
-
                     <div class="field">
+                        <div class="control">
+                            <input class="button is-link" type="submit" id="submit" value="Submit" onsubmit="onSubmit"/>
+                        </div>
+                    </div>
+
+                  <!--  <div class="field">
                         <div class="control">
                             <input class="button is-link g-recaptcha" type="submit" id="submit" value="Submit" data-sitekey="6LePDMsUAAAAAHZT30VD-yAfVwsKfJJhG9DpZg9M" data-callback="onSubmit"/>
                         </div>
-                    </div>
+                    </div>-->
 
 
 

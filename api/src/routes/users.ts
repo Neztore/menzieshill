@@ -161,7 +161,7 @@ users.post('/login', errorCatch(async (req: Request, res: Response) => {
                 //secure: true During dev we have no https. Probably should enable in future.
             });
                 // TODO: Make this compatible with client somehow.
-                res.send({success: true, message: "Logged in as " + user.username})
+                res.send({success: true, message: "Logged in."})
 
 
         } else {

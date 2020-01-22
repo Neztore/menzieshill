@@ -11,7 +11,9 @@ document.addEventListener("DOMContentLoaded", function () {
   })
 
 
-  async function onSubmit (t) {
+  async function onSubmit (e) {
+    console.log("Submit!")
+    e.preventDefault()
     const username = fields.username.value;
     const password = fields.password.value;
     if (username && password && username !== "" && password !== "") {
@@ -19,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
          body: {
            username,
            password,
-           recaptcha: t
+          // recaptchaToken: t
          }
        });
       if (res.error) {
@@ -30,8 +32,9 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
       showError("Please fill out both username and password.")
     }
+    return false;
   }
-  window.onSubmit = onSubmit
+  form.addEventListener("submit", onSubmit)
 
 
   function showError (text) {

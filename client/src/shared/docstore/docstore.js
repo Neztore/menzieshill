@@ -170,7 +170,7 @@ class DocStore {
       if (arr.length > 1) {
         typeString = arr[arr.length - 1].toLowerCase()
       } else {
-        typeString = "Unkown"
+        typeString = "Unknown"
       }
 
     } else {
