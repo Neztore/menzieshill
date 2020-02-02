@@ -48,7 +48,7 @@
             </div>
         </div>
         <div class="navbar-end">
-            <div class="navbar-item">
+            <div class="navbar-item nav-login-button">
                 <div class="buttons">
                     <a class="button">
                         <strong>Log in</strong>
@@ -80,9 +80,19 @@
           el.classList.toggle('is-active');
           $target.classList.toggle('is-active');
 
-        });
+        });//
       });
     }
+    const loginBox = document.getElementsByClassName("nav-login-button")[0];
+    (async function getUserInfo () {
+           const userInfo = await Api.get("/users/@me");
+           if (!userInfo.error) {
+               removeChildren(loginBox)
+               const userText = document.createElement("p")
+               userText.innerText = userInfo.username
+               loginBox.appendChild(userText)
+           }
+      })()
 
   });
 </script>

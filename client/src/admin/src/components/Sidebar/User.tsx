@@ -1,20 +1,17 @@
 import React, {useEffect, useState} from "react";
 import * as Api from '../../../../js/apiFetch'
+import { User } from '../../shared/Types'
 
 const UserBoxStyle = {
     paddingLeft: "1em",
     paddingBottom: "0.2em"
 };
 
-interface User {
-    firstName: string,
-    lastName: string,
-    username: string
-}
+import { Message } from "../../../bulma/Message";
 
 export const UserBox = ()=>{
-
     const [info, setInfo] = useState<any>();
+
     useEffect(() => {
         (async function() {
             if (!info) {
@@ -26,7 +23,7 @@ export const UserBox = ()=>{
     });
     if (info) {
         if (info.error) {
-            return <h2>Error: {info.error.message}</h2>
+            return <Message title={`${info.error.status}: Oops! Something went wrong.`} text={info.error.message} colour="danger"/>
         }
         return <div style={UserBoxStyle}>
             <p className="title is-5">Hello, {info.firstName || `Loading...`}!</p>

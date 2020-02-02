@@ -32,7 +32,7 @@ function getPerms (User: User, override?: boolean) {
         console.error(`User passed to checkAdmin without groups. Assuming none.`);
         return userPermission
     }
-    userPermission.admin = true;
+
     for (let grp of User.groups) {
         // I tried to use a loop. It failed, a lot.
         if (grp.admin) userPermission.admin = true;

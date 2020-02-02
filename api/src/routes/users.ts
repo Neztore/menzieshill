@@ -9,9 +9,9 @@ import checkAuth from "../middleware/auth";
 import { authLife } from '../../config'
 
 import Group from "../db/entity/Group.entity";
+import User from "../db/entity/User.entity";
 
 const users = express.Router();
-
 
 
 
@@ -214,7 +214,7 @@ users.patch('/:userId', errorCatch(async (_req: Request, res: Response) => res.s
     body:
         groups: Array of group ids.
  */
-
+// TODO: CRITICAL: AUTH!!!
 users.patch('/:userId/groups', errorCatch(async (req: Request, res: Response) => {
     if (!req.user) throw new Error("No req.user on patch /:user/groups");
     const perms = getPerms(req.user);
@@ -258,6 +258,16 @@ users.patch('/:userId/groups', errorCatch(async (req: Request, res: Response) =>
 
 // For @me this should probably also request their password.
 users.delete('/:userId', (_req, res) => res.status(501).send(errors.notImplemented));
+
+users.use(checkAuth([Perms.Admin]));
+users.get('/', errorCatch(async (_req: Request, res: Response): Promise<any> => {
+    const users:Array<User> = await Database.getUsers()
+    res.send({
+        success: true,
+        users
+    })
+
+}));
 
 
 

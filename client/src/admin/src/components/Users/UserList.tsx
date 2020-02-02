@@ -1,32 +1,67 @@
-import  React from "react";
+import React, {useEffect, useState} from "react";
 import {UserRow} from "./UserRow";
+import * as Api from '../../../../js/apiFetch'
+import {UserModal} from "./ModifyUser/UserModal";
+import {User} from "../../shared/Types";
 
 const GroupsStyle = {
     minWidth: "15em"
 };
 
 export function UserList() {
-    return <div className="columns">
-        <div className="column is-7 ">
-            <table className="table is-hoverable is-fullwidth">
-                <thead>
-                <tr>
-                    <th>Username</th>
-                    <th>Full name</th>
-                    <th style={GroupsStyle}>Groups</th>
-                </tr>
-                </thead>
-                <tbody>
-                <UserRow user={{username: "Test", firstName: "Josh", lastName: "Muir", id: 1, accessGroups:[{name: "Test"}, {name: "Admin"}, {name: "Swmimming"}]}}/>
-                <UserRow user={{username: "Test", firstName: "Josh", lastName: "Muir", id: 1, accessGroups:[{name: "Test"}, {name: "Admin"}, {name: "Swmimming"}]}}/>
-                <UserRow user={{username: "Test", firstName: "Josh", lastName: "Muir", id: 1, accessGroups:[{name: "Test"}, {name: "Admin"}, {name: "Swmimming"}]}}/>
+    const [users, setUsers] = useState([]);
+    const [modalItem, setModalItem] = useState();
 
-                </tbody>
-            </table>
+
+    useEffect(function(){
+
+            (async function doIt() {
+                const users = await Api.get("/users")
+                if (users.success) {
+                    setUsers(users.users)
+                } else {
+                    throw new Error(users.error.message)
+                }
+            })();
+
+
+    }, []);
+    function saveChanges(newUser: User) {
+        // If newUser is false, modal was just closed.
+        if (!newUser) {
+            // They only closed it.
+            setModalItem(false)
+        }
+    }
+
+    return <div>
+        {modalItem ? <UserModal user={modalItem} handleDone={saveChanges}/>:""}
+        <div className="columns">
+            <div className="column is-7 ">
+                <table className="table is-hoverable is-fullwidth">
+                    <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Full name</th>
+                        <th style={GroupsStyle}>Groups</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {
+                        users.map((u: User)=>
+                            <UserRow user={u} key={u.id} handleClick={setModalItem}/>
+                        )
+                    }
+
+
+
+                    </tbody>
+                </table>
+
+            </div>
+
 
         </div>
-
-
     </div>
 }
 export  default UserList

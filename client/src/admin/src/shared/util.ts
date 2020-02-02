@@ -1,13 +1,7 @@
-import {ReactNode} from "react";
 
-export interface HttpError {
-    error: {
-        status:  number,
-        message: string,
-    }
+
+export function createErrorMessage() {
+
 }
 
 
-export interface ReactProps {
-    children?: ReactNode[] | string[] | Element[]
-}

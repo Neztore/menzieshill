@@ -8,7 +8,6 @@ interface AdminBlockProps extends BlockProps{
 }
 
 const AdminBlock:FunctionComponent<AdminBlockProps> = (props) => {
-    //useCurrentItem("Home", true);
     return (<PanelBlock isActive={props.name === props.current} {...props} handleClick={()=>props.handleClick(props.name)}/>)
 };
 

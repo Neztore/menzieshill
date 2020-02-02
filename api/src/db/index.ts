@@ -67,6 +67,13 @@ class Database extends EventEmitter {
         return this.users.findOne({id}, options);
     }
 
+    getUsers () {
+        // We get groups by default
+        const options = { relations: ["groups"]};
+
+        return this.users.find(options);
+    }
+
     async setAuth (userId: number, token: string): Promise<boolean> {
 
         const user = await this.getUser(userId);

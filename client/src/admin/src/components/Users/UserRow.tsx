@@ -1,18 +1,10 @@
 import React, {FunctionComponent} from "react";
+import { User } from '../../shared/Types'
 
-interface Group {
-    id: number,
-    name: string
-}
 
 interface UserRowProps {
-    user: {
-        firstName: string,
-        lastName: string
-        id: number,
-        username: string,
-        accessGroups: Array<Group>
-    }
+    user: User,
+    handleClick: Function
 }
 const RowStyle = {
     cursor: "pointer"
@@ -23,14 +15,17 @@ export const UserRow:FunctionComponent<UserRowProps> = (props) => {
         username,
         firstName,
         lastName,
-        accessGroups
+        groups
     } = props.user;
-    return <tr style={RowStyle}>
+
+
+
+    return <tr style={RowStyle} onClick={()=>props.handleClick(props.user)}>
         <td>{username}</td>
         <td>{firstName} {lastName}</td>
         <td>
             <div className="tags">
-                {accessGroups.map((grp)=> <span className="tag  " key={`${grp.id}-${Math.floor(Math.random() * 1000)}`}>{grp.name}</span>)}
+                {groups.map((grp)=> <span className="tag  " key={`${grp.id}-${Math.floor(Math.random() * 1000)}`}>{grp.name}</span>)}
             </div>
             </td>
 
