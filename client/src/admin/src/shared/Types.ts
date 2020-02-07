@@ -9,7 +9,8 @@ export interface User {
     lastName: string
     id: number,
     username: string,
-    groups: Array<Group>
+    groups: Array<Group>,
+    email: string
 }
 
 export interface HttpError {

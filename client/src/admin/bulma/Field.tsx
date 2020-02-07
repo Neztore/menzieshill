@@ -69,8 +69,8 @@ const ErrorComponent:FunctionComponent = (props) =>(
 // Applies to all form controls - encompasses both error and custom field
 export const FormControl: FunctionComponent<baseProps> = (props)=>(
     <div className="control">
-        <ErrorMessage component={ErrorComponent} name={props.name}/>
         <Field  as={CustomInput} name={props.name} {...props}/>
+        <ErrorMessage component={ErrorComponent} name={props.name}/>
     </div>
 );
 

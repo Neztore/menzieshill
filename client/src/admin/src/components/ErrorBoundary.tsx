@@ -1,5 +1,7 @@
 import React from "react";
 import Notification from '../../bulma/notification'
+import {Message} from "../../bulma/Message";
+import {HttpError} from "../shared/Types";
 interface ErrorBoundaryState {
     hasError: boolean,
     errorText?: string
@@ -35,3 +37,5 @@ export default class ErrorBoundary extends React.Component<any, ErrorBoundarySta
         return this.props.children;
     }
 }
+
+export const ErrorMessage = ({error}: HttpError)=><Message title={`${error.status}: Oops! Something went wrong.`} text={error.message} colour="danger"/>;

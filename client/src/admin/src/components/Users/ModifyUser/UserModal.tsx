@@ -1,9 +1,11 @@
 import React, {FunctionComponent} from "react";
 import {User} from "../../../shared/Types";
 import EditModal from "../../../../bulma/EditModal";
-import {NormalField, HorizontalField, HorizontalMultipleField, FormControl} from "../../../../bulma/Field";
+import {HorizontalField, HorizontalMultipleField} from "../../../../bulma/Field";
+import { Api } from "../../../shared/util";
 
-import {Formik, Form, ErrorMessage} from "formik";
+import {Formik, Form} from "formik";
+import GroupEditor from "./GroupEditor";
 // TODO: Need to intregate with the EditModal somehow if I want SaveChanges to connect.
 // Possibly just a case of binding handleSubmit to the appropriate listener on Formik.
 
@@ -19,7 +21,8 @@ export const UserModal:FunctionComponent<UserRowProps> = (props) => {
         firstName,
         lastName,
         groups,
-        email
+        email,
+        id
     } = props.user;
 
 
@@ -27,11 +30,8 @@ export const UserModal:FunctionComponent<UserRowProps> = (props) => {
 
     return <Formik
         initialValues={{username: username || "", firstName: firstName || "", lastName: lastName || "", email: email || ""}}
-        onSubmit={(values, { setSubmitting }) => {
-            setTimeout(() => {
-                alert(JSON.stringify(values, null, 2));
-                setSubmitting(false);
-            }, 400);
+        onSubmit={async (values, { setSubmitting }) => {
+           const res = Api.post(`/`);
         }}
         validate={(values)=>{
             const errors:any = {};
@@ -42,8 +42,19 @@ export const UserModal:FunctionComponent<UserRowProps> = (props) => {
             }
             if (!values.username) {
                 errors.username = 'Required';
+            } else if (values.username.length < 2) {
+                errors.username = "Too short."
             }
-
+            if (!values.firstName) {
+                errors.firstName = 'Required';
+            } else if (values.firstName.length < 2) {
+                errors.firstName = "Too short."
+            }
+            if (!values.lastName) {
+                errors.lastName = 'Required';
+            } else if (values.lastName.length < 2) {
+                errors.lastName = "Too short."
+            }
             return errors
 
         }}
@@ -62,6 +73,7 @@ export const UserModal:FunctionComponent<UserRowProps> = (props) => {
                             placeholder: "Last name"
                         }]} />
                     <HorizontalField type="email" name="email" label="Email:"/>
+                    <GroupEditor groups={groups} userId={id}/>
                 </Form>
                 </EditModal>
             )}
