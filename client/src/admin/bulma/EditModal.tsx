@@ -6,6 +6,7 @@ import React, {FunctionComponent} from "react";
 interface EditModalProps {
     close: Function,
     save: Function,
+    delete?: Function,
     title: string,
     isSubmitting?: boolean
 
@@ -26,6 +27,7 @@ export const EditModal:FunctionComponent<EditModalProps> = (props) => {
             </section>
             <footer className="modal-card-foot">
                 <button type="button" onClick={()=>props.save()} className="button is-success" disabled={props.isSubmitting}>Save changes</button>
+                {props.delete ?  <button type="button" onClick={()=>props.delete ? props.delete() : ""} className="button is-danger" disabled={props.isSubmitting}>Delete</button> : ""}
                 <button type="button" className="button" onClick={()=> props.close()}>Cancel</button>
             </footer>
         </div>

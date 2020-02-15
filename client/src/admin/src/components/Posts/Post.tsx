@@ -1,17 +1,13 @@
 // Created by josh on 14/02/2020
-import React, {FunctionComponent, useState} from "react";
+import React, {FunctionComponent} from "react";
 import {Post} from "../../shared/Types";
 import Card from "../../../bulma/Card";
-import { Redirect } from 'react-router-dom'
 import {unescape} from "../../shared/util";
 
 interface PostProps {
     post: Post,
     openPost: Function
 }
-// TODO: SO I REMEMBER.
-// Make it so this returns a Redirect when you open post.
-// to /posts/:id. This means a open function doesn't have to be passed everywhere and it's nice & neat.
 
 export const PostBox: FunctionComponent<PostProps> = ({post, openPost}) => {
     const {

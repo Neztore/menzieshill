@@ -1,7 +1,7 @@
 // Created by josh on 15/02/2020
 // Keeps all the components down to a nice size.
 
-import React, {FunctionComponent, useState} from "react";
+import React, {FunctionComponent} from "react";
 import {Form, Formik} from "formik";
 import {Api, unescape} from "../../shared/util";
 import {EditModal} from "../../../bulma/EditModal";
@@ -21,6 +21,20 @@ export const PostForm: FunctionComponent<PostFormProps> = ({post, handleDone}) =
     if (content) {
         content = unescape(content)
     }
+    async function deletePost() {
+        const confirmation = confirm("Are you sure you want to delete this post?");
+        if (!confirmation) return;
+        // Delete it
+        if (post.id) {
+
+            const resp = await Api.delete(`/posts/${post.id}`)
+            if (resp.error) {
+                alert(`Failed to delete: ${resp.error.message}`)
+            }
+        }
+        handleDone(true)
+    }
+
         return <Formik
             initialValues={{title, content}}
             onSubmit={async (values, { setSubmitting, setErrors }) => {
@@ -61,7 +75,7 @@ export const PostForm: FunctionComponent<PostFormProps> = ({post, handleDone}) =
             }}
         >
             {({ isSubmitting, handleSubmit }) => (
-                <EditModal close={()=>handleDone(false)} save={handleSubmit} isSubmitting={isSubmitting} title={post.id ? `Editing ${title}`: "New post"}>
+                <EditModal delete={deletePost} close={()=>handleDone(false)} save={handleSubmit} isSubmitting={isSubmitting} title={post.id ? `Editing ${title}`: "New post"}>
                     <Form>
                         <NormalField type="text" name="title" label="Post title"/>
                         <TextArea name="content" label="Post contents" rows="15"/>

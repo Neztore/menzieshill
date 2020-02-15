@@ -127,15 +127,15 @@ async function modifyPost (post: Post, body: any) {
 
 posts.delete('/:postId',errorCatch(async (req: Request, res: Response) =>{
     if (!req.user) return;
-    if (validId(req.params.id)) {
-        const post = await Database.getPost(parseInt(req.params.id, 10));
+    if (validId(req.params.postId)) {
+        const post = await Database.getPost(parseInt(req.params.postId, 10));
         if (!post) {
             return res.status(404).send(errorGenerator(404, "Post not found."))
         }
         if (post.author.id === req.user.id) {
             // Matches: Delete.
             await Database.deletePost(post);
-            return res.status(204)
+            return res.status(200).send({success:true})
         } else {
             res.status(403).send(errorGenerator(403, "Forbidden: You do not own that post."))
         }
