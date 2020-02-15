@@ -25,8 +25,8 @@ export const EditModal:FunctionComponent<EditModalProps> = (props) => {
                 {props.children}
             </section>
             <footer className="modal-card-foot">
-                <button onClick={()=>props.save()} className="button is-success" disabled={props.isSubmitting}>Save changes</button>
-                <button className="button" onClick={()=> props.close()}>Cancel</button>
+                <button type="button" onClick={()=>props.save()} className="button is-success" disabled={props.isSubmitting}>Save changes</button>
+                <button type="button" className="button" onClick={()=> props.close()}>Cancel</button>
             </footer>
         </div>
     </div>

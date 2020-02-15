@@ -55,7 +55,7 @@ class Database extends EventEmitter {
         return this.users.delete(id);
     }
 
-    editUser (user: User) {
+    saveUser (user: User) {
         return this.users.save(user);
     }
 

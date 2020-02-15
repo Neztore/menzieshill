@@ -6,6 +6,7 @@ import {escape, isAscii, isEmpty, isInt, isLength, isWhitelisted, stripLow, trim
 import Group, {Permission} from "../db/entity/Group.entity";
 import fetch from 'node-fetch'
 import { recaptchaToken } from '../../config'
+import isAlpha from "validator/lib/isAlpha";
 
 // Len: length in letters.
 function generateToken (): Promise<string> {
@@ -104,6 +105,7 @@ function hasPerms(user: User, requiredPerms:  Perms[]) {
 // Name does both user and group names.
 const validUsername = (username: string|undefined) => username && !isEmpty(username) && isWhitelisted(username, whitelistChars) && isLength(username, { min: 3, max: 30 });
 const validName = (username: string|undefined) => username && !isEmpty(username) && isWhitelisted(username, whitelistChars + " ") && isLength(username, { min: 3, max: 30 });
+const validRealName = (username: string|undefined) => username && !isEmpty(username) && isAlpha(username) && isLength(username, { min: 1, max: 30 });
 const validFileName = (username: string|undefined) => username && !isEmpty(username) && isWhitelisted(username, whitelistChars + " ") && isLength(username, { min: 1, max: 30 });
 const validPassword = (password: string|undefined) => password && !isEmpty(password) && isAscii(password) && isLength(password, { min: 8, max: 50 });
 const validId = (id: string|undefined) => id && !isEmpty(id) && isInt(id) && parseInt(id, 10) > 0;
@@ -170,6 +172,7 @@ export {
     validId,
     validString,
     validFileName,
+    validRealName,
     RootString,
     makeRequest,
     post

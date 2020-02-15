@@ -30,9 +30,9 @@ posts.get('/:postId', errorCatch(async (req: Request, res: Response) =>{
     if (req.params.postId && validId(req.params.postId)) {
         const post = await Database.getPost(parseInt(req.params.postId, 10));
         if (post) {
-            return res.send({success: true, post})
+            res.send({success: true, post})
         } else {
-            return res.status(404).send(errorGenerator(400, "Post not found."))
+            return res.status(404).send(errorGenerator(404, "Post not found."))
         }
     } else {
         return res.status(400).send(errorGenerator(400, "Bad post id number."))
@@ -85,7 +85,7 @@ posts.patch('/:postId', errorCatch(async (req: Request, res: Response) =>{
         post.author = req.user;
         // It's OK: Save it.
         const result = await Database.savePost(post);
-        res.send({success: true, message: "Successfully updated post", result})
+        res.send({success: true, message: "Successfully updated post", post: result})
 
     } else {
         res.status(400).send(errorGenerator(400, "Bad post id."))

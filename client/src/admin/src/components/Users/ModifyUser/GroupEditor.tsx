@@ -32,7 +32,6 @@ export const GroupEditor: FunctionComponent<GroupBoxProps> = function (props) {
         return false
     }
 
-    console.log(groups)
     return <div>
         <label className="label">User groups</label>
         <p className="help">Modify user's groups. Groups grant specific permissions - for example manage files.</p>

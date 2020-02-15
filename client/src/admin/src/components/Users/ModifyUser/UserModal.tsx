@@ -29,9 +29,26 @@ export const UserModal:FunctionComponent<UserRowProps> = (props) => {
     // Deal with form elements
 
     return <Formik
-        initialValues={{username: username || "", firstName: firstName || "", lastName: lastName || "", email: email || ""}}
-        onSubmit={async (values, { setSubmitting }) => {
-           const res = Api.post(`/`);
+        initialValues={{username: username || "", firstName: firstName || "", lastName: lastName || "", email: email || "", password:""}}
+        onSubmit={async (values, { setSubmitting, setErrors }) => {
+           const res = await Api.patch(`/users/${id}`, {body: values});
+            if (res.error) {
+                const errors:any = {
+                };
+                if (!res.error.errors) {
+                    // what
+                    errors.username = res.error.message
+                } else {
+                    for (let error of res.error.errors) {
+                        errors[error.field] = error.msg
+                    }
+                }
+                setErrors(errors)
+            } else {
+                props.handleDone(res.user)
+            }
+
+           setSubmitting(false)
         }}
         validate={(values)=>{
             const errors:any = {};
@@ -55,6 +72,12 @@ export const UserModal:FunctionComponent<UserRowProps> = (props) => {
             } else if (values.lastName.length < 2) {
                 errors.lastName = "Too short."
             }
+            if (values.password) {
+                if (values.password.length < 8 || values.password.length > 50) {
+                    errors.password = "Invalid length - Must be more than 8 characters and less than 50."
+                }
+            }
+
             return errors
 
         }}
@@ -73,6 +96,7 @@ export const UserModal:FunctionComponent<UserRowProps> = (props) => {
                             placeholder: "Last name"
                         }]} />
                     <HorizontalField type="email" name="email" label="Email:"/>
+                    <HorizontalField type="text" name="password" label="Password:" small="Leave blank - Only provide a value if you want to change it."/>
                     <GroupEditor groups={groups} userId={id}/>
                 </Form>
                 </EditModal>

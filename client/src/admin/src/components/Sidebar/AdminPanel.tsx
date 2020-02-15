@@ -1,4 +1,4 @@
-import React, {useState, FunctionComponent} from "react";
+import React, {useState, FunctionComponent, useEffect} from "react";
 import {Panel, PanelBlock} from "../../../bulma/Panel";
 import { BlockProps } from '../../../bulma/Panel'
 
@@ -8,13 +8,22 @@ interface AdminBlockProps extends BlockProps{
 }
 
 const AdminBlock:FunctionComponent<AdminBlockProps> = (props) => {
-    return (<PanelBlock isActive={props.name === props.current} {...props} handleClick={()=>props.handleClick(props.name)}/>)
+    return (<PanelBlock isActive={props.name.toLowerCase() === props.current.toLowerCase()} {...props} handleClick={()=>props.handleClick(props.name)}/>)
 };
 
 export const AdminPanel:FunctionComponent = () => {
     const [currentItem, setCurrentItem] = useState("Home");
+
+    useEffect(()=> {
+        const urlParts = window.location.href.split("/");
+        const relevantPart = urlParts[urlParts.length - 1].toLowerCase();
+        const initial = relevantPart === "home" || relevantPart === "users" || relevantPart === "calendar" || relevantPart === "posts" ? relevantPart : "Home"
+        setCurrentItem(initial)
+    }, []);
+
+
     function clicked(n:string) {
-        setCurrentItem(n)
+      setCurrentItem(n)
     }
 
     return <Panel heading="Admin console">

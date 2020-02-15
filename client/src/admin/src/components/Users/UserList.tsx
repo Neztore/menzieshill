@@ -15,23 +15,23 @@ export function UserList() {
 
     useEffect(function(){
 
-            (async function doIt() {
-                const users = await Api.get("/users")
-                if (users.success) {
-                    setUsers(users.users)
-                } else {
-                    throw new Error(users.error.message)
-                }
-            })();
-
-
-    }, []);
+                (async function doIt() {
+                    console.log("Fetching users...");
+                    const users = await Api.get("/users")
+                    if (users.success) {
+                        setUsers(users.users)
+                    } else {
+                        throw new Error(users.error.message)
+                    }
+                })();
+            
+    }, [modalItem]);
     function saveChanges(newUser: User) {
         // If newUser is false, modal was just closed.
-        if (!newUser) {
-            // They only closed it.
-            setModalItem(false)
+        if (newUser) {
+           //TODO: Update user value. Refresh it?
         }
+        setModalItem(false)
     }
 
     return <div>

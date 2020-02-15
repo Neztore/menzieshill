@@ -6,13 +6,27 @@ interface baseProps{
     colour?: string,
     placeholder?:string,
     name: string,
+    small?: string
 }
 
 interface Props extends  baseProps{
-
     label: string
 }
 
+// Text area
+interface TextareaProps extends Props{
+    rows: string
+}
+const TextAreaInput = (props: Props)=> (
+    <textarea className={`textarea is-${props.colour}`} {...props}/>);
+
+
+export const TextArea:FunctionComponent<TextareaProps> = (props) => {
+    return <div className="field">
+        <label className="label">{props.label}</label>
+        <FormControl CustomInput={TextAreaInput} {...props} />
+    </div>
+};
 
 
 export const NormalField:FunctionComponent<Props> = (props) => {
@@ -21,6 +35,7 @@ export const NormalField:FunctionComponent<Props> = (props) => {
         <FormControl {...props} />
     </div>
 };
+
 export const HorizontalField:FunctionComponent<Props> = (props) => {
     return <div className="field is-horizontal">
         <div className="field-label is-normal">
@@ -67,12 +82,21 @@ const ErrorComponent:FunctionComponent = (props) =>(
 </p>);
 
 // Applies to all form controls - encompasses both error and custom field
-export const FormControl: FunctionComponent<baseProps> = (props)=>(
-    <div className="control">
-        <Field  as={CustomInput} name={props.name} {...props}/>
+
+interface FormControlProps extends baseProps {
+    CustomInput?: any
+}
+
+export const FormControl: FunctionComponent<FormControlProps> = (props)=>{
+    const passProps = {...props}
+    delete passProps["CustomInput"]
+
+    return <div className="control">
+        <Field  as={props.CustomInput || CustomInput} name={props.name} {...passProps}/>
+        {props.small ? <p className="help">{props.small}</p>:""}
         <ErrorMessage component={ErrorComponent} name={props.name}/>
     </div>
-);
+};
 
 // Implements bulma formatting to Formik fields.
 export const CustomInput = (props: Props)=> (

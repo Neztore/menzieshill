@@ -2,7 +2,7 @@ import React, {FunctionComponent} from "react";
 
 
 export interface MessageProps   {
-    colour?: string,
+    colour?: "danger"|"warning"|"primary",
     title:string,
     text:string,
     delete?: React.MouseEventHandler

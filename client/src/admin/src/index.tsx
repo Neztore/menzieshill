@@ -23,7 +23,7 @@ const base = (
                 <div className="column is-3">
                     <Sidebar/>
                 </div>
-                <div className="column">
+                <div className="column" style={{marginRight: "0.5em"}}>
                     <PanelRouter/>
                 </div>
             </div>

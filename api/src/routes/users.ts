@@ -1,15 +1,28 @@
 import express, {Request, Response} from "express";
 import Database from '../db/index'
 
-import { isEmail, escape, normalizeEmail, trim, isEmpty, isAlpha, isNumeric } from 'validator';
-import { hash, compare } from 'bcrypt';
+import {escape, isAlpha, isEmail, isEmpty, isNumeric, normalizeEmail, trim} from 'validator';
+import {compare, hash} from 'bcrypt';
 
-import {errorGenerator, errorCatch, generateToken, errors, getPerms, validUsername, validPassword, hasPerms, Perms} from '../util'
+import {
+    errorCatch,
+    errorGenerator,
+    errors,
+    generateToken,
+    getPerms,
+    hasPerms,
+    Perms,
+    validId,
+    validPassword,
+    validRealName,
+    validUsername
+} from '../util'
 import checkAuth from "../middleware/auth";
-import { authLife } from '../../config'
+import {authLife} from '../../config'
 
 import Group from "../db/entity/Group.entity";
 import User from "../db/entity/User.entity";
+import EmailSystem from "../util/email";
 
 const users = express.Router();
 
@@ -170,20 +183,24 @@ users.post('/login', errorCatch(async (req: Request, res: Response) => {
     }
 }));
 
-// Authenticated routes
-users.use(checkAuth());
 
 // UserEntity ID should be either a valid userId string or @me
 users.get('/:id', errorCatch(async (req: Request, res:Response) => {
-    if (!req.user) return;
     if (!req.params.id || isEmpty(req.params.id) || !isNumeric(req.params.id)) {
         if (req.params.id === "@me") {
-            return res.send(req.user);
+            const auth = await Database.getAuthByToken(req.cookies.token)
+            if (auth && auth.user) {
+                const fullUser = await Database.getUser(auth.user.id)
+                return res.send(fullUser);
+            } else {
+                return  res.status(400).send(errorGenerator(400, "You are not logged in."));
+            }
+
         } else {
             return  res.status(400).send(errorGenerator(400, "Bad user id."));
         }
     }
-
+    if (!req.user) return false;
     if (hasPerms(req.user, [Perms.Admin])) {
 
         const user = await Database.getUser(parseInt(req.params.id, 10));
@@ -197,24 +214,163 @@ users.get('/:id', errorCatch(async (req: Request, res:Response) => {
     }
 }));
 
-// TODO: Add email verification - Email should update provisionally i.e. Have a awaitingVerification table. This would also be used for new sign-ups. (include a firstLogin bool)
-// TODO: Add password verification & update. Password will be on it's own endpoint. (changing password should also clearAuth)
-
+users.use(checkAuth());
     // * It should take both currentPassword and newPassword.
     // * Will also need a way to reset password via. email.
+users.patch('/@me', errorCatch(async (req: Request, res: Response) =>{
+    if (req.user && req.user.id) {
+        const user = Object.assign({}, req.user);
+        // password stuff
+        if (req.body.password) {
+            if (req.body.confirmPassword) {
+                if (validPassword(req.body.password) && validPassword(req.body.confirmPassword)) {
+                    if (req.body.password === req.body.confirmPassword) {
+                        if (req.body.oldPassword && validPassword(req.body.oldPassword)) {
+                            // We use this as this is the only method which includes hash.
+                            const fullUser = await Database.checkUserExists(user.username, user.email);
+                            if (!fullUser) throw new Error("Failed to get user");
+                            if (await compare(req.body.oldPassword, fullUser.hash)) {
+                                user.hash = await hash(req.body.password, 12);
 
-users.patch('/:userId', errorCatch(async (_req: Request, res: Response) => res.status(501).send(errors.notImplemented)));
+                                // Long, but needed.
+                                await EmailSystem.sendMail(user.email, "Password changed", `<h1 style="text-align: center">Password changed</h1><br><p>Hi, ${user.firstName} (<strong>${user.username}</strong>)<br>Your password for the site (<a href="https://menzieshillwhitehall.co.uk">menzieshillwhitehall.co.uk</a>) has been changed.<br>If you did not make this change, please notify <a href="mailto:admin@menzieshillwhitehall.co.uk">admin@menzieshillwhitehall.co.uk</a> as soon as possible.<br/>Thanks!<br>Site administrator.</p>.`)
+                                await doReq(user, req, res, true)
+                            } else {
+                                return res.status(401).send(errorGenerator(401, "Incorrect old password."))
+                            }
+                        } else {
+                            return res.status(401).send(errorGenerator(401, "You must provide old password to do that."))
+                        }
+                    } else {
+                        // These errors are cancer. Sigh. For consistency!
+                        return res.status(400).send(
+                            errorGenerator(400, `passwords must match.`,
+                                { errors: [{field: "password", msg: "passwords must match"}] }))
+                    }
+                } else {
+                    return res.status(400).send(
+                        errorGenerator(400, `Please provide both password and confirm password and ensure they are valid.`,
+                            { errors: [{field: "password", msg: "Please provide both password and confirm password and ensure they are valid"}] }))
+                }
+            } else {
+                return res.status(400).send(
+                    errorGenerator(400, `Please provide both password and confirm password and ensure they are valid.`,
+                        { errors: [{field: "password", msg: "Please provide both password and confirm password and ensure they are valid"}] }))
+            }
+        } else {
+            await doReq(user, req, res, false)
+        }
+    } else {
+        throw new Error("No req.user set for update @me")
+    }
+}));
 
+// Authenticated routes.
+users.use(checkAuth([Perms.Admin]));
+users.patch('/:userId', errorCatch(async (req: Request, res: Response) =>{
+    const { userId } = req.params;
 
+    if (userId && validId(userId)) {
+        let parsedId = parseInt(userId,10);
+        let user = await Database.getUser(parsedId)
+        if (user) {
+            user = Object.assign({}, user);
+            // do password
+            if (req.body.password) {
+                if (!validPassword(req.body.password)) {
+                    return res.status(400).send(errorGenerator(400, "Bad password", {errors: [{field: "password", msg: "Invalid password. Please ensure it is long enough."}]}));
+                } else {
+                    console.log(`Valid ${req.body.password}`)
+                }
+                user.hash = await hash(req.body.password, 12)
+                // Long, but needed.
+                await EmailSystem.sendMail(user.email, "Password changed", `<h1 style="text-align: center">Password changed</h1><br><p>Hi, ${user.firstName} (<strong>${user.username}</strong>).<br>Your password for the site (<a href="https://menzieshillwhitehall.co.uk">menzieshillwhitehall.co.uk</a>) has been <strong>changed by an administrator</strong>${req.user ? ` (${req.user.username})`:""}. <br>If you did not request this change, please notify <a href="mailto:admin@menzieshillwhitehall.co.uk">admin@menzieshillwhitehall.co.uk</a> as soon as possible.<br/>Thanks!<br>Site administrator.</p>.`)
 
+                await doReq(user, req, res, true)
+            } else {
+                // Long, but needed.
+                await doReq(user, req, res, false)
+            }
 
+        } else {
+            res.status(404).send(errorGenerator(404, "User not found."))
+        }
+    } else {
+        res.status(400).send(errorGenerator(400, "Bad user id."))
+    }
+}));
 
-/*
-    req.params.userId: Target user
-    body:
-        groups: Array of group ids.
- */
-// TODO: CRITICAL: AUTH!!!
+async function doReq (user:User, req: Request, res: Response, passwordModified:boolean) {
+    if (!req.body) return res.status(400).send(errorGenerator(400, "No body provided."))
+    const resp = await userEdit(user, req.body);
+    if (resp.length !== 0) {
+        return res.status(400).send(errorGenerator(400, `There were some errors, please see "errors" array.`, { errors: resp }))
+    } else {
+        await Database.saveUser(user);
+        const sendUser = Object.assign({}, user)
+        delete sendUser.hash
+        return res.send({success: true, user: sendUser, passwordChanged:passwordModified})
+    }
+}
+
+// Does everything bar password stuff. Each endpoint can handle THAT itself.
+interface FieldError {
+    field: keyof User,
+    msg: string
+}
+async function userEdit (user: User, newInfo: any): Promise<FieldError[]> {
+    const errors: FieldError[] = [];
+    const {
+        username,
+        email,
+        firstName,
+        lastName,
+    } = newInfo;
+    if (username) {
+        if (validUsername(username)) {
+            user.username = trim(escape(username))
+        } else {
+            errors.push({field: "username", msg: "Username must be between 3 and 20 characters and contain only letters, numbers and the symbols \".\", \"-\" or \"_\"."})
+        }
+    }
+    if (email) {
+        if (isEmpty(email) || !isEmail(email)) {
+            errors.push({field: "email", msg: "Invalid email: Please check it and try again."})
+        } else {
+            const normalised = normalizeEmail(email)
+            if (normalised) {
+                user.email = normalised
+            } else {
+                errors.push({field: "email", msg: "Invalid email: The email could not be normalised."})
+            }
+        }
+    }
+
+    if (firstName) {
+        if (validRealName(firstName)) {
+            user.firstName = trim(escape(firstName))
+        } else {
+            errors.push({field: "firstName", msg: "Invalid first name: Must be alphanumeric and under 30 characters."})
+        }
+    }
+    if (lastName) {
+        if (validRealName(lastName)) {
+            user.lastName = trim(escape(lastName))
+        } else {
+            errors.push({field: "lastName", msg: "Invalid last name: Must be alphanumeric and under 30 characters."})
+        }
+    }
+
+    if (username || email) {
+        // Check they aren't taken.
+        const existingUser = await Database.checkUserExists(username, email);
+        if (existingUser && existingUser.id !== user.id) {
+            errors.push({field: username?"username":"email", msg: `${username?"Username":"Email"} is already in use by another account.`})
+        }
+    }
+    return errors;
+}
+
 users.patch('/:userId/groups', errorCatch(async (req: Request, res: Response) => {
     if (!req.user) throw new Error("No req.user on patch /:user/groups");
     const perms = getPerms(req.user);
@@ -223,7 +379,6 @@ users.patch('/:userId/groups', errorCatch(async (req: Request, res: Response) =>
     }
 
     if (req.params.userId && !isEmpty(req.params.userId) && isNumeric(req.params.userId)) {
-        // Add permission check HERE.
         const user = await Database.getUser(parseInt(req.params.userId, 10));
         if (user) {
             // Check permissions then modify it.
@@ -259,7 +414,6 @@ users.patch('/:userId/groups', errorCatch(async (req: Request, res: Response) =>
 // For @me this should probably also request their password.
 users.delete('/:userId', (_req, res) => res.status(501).send(errors.notImplemented));
 
-users.use(checkAuth([Perms.Admin]));
 users.get('/', errorCatch(async (_req: Request, res: Response): Promise<any> => {
     const users:Array<User> = await Database.getUsers()
     res.send({

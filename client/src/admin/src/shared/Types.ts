@@ -24,3 +24,20 @@ export interface ReactProps {
     children?: ReactNode[] | string[] | Element[]
 }
 
+
+
+export interface Post {
+    id: number,
+
+    title: string,
+
+    content: string,
+
+    created: Date,
+
+    updated: Date,
+
+    groups: Group[],
+
+    author: User,
+}
