@@ -9,7 +9,9 @@ const Repeats = {
     Weekly:"Weekly",
     Monthly:"Monthly"
 }
-
+if (module !== undefined) {
+  module.exports = calendar;
+}
 // Date stuff
 // Done to prevent polluting globals.
 const calendar = {

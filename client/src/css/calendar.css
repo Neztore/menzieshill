@@ -74,8 +74,12 @@ body {font-family: Verdana, sans-serif;}
     color: #777;
     padding: 0.4em 0;
     cursor: pointer;
-
+    box-sizing: content-box;
 }
+.days li:hover {
+    font-weight: bold;
+}
+
 
 /* Highlight the "current" day */
 .days ul .active {
@@ -101,6 +105,7 @@ body {font-family: Verdana, sans-serif;}
 .events-display .events-padding {
     padding: 0 1em 1em 0;
 }
+
 
 .events-display .notification {
     margin-bottom: 0.5em;
