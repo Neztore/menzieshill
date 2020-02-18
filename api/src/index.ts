@@ -31,7 +31,7 @@ const app = express();
 sentry.init({ dsn: sentryDsn });
 // TODO: Set CORS
 app.use(cors({ //
-  origin: ["localhost", "http://localhost", "https://localhost", "192.168.1.2", "http://192.168.1.2"],
+  origin: ["localhost", "http://localhost", "https://localhost", "192.168.1.2", /.*192.168.1.2.*/],
   credentials: true
 }));
 app.options('*', cors())
