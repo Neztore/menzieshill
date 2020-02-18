@@ -9,7 +9,7 @@ const Repeats = {
     Weekly:"Weekly",
     Monthly:"Monthly"
 }
-if (module !== undefined) {
+if (typeof module !== 'undefined') {
   module.exports = calendar;
 }
 // Date stuff
