@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Typescript" type="NodeJSConfigurationType" path-to-js-file="src/index.js" working-dir="$PROJECT_DIR$/api/build">
+    <method v="2">
+      <option name="TypeScript.Before.Run" enabled="true" FAIL_ON_ERROR="true" CONFIG_PATH="$PROJECT_DIR$/api/tsconfig.json" />
+    </method>
+  </configuration>
+</component>

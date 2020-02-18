@@ -96,3 +96,5 @@ api/ormconfig.js
 api/config.js
 
 client/dist/
+
+!.idea
