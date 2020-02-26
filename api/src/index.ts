@@ -14,7 +14,6 @@ import {errorGenerator, errorHandler} from './util/';
 import helmet from 'helmet';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
-import auth from './middleware/auth'
 import 'reflect-metadata'
 import db from './db'
 import cors from 'cors'
@@ -25,6 +24,7 @@ import groups from './routes/groups'
 import posts from './routes/posts'
 import events from './routes/events';
 import files from './routes/files'
+import contact from './routes/contact'
 
 // Set up
 const app = express();
@@ -53,9 +53,9 @@ app.use('/users', users);
 app.use('/posts', posts);
 app.use('/files', files);
 app.use('/events', events);
+app.use('/contact', contact);
 
-// Routes requiring auth
-app.use(auth());
+
 app.use('/groups', groups);
 
 

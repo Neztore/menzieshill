@@ -17,4 +17,12 @@ Copyright Menzieshill Whitehall Swimming and Water Polo club 2019.
     hyphens: auto;
     word-break: break-word;
 }
+iframe {
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+.fullHeight {
+    height: 100%;
+    min-height: 50vh;
+}
 

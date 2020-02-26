@@ -52,12 +52,24 @@ app.get('/archive', (req, res) =>
   res.render(path.join(pagePath, "archive.ejs"))
 )
 
+app.get('/photos', (req, res) =>
+    res.render(path.join(pagePath, "photos.ejs"))
+)
+
 app.get('/register', (req, res) =>
   res.render(path.join(pagePath, "register.ejs"))
 )
 
 app.get('/login', (req, res) =>
   res.render(path.join(pagePath, "login.ejs"))
+)
+
+app.get('/contact', (req, res) =>
+    res.render(path.join(pagePath, "contact.ejs"))
+)
+
+app.get('/*', (req, res) =>
+    res.status(404).render(path.join(sharedPath, "404.ejs"))
 )
 
 

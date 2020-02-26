@@ -193,11 +193,11 @@ users.get('/:id', errorCatch(async (req: Request, res:Response) => {
                 const fullUser = await Database.getUser(auth.user.id)
                 return res.send(fullUser);
             } else {
-                return  res.status(400).send(errorGenerator(400, "You are not logged in."));
+                return  res.status(400).send(errorGenerator(401, "You are not logged in."));
             }
 
         } else {
-            return  res.status(400).send(errorGenerator(400, "Bad user id."));
+            return  res.status(400).send(errorGenerator(400, "Invalid user id."));
         }
     }
     if (!req.user) return false;
@@ -232,8 +232,12 @@ users.patch('/@me', errorCatch(async (req: Request, res: Response) =>{
                             if (await compare(req.body.oldPassword, fullUser.hash)) {
                                 user.hash = await hash(req.body.password, 12);
 
-                                // Long, but needed.
-                                await EmailSystem.sendMail(user.email, "Password changed", `<h1 style="text-align: center">Password changed</h1><br><p>Hi, ${user.firstName} (<strong>${user.username}</strong>)<br>Your password for the site (<a href="https://menzieshillwhitehall.co.uk">menzieshillwhitehall.co.uk</a>) has been changed.<br>If you did not make this change, please notify <a href="mailto:admin@menzieshillwhitehall.co.uk">admin@menzieshillwhitehall.co.uk</a> as soon as possible.<br/>Thanks!<br>Site administrator.</p>.`)
+                                // Long, but needed.I
+                                await EmailSystem.send("passwordReset", user.email, `Password changed`, {
+                                    name: user.firstName,
+                                    rest: `following your request.`,
+                                    username: user.username
+                                });
                                 await doReq(user, req, res, true)
                             } else {
                                 return res.status(401).send(errorGenerator(401, "Incorrect old password."))
@@ -279,16 +283,17 @@ users.patch('/:userId', errorCatch(async (req: Request, res: Response) =>{
             if (req.body.password) {
                 if (!validPassword(req.body.password)) {
                     return res.status(400).send(errorGenerator(400, "Bad password", {errors: [{field: "password", msg: "Invalid password. Please ensure it is long enough."}]}));
-                } else {
-                    console.log(`Valid ${req.body.password}`)
                 }
                 user.hash = await hash(req.body.password, 12)
                 // Long, but needed.
-                await EmailSystem.sendMail(user.email, "Password changed", `<h1 style="text-align: center">Password changed</h1><br><p>Hi, ${user.firstName} (<strong>${user.username}</strong>).<br>Your password for the site (<a href="https://menzieshillwhitehall.co.uk">menzieshillwhitehall.co.uk</a>) has been <strong>changed by an administrator</strong>${req.user ? ` (${req.user.username})`:""}. <br>If you did not request this change, please notify <a href="mailto:admin@menzieshillwhitehall.co.uk">admin@menzieshillwhitehall.co.uk</a> as soon as possible.<br/>Thanks!<br>Site administrator.</p>.`)
+                await EmailSystem.send("passwordReset", user.email, `Password changed`, {
+                    name: user.firstName,
+                    username: user.username,
+                    rest: `by a site administrator (${req.user ? req.user.username : "Unknown"})`
+                });
 
                 await doReq(user, req, res, true)
             } else {
-                // Long, but needed.
                 await doReq(user, req, res, false)
             }
 

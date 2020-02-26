@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Contact us</title>
+
+    <script src="/js/contact.js"></script>
+    <%- include('../shared/partials/sharedMeta.ejs'); %>
+</head>
+<body>
+<%- include('../shared/partials/navbar.ejs'); %>
+<section class="section">
+    <div class="columns is-centered">
+        <div class="column is-5 ">
+            <div class="has-text-centered">
+                <h2 class="title">Contact us</h2>
+                <h2 class="subtitle">You can use this form to contact us about anything.</h2>
+                <p>We'll try to get back to you as soon as possible through email, so please supply a valid email address.</p>
+                <span class="error-box has-text-danger"></span>
+            </div>
+            <form class="contact-us-form form">
+
+                <div class="field">
+                    <label class="label" for="name">Your full name</label>
+                    <div class="control">
+                        <input name="name" id="name" class="input" type="text" placeholder="John Doe">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label" for="email">Email</label>
+                    <div class="control">
+                        <input name="email" id="email" class="input" type="email" placeholder="Your email">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Subject</label>
+                    <div class="control">
+                        <div class="select">
+                            <select id="subject">
+                                <option>General</option>
+                                <option>Welfare concern</option>
+                                <option>Website issue</option>
+                            </select>
+                        </div>
+                        <p class="help subject-help"> </p>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Message</label>
+                    <div class="control">
+                        <textarea id="text" class="textarea" placeholder="Your message" minlength="10"></textarea>
+                    </div>
+                </div>
+
+
+
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button class="button is-link">Submit</button>
+                        <p class="help">Your data will be processed as per our <a href="/terms">terms of use</a>.</p>
+                    </div>
+                </div>
+
+            </form>
+
+
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
+
+<%- include('../shared/partials/footer.ejs'); %>
+
+</body>
+</html>

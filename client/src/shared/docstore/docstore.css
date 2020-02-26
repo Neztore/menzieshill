@@ -24,8 +24,9 @@
     width: 100%;
 }
 .docstore-parent {
-    width: 50%;
+    width: 100%;
     padding-left: 0.3em;
+    padding-right: 0.1em;
 }
 
 .docstore-parent .icon-cog {

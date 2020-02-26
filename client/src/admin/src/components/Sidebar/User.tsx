@@ -1,13 +1,14 @@
 import React, {useEffect, useState} from "react";
 import * as Api from '../../../../js/apiFetch'
 import { User } from '../../shared/Types'
+import { Message } from "../../../bulma/Message";
 
 const UserBoxStyle = {
     paddingLeft: "1em",
     paddingBottom: "0.2em"
 };
 
-import { Message } from "../../../bulma/Message";
+
 
 export const UserBox = ()=>{
     const [info, setInfo] = useState<any>();
@@ -23,6 +24,10 @@ export const UserBox = ()=>{
     });
     if (info) {
         if (info.error) {
+            if (info.error.status === 401) {
+                document.location.href = "/login";
+                return ""
+            }
             return <Message title={`${info.error.status}: Oops! Something went wrong.`} text={info.error.message} colour="danger"/>
         }
         return <div style={UserBoxStyle}>
