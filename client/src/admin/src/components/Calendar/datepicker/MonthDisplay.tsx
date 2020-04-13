@@ -11,8 +11,8 @@ interface MonthDisplayProps {
 export const MonthDisplay: FunctionComponent<MonthDisplayProps> = ({setDisplayDate, displayDate}) => {
 
     function setMonth (newMonth: 1 | -1) {
-        const newDate = new Date(displayDate.getTime())
-        newDate.setMonth(newDate.getMonth() + newMonth)
+        const newDate = new Date(displayDate.getTime());
+        newDate.setMonth(displayDate.getMonth() + newMonth);
         setDisplayDate(newDate)
     }
     return <div className="month noselect">

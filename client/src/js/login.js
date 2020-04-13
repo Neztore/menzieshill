@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   async function onSubmit (e) {
-    console.log("Submit!")
     e.preventDefault()
     const username = fields.username.value;
     const password = fields.password.value;
@@ -21,13 +20,12 @@ document.addEventListener("DOMContentLoaded", function () {
          body: {
            username,
            password,
-          // recaptchaToken: t
          }
        });
       if (res.error) {
         showError(`Incorrect username or password: Please check them and try again.`)
       } else {
-        window.document.location.href = "/"
+        window.document.location.href = "/admin"
       }
     } else {
       showError("Please fill out both username and password.")

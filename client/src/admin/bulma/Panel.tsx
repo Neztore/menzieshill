@@ -3,15 +3,16 @@ import Icon, { IconProps } from './Icon'
 import {Link} from "react-router-dom";
 
 interface PanelProps {
-    heading: string
+    heading: string,
+    colour?: string
 }
 
-export const Panel:FunctionComponent<PanelProps> = (props)=>{
-    return <nav className="panel">
+export const Panel:FunctionComponent<PanelProps> = ({heading, children, colour})=>{
+    return <nav className={`panel ${colour ? `is-${colour}` : ""}`}>
         <p className="panel-heading">
-            {props.heading}
+            {heading}
         </p>
-        {props.children}
+        {children}
     </nav>
 };
 export interface BlockProps {

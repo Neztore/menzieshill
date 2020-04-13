@@ -23,7 +23,7 @@ export const DatePicker: FunctionComponent<DatePickerProps> = ({initialDate = ne
         if (dateNum !== 0) {
             const newDate = new Date(selectedDate.getTime());
             newDate.setDate(dateNum);
-            setSelectedDate(newDate)
+            setSelectedDate(newDate);
             handleSelected(newDate);
         }
     }

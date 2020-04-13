@@ -240,7 +240,7 @@ files.post('/:parent/files', upload.array('files', 200),errorCatch(async (req: R
 async function handleFile (file: any, parent: Folder, creatorId: number) {
 
     const dbFile = new File();
-    if (validName(file.originalname)) {
+    if (validFileName(file.originalname)) {
         const split = file.originalname.split('.');
 
         // remove extension if exists

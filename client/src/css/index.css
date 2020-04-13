@@ -26,3 +26,26 @@ iframe {
     min-height: 50vh;
 }
 
+#s2 .column .card-img{
+    width: 100%;
+}
+.nav-crd {
+    min-height: 15rem;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+#img-one {
+    background-image: url("/img/swimming2.jpeg");
+}
+#img-two {
+    background-image: url("/img/water-polo.jpeg");
+}
+
+#img-three {
+    background-image: url("/img/open-water2.jpg");
+}
+
+#img-four {
+    background-image: url("/img/fundraising.jpeg");
+}

@@ -21,39 +21,98 @@ function getIEVersion() {
   else
     return 0; //It is not IE
 }
-if (getIEVersion > 0) {
+if (getIEVersion() > 0) {
   alert("We've noticed you are using Internet explorer.\nPlease note that some features on this site are not supported by your browser.\n\nIf possible, please upgrade to a newer browser.\nThanks :)")
   console.log("%c Internet explorer is not supported: Please upgrade!", "font-size: 2em; color: red")
 }
 
+// We create dynamically because it's easier than ensuring the HTML code exists on every page.
+function showMessage (headerContent, content, colour, closeAfter, closeCb) {
+  if (closeAfter < 500) {
+    // Assume it's been provided in seconds.
+    closeAfter = closeAfter * 1000;
+  }
+  let parent = document.getElementById("message-parent");
+  if (!parent) {
+    parent = document.createElement("div");
+    parent.className = "fixed-message";
+    parent.id = "message-parent";
 
-function createErrorMessage (msg) {
-  // TODO: Better error system - sentry
-  console.error(msg);
+    document.body.appendChild(parent);
+  }
 
-  const notification = document.createElement("div")
-  notification.className = "notification is-warning"
+  const message = document.createElement("div");
+  message.className = `message is-${colour} slideInRight`;
 
-  const title = document.createElement("h1")
-  title.className  = "is-size-5"
+  const header = document.createElement("div");
+  header.className = "message-header";
 
-  title.innerText = "Oops! Something went wrong."
-  notification.appendChild(title)
+  const headerText = document.createElement("p");
+  headerText.innerText = headerContent;
+  header.appendChild(headerText);
 
-  const errorText = document.createTextNode(""+msg)
-  notification.appendChild(errorText)
+  const deleteButton = document.createElement("button");
+  deleteButton.className = "delete";
+  header.appendChild(deleteButton);
 
-  const closeButton = document.createElement("button");
-  closeButton.className = "delete"
-  closeButton["aria-label"] = "close"
-  notification.appendChild(closeButton)
-  closeButton.addEventListener("click", function () {
-    notification.remove()
-  })
+  function close () {
+    if (message) {
+      message.classList.remove("slideInRight");
+      message.classList.add("slideOutRight");
+      setTimeout(function () {
+        message.remove();
+      }, 2000);
+      if (closeCb) closeCb();
+    }
+  }
+  deleteButton.onclick = close;
 
-  document.body.prepend(notification)
-
+  message.appendChild(header);
+  const messageBody = document.createElement("div");
+  messageBody.className = "message-body";
+  messageBody.innerText = content;
+  message.appendChild(messageBody);
+  parent.appendChild(message);
+  if (closeAfter) {
+    setTimeout(close, closeAfter);
+  }
+  return message;
 }
+
+function showError (error) {
+  if (error.error && error.error.status) {
+    error = error.error;
+  }
+  const errorText = `${error.status ? `${error.status}: ` : ""} Something went wrong`;
+  const content = typeof error === "string" ? error : error.message;
+  return showMessage(errorText, content, "danger");
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Get all "navbar-burger" elements
+  const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll(".navbar-burger"), 0);
+
+  // Check if there are any navbar burgers
+  if ($navbarBurgers.length > 0) {
+    // Add a click event on each of them
+    $navbarBurgers.forEach(el => {
+      el.addEventListener("click", () => {
+        // Get the target from the "data-target" attribute
+        const target = el.dataset.target;
+        const $target = document.getElementById(target);
+
+        // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+        el.classList.toggle("is-active");
+        $target.classList.toggle("is-active");
+      });
+    });
+  }
+});
+window.showMessage = showMessage;
+window.showError = showError;
+
+const createErrorMessage = showError;
+
 
 function parseDate(time, withTime) {
   if (typeof time === 'string') {
@@ -106,6 +165,19 @@ document.addEventListener('DOMContentLoaded', () => {
       $notification.parentNode.removeChild($notification);
     });
   });
+
+  // TODO: Remove (TEMP)
+  if (!document.cookie.includes("DISCLAIMER_ACCEPTED")) {
+    const disc = document.getElementById("disclaimer")
+    disc.className = disc.className + "is-active"
+
+    const accepted = document.getElementById("disc-accepted");
+    accepted.onclick = function () {
+      document.cookie = "DISCLAIMER_ACCEPTED=yes"
+      disc.remove();
+    }
+  }
+
 });
 
 function removeChildren(element) {
@@ -152,3 +224,4 @@ class Modal {
   }
 }
 var GlobalModal = Modal
+

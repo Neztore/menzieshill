@@ -2,12 +2,13 @@ import React from "react";
 
 interface notificationProps {
     hasClose?: boolean,
-    children: any
+    children: any,
+    colour?: string
 }
 
-export default function (props: notificationProps) {
-    return <div className="notification is-warning">
+export default function Notification(props: notificationProps) {
+    return <div className={`notification ${props.colour ? `is-${props.colour}` : ""}`}>
         {props.hasClose ? <button className="delete"/> : ""}
-        {props.children}
+        {...props.children}
     </div>
 }

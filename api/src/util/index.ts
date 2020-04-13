@@ -104,9 +104,9 @@ function hasPerms(user: User, requiredPerms:  Perms[]) {
 
 // Name does both user and group names.
 const validUsername = (username: string|undefined) => username && !isEmpty(username) && isWhitelisted(username, whitelistChars) && isLength(username, { min: 3, max: 30 });
-const validName = (username: string|undefined) => username && !isEmpty(username) && isWhitelisted(username, whitelistChars + " ") && isLength(username, { min: 3, max: 30 });
+const validName = (username: string|undefined) => username && !isEmpty(username) && isWhitelisted(username, whitelistChars + " ()!") && isLength(username, { min: 3, max: 30 });
 const validRealName = (username: string|undefined) => username && !isEmpty(username) && isAlpha(username) && isLength(username, { min: 1, max: 30 });
-const validFileName = (username: string|undefined) => username && !isEmpty(username) && isWhitelisted(username, whitelistChars + " ") && isLength(username, { min: 1, max: 30 });
+const validFileName = (username: string|undefined) => username && !isEmpty(username) && isWhitelisted(username, whitelistChars + " '()!") && isLength(username, { min: 1, max: 80 });
 const validPassword = (password: string|undefined) => password && !isEmpty(password) && isAscii(password) && isLength(password, { min: 8, max: 50 });
 const validId = (id: string|undefined) => id && !isEmpty(id) && isInt(id) && parseInt(id, 10) > 0;
 const validString = (username: string|undefined, length?: number) => { if (length) {

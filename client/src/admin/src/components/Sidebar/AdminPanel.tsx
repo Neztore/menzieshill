@@ -26,7 +26,7 @@ export const AdminPanel:FunctionComponent = () => {
       setCurrentItem(n)
     }
 
-    return <Panel heading="Admin console">
+    return <Panel heading="Admin console" colour="info">
         <AdminBlock icon="fas fa-home" name="Home" to="/admin" handleClick={clicked} current={currentItem}/>
         <AdminBlock icon="fas fa-users" name="Users" to="/admin/users" handleClick={clicked} current={currentItem}/>
         <AdminBlock icon="fas fa-calendar" name="Calendar" to="/admin/calendar" handleClick={clicked} current={currentItem}/>

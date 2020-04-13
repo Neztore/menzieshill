@@ -19,7 +19,7 @@ const Posts = {
         for (let counter = 0; counter < posts.length; counter++) {
             if (rowSize === 4) {
                 const newRow = document.createElement("div")
-                newRow.className = "columns is-desktop"
+                newRow.className = "columns"
                 this.postsContainer.appendChild(newRow)
                 currentRow = newRow
                 rowSize = 0

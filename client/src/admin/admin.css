@@ -1,0 +1,36 @@
+.daybox-heading {
+    border-bottom: 1px solid gray;
+    margin-bottom: 0.5rem;
+    margin-top: 0.2rem;
+    max-width: 90%;
+}
+.daybox {
+    padding-left: 0.5rem;
+}
+.daybox-content {
+    padding-left: 0.5rem;
+}
+.event-list {
+    height: 80vh;
+    overflow-y: scroll;
+    padding-right: 0.5rem;
+
+}
+
+.event {
+    border-radius: 5px;
+
+    padding: 0.5rem;
+    cursor: pointer;
+    user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    max-width: 88%;
+}
+.event:hover {
+    background-color: rgba(212, 212, 212, 0.2);
+}
+.event-icon {
+    margin-top: 0.5rem;
+}

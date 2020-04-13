@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {FunctionComponent, useEffect, useState} from "react";
 import * as Api from '../../../../js/apiFetch'
 import { User } from '../../shared/Types'
 import { Message } from "../../../bulma/Message";
@@ -10,7 +10,7 @@ const UserBoxStyle = {
 
 
 
-export const UserBox = ()=>{
+export const UserBox: FunctionComponent = ()=> {
     const [info, setInfo] = useState<any>();
 
     useEffect(() => {
@@ -26,7 +26,7 @@ export const UserBox = ()=>{
         if (info.error) {
             if (info.error.status === 401) {
                 document.location.href = "/login";
-                return ""
+                return <p>Redirecting...</p>
             }
             return <Message title={`${info.error.status}: Oops! Something went wrong.`} text={info.error.message} colour="danger"/>
         }

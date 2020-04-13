@@ -26,7 +26,14 @@ app.use('/admin', express.static(distPath))
 
 
 // TODO: Move to app.render for caching of generated pages.
+// TODO: Update file viewer to use a partial instead of iframe.
 // No point in doing it now - will just make development harder.
+const simpleFiles = ["swimming", "waterpolo", "openwater", "archive", "photos", "register", "login", "contact", "terms", "docs"];
+for (let file of simpleFiles) {
+	app.get(`/${file}`, (req, res) =>
+		res.render(path.join(pagePath, `${file}.ejs`))
+	)
+}
 app.get('/', (req, res) =>
 res.render(path.join(pagePath, "index.ejs"))
 )
@@ -36,36 +43,8 @@ app.get('/admin/*', (req, res) =>
 
 )
 
-app.get('/swimming', (req, res) =>
-  res.render(path.join(pagePath, "swimming.ejs"))
-)
-
-app.get('/waterpolo', (req, res) =>
-  res.render(path.join(pagePath, "waterpolo.ejs"))
-)
-
 app.get('/posts/*', (req, res) =>
   res.render(path.join(pagePath, "post.ejs"))
-)
-
-app.get('/archive', (req, res) =>
-  res.render(path.join(pagePath, "archive.ejs"))
-)
-
-app.get('/photos', (req, res) =>
-    res.render(path.join(pagePath, "photos.ejs"))
-)
-
-app.get('/register', (req, res) =>
-  res.render(path.join(pagePath, "register.ejs"))
-)
-
-app.get('/login', (req, res) =>
-  res.render(path.join(pagePath, "login.ejs"))
-)
-
-app.get('/contact', (req, res) =>
-    res.render(path.join(pagePath, "contact.ejs"))
 )
 
 app.get('/*', (req, res) =>

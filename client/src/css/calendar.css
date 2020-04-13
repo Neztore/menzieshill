@@ -133,3 +133,13 @@ body {font-family: Verdana, sans-serif;}
 .calendar-modal .level-item:not(:last-child) {
     border-right: 0.5px solid gray;
 }
+.calendar .days .column {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.days {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+

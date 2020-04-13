@@ -20,6 +20,7 @@ function bindControl () {
       showContent(i)
     })
   }
+  window.scrollTo(0, 0);
 }
 
 function showContent (pos) {

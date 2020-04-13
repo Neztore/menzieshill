@@ -2,6 +2,7 @@
 const rootType = location.href.split('=')[1].split('&')[0]
 const Api = parent.Api
 const BaseUrl = parent.BaseUrl
+const parseDate = parent.parseDate;
 const removeChildren = parent.removeChildren
 
 
@@ -191,9 +192,8 @@ class DocStore {
 
     const created = document.createElement("td")
 
-    const timeString = new Date(fileInfo.created).toLocaleString()
-    const processedTime = timeString.substr(0, 10) + " " + timeString.substr(12, 4) + timeString.substr(20, 2)
-    created.appendChild(document.createTextNode(processedTime))
+    const timeString = parseDate(new Date(fileInfo.created), true);
+    created.appendChild(document.createTextNode(timeString))
     row.appendChild(created)
 
     const editRow = document.createElement("td")

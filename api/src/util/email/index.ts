@@ -44,7 +44,6 @@ class Email {
                 subject,
                 html: content
             });
-            console.log(`Sent email to ${to}.`);
             return f
         } catch (e) {
             console.error("Failed to send email.");

@@ -10,38 +10,42 @@
     <link rel="stylesheet" type="text/css" href="/css/icons.css">
 </head>
 <body>
-<div class="docstore-parent">
+<div class="columns is-mobile is-centered">
+    <div class="column is-10">
+        <div class="docstore-parent">
+            <div class="level">
+                <div class="level-left">
+                    <div class="level-item">
+                        <button class="button add-files">Add file(s)</button>
+                    </div>
+                </div>
 
-    <div class="level">
-        <div class="level-left">
-            <div class="level-item">
-                <button class="button add-files">Add file(s)</button>
+                <div class="level-right">
+                    <div class="level-item">
+                        <button class="button add-folder">Add folder</button>
+                    </div>
+                </div>
             </div>
-        </div>
+            <div class="trail breadcrumb">
 
-        <div class="level-left">
-            <div class="level-item">
-                <button class="button add-folder">Add folder</button>
             </div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th class="name-heading">Name</th>
+                    <th>Type</th>
+                    <th>Created</th>
+                    <th><span class="icon-cog icon"></span></th>
+                </tr>
+                </thead>
+                <tbody class="data">
+                </tbody>
+            </table>
         </div>
     </div>
-    <div class="trail breadcrumb">
-
-    </div>
-    <table class="table">
-        <thead>
-        <tr>
-            <th></th>
-            <th class="name-heading">Name</th>
-            <th>Type</th>
-            <th>Created</th>
-            <th><span class="icon-cog icon"></span></th>
-        </tr>
-        </thead>
-        <tbody class="data">
-        </tbody>
-    </table>
 </div>
+
 
 </body>
 </html>
