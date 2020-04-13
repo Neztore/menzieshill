@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "dev": "parcel watch src/admin/index.html --public-url=/admin",
-    "build": "parcel build src/admin/index.html"
+    "build": "parcel build src/admin/index.html --public-url=/admin --no-source-maps"
   },
   "author": "Josh Muir",
   "license": "UNLICENSED",

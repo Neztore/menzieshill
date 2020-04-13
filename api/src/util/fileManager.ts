@@ -13,7 +13,7 @@ const getPath = (loc: string) => join(filesLoc, loc);
 
 export function generateFileExtra (len: number): Promise<string> {
     return new Promise(function (resolve, reject) {
-        randomBytes(len / 1.15, function(err, buffer) {
+        randomBytes(len, function(err, buffer) {
             if (err) {
                 reject(err);
             }
