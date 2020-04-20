@@ -1,5 +1,5 @@
-import React, {FunctionComponent} from "react";
-import {Field, ErrorMessage} from "formik";
+import React, {Fragment, FunctionComponent} from "react";
+import {Field as FormikField, ErrorMessage} from "formik";
 
 interface baseProps{
     type?: string,
@@ -7,6 +7,9 @@ interface baseProps{
     placeholder?:string,
     name: string,
     small?: string
+    min?: string
+    max?: string
+    step?: string
 }
 
 interface Props extends  baseProps{
@@ -17,23 +20,56 @@ interface Props extends  baseProps{
 interface TextareaProps extends Props{
     rows: string
 }
-const TextAreaInput = (props: Props)=> (
-    <textarea className={`textarea is-${props.colour}`} {...props}/>);
+type FieldProps = {
+    grouped?: boolean
+}
+export const Field:FunctionComponent<FieldProps> = ({grouped, ...props}) => {
+    return <div className={`field ${grouped && "is-grouped"}`} {...props}>
 
-
-export const TextArea:FunctionComponent<TextareaProps> = (props) => {
-    return <div className="field">
-        <label className="label">{props.label}</label>
-        <FormControl CustomInput={TextAreaInput} {...props} />
     </div>
 };
 
+const TextAreaInput = (props: Props)=> (
+    <textarea className={`textarea is-${props.colour}`} {...props}/>);
+const SelectInput = (props: Props)=> (<div className={`select is-${props.colour}`}>
+      <select {...props}/>
+  </div>
+  );
 
-export const NormalField:FunctionComponent<Props> = (props) => {
-    return <div className="field">
+
+export const Dropdown:FunctionComponent<Props> = (props) => {
+    return <Fragment>
+        <label className="label">{props.label}</label>
+        <FormControl CustomInput={SelectInput} {...props} />
+    </Fragment>
+};
+
+export const TextArea:FunctionComponent<TextareaProps> = (props) => {
+    return <Fragment>
+        <label className="label">{props.label}</label>
+        <FormControl CustomInput={TextAreaInput} {...props} />
+    </Fragment>
+};
+
+
+const CheckboxInput = (props: Props)=> (<div className="checkbox">
+      <input type="checkbox" {...props}/>
+  </div>
+);
+export const Checkbox:FunctionComponent<Props> = (props) => {
+    return <Fragment>
+        <label className="label">{props.label}</label>
+            <FormControl CustomInput={CheckboxInput} {...props} />
+
+    </Fragment>
+};
+
+
+export const NormalInput:FunctionComponent<Props> = (props) => {
+    return <Fragment>
         <label className="label">{props.label}</label>
         <FormControl {...props} />
-    </div>
+    </Fragment>
 };
 
 export const HorizontalField:FunctionComponent<Props> = (props) => {
@@ -88,11 +124,11 @@ interface FormControlProps extends baseProps {
 }
 
 export const FormControl: FunctionComponent<FormControlProps> = (props)=>{
-    const passProps = {...props}
-    delete passProps["CustomInput"]
+    const passProps = {...props};
+    delete passProps["CustomInput"];
 
     return <div className="control">
-        <Field  as={props.CustomInput || CustomInput} name={props.name} {...passProps}/>
+        <FormikField  as={props.CustomInput || CustomInput} name={props.name} {...passProps}/>
         {props.small ? <p className="help">{props.small}</p>:""}
         <ErrorMessage component={ErrorComponent} name={props.name}/>
     </div>
@@ -101,4 +137,3 @@ export const FormControl: FunctionComponent<FormControlProps> = (props)=>{
 // Implements bulma formatting to Formik fields.
 export const CustomInput = (props: Props)=> (
         <input className={`input is-${props.colour}`} type={props.type || "text"} {...props}/>);
-export default Field

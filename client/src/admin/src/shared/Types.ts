@@ -65,26 +65,26 @@ export enum Repeat{
     Monthly = "Monthly"
 }
 
-
+// Date fields are strings because that's what they are until they are parsed client side
 export class CalendarEvent {
     id: number;
     name: string;
-    when: Date;
+    when: string;
     length: number;
     description?: string;
     colour: EventColour;
     type: EventType;
     repeat: Repeat;
-    created: Date;
+    created: string;
     cancellations: Cancellation[];
 	__loc?: number;
 }
 
 export class Cancellation {
     id: number;
-    when?: Date;
+    when?: string;
     reason?: string;
-    created: Date;
+    created: string;
     cancelledBy: Partial<User>;
     event: CalendarEvent;
 

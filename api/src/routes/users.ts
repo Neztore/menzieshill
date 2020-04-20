@@ -155,7 +155,8 @@ users.post('/login', errorCatch(async (req: Request, res: Response) => {
                 } else {
                     for (let c=0; c<fullUser.auth.length; c++) {
                         const timeSince = Date.now() - fullUser.auth[c].created.getTime();
-                        if (timeSince > authLife * 1000) {
+                        const numLife = Number(authLife);
+                        if (timeSince > numLife * 1000) {
                             Database.deleteAuth(fullUser.auth[c])
                         }
                     }

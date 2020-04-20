@@ -17,10 +17,11 @@ document.addEventListener('DOMContentLoaded', function () {
   }
   // Get initial area value and set it
   const iArea = window.location.hash ? window.location.hash.toLowerCase().substring(1) : "";
+  console.log(iArea)
 
   for (var i = 0; i < fields.area.options.length; i++) {
     const curr = fields.area.options[i]
-    if (curr.text.toLowerCase() === iArea.substring(1) || curr.id === iArea) {
+    if (curr.text.toLowerCase() === iArea || curr.id === iArea) {
       fields.area.selectedIndex = i;
       updateSubject();
       window.scrollTo(0, 0);

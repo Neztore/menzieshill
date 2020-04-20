@@ -43,7 +43,8 @@ function makeMiddleware (requiredPerms?: Perms[]) {
             } else {
                 // User exists. Set it and move on.
                 // Check auth age
-                const oldest = auth.created.getTime() + (authLife * 1000);
+                const numLife = Number(authLife);
+                const oldest = auth.created.getTime() + (numLife * 1000);
                 if (oldest < Date.now()) {
                     // It's expired.
                     await Database.deleteAuth(auth);

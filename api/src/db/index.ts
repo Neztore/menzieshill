@@ -155,7 +155,11 @@ class Database extends EventEmitter {
     
 
     getEvent (eventId: number) {
-        return this.events.findOne(eventId)
+        return this.events.createQueryBuilder('event')
+          .where("event.id = :id", {id: eventId})
+          .leftJoinAndSelect("event.cancellations", "cancellation")
+          .leftJoinAndSelect("cancellation.cancelledBy", "cancelledBy")
+          .getOne();
     }
 
     modifyEvent (event: CalendarEvent) {

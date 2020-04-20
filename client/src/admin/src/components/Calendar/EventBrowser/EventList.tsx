@@ -7,7 +7,7 @@ import DayBox from "./DayBox";
 
 
 interface EventListProps {
-	selectedEvent: CalendarEvent,
+	selectedEvent?: CalendarEvent,
 	setSelected: Function,
 	recurringEvents: CalendarEvent[],
 	events: CalendarEvent[],
@@ -77,7 +77,7 @@ export const EventList: FunctionComponent<EventListProps> = ({recurringEvents, e
 	}, [filterNo,events, recurringEvents ]);
 	function setSelect(loc:number, e:CalendarEvent) {
 			setSelected({
-				__loc: loc,
+				_loc: loc,
 				...e
 			});
 
@@ -89,7 +89,7 @@ export const EventList: FunctionComponent<EventListProps> = ({recurringEvents, e
 				const current = lists[i];
 				if (current && current.length !==0) {
 					const date = new Date(displayDate.getFullYear(), displayDate.getMonth(), i + 1);
-					rdy.push(<DayBox events={current} date={date} key={i} selected={selectedEvent && selectedEvent.__loc === i} setSelected={(e: CalendarEvent)=> setSelect(i, e)} selectedEvent={selectedEvent}/>)
+					rdy.push(<DayBox events={current} date={date} key={i} setSelected={(e: CalendarEvent)=> setSelect(i, e)} selectedEvent={selectedEvent}/>)
 				}
 
 			}

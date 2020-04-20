@@ -6,6 +6,7 @@ import {isEmpty, isISO8601, trim} from 'validator'
 import Database from '../db'
 import auth from '../middleware/auth'
 import Cancellation from "../db/entity/Cancellation.entity";
+import isLength from "validator/lib/isLength";
 
 const events = Router();
 
@@ -98,6 +99,17 @@ events.all('/:eventId*', errorCatch(async (req: Request, res: Response, next: Ne
         res.status(400).send(errorGenerator(400, "Invalid event id: Please provide a number."));
     }
 }));
+// Get existing event - used for the admin panel only
+events.get('/:eventId', errorCatch(async (req: Request, res: Response)=>{
+    if (req.event) {
+        const event = req.event;
+        res.send({message: `Event found`, success: true, event})
+    } else {
+        res.status(404).send(errorGenerator(404, "Failed to get event: Event not found."))
+    }
+}));
+
+
 
 // Modify existing event
 events.patch('/:eventId', errorCatch(async (req: Request, res: Response)=>{
@@ -116,7 +128,7 @@ function modifyEvent (event: CalendarEvent, body: any): CalendarEvent {
         event.name = trim(body.name)
     }
 
-    if (body.description && typeof body.description === "string") {
+    if (body.description && typeof body.description === "string" && isLength(body.description, {min: 0, max: 100000})) {
         const desc = cleanString(body.description);
         event.description = desc
     }

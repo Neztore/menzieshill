@@ -5,7 +5,7 @@ import React, {FunctionComponent} from "react";
 import {Form, Formik} from "formik";
 import {Api, unescape} from "../../shared/util";
 import {EditModal} from "../../../bulma/EditModal";
-import {NormalField, TextArea} from "../../../bulma/Field";
+import {NormalInput, Field, TextArea} from "../../../bulma/Field";
 import {Post} from "../../shared/Types";
 
 interface PostFormProps {
@@ -77,8 +77,12 @@ export const PostForm: FunctionComponent<PostFormProps> = ({post, handleDone}) =
             {({ isSubmitting, handleSubmit }) => (
                 <EditModal delete={deletePost} close={()=>handleDone(false)} save={handleSubmit} isSubmitting={isSubmitting} title={post.id ? `Editing ${title}`: "New post"}>
                     <Form>
-                        <NormalField type="text" name="title" label="Post title"/>
-                        <TextArea name="content" label="Post contents" rows="15"/>
+                        <Field>
+                            <NormalInput type="text" name="title" label="Post title"/>
+                        </Field>
+                        <Field>
+                            <TextArea name="content" label="Post contents" rows="15"/>
+                        </Field>
                     </Form>
                 </EditModal>
             )}

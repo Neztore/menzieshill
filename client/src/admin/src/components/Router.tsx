@@ -1,4 +1,4 @@
-import {Route, Switch} from "react-router";
+import {Route, Switch, Redirect} from "react-router";
 import Home from "./Home";
 import React from "react";
 import Users from "./Users";
@@ -9,9 +9,9 @@ import Posts from "./Posts";
 export const PanelRouter = ()=> {
     return <Switch>
         <Route exact path="/">
-            <Home />
+            <Redirect to="/"/>
         </Route>
-        /* This shouldn't really be needed - I don't know why the top sometimes doesn't match.*/
+
         <Route exact path="/admin">
             <Home />
         </Route>

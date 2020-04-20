@@ -136,6 +136,12 @@ Api.delete = function (url, options) {
 Api._makeRequest = async function (url, options) {
   const startChar = url.substr(0, 1);
   options.credentials = "include"
+  if (options.noCache) {
+    if (!options.headers) options.headers = {};
+    options.headers["cache-control"] = "no-cache"
+    delete options.noCache;
+  }
+
 
   url = (startChar === '/') ? `${BaseUrl}${url}` : `/${url}`;
   const req = await fetch(url, options);

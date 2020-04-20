@@ -224,4 +224,20 @@ class Modal {
   }
 }
 var GlobalModal = Modal
-
+// From https://github.com/validatorjs/validator.js/blob/master/src/lib/unescape.js
+function unescapeHtml (str) {
+  return (str.replace(/&amp;/g, '&')
+  .replace(/&quot;/g, '"')
+  .replace(/&#x27;/g, "'")
+  .replace(/&lt;/g, '<')
+  .replace(/&gt;/g, '>')
+  .replace(/&#x2F;/g, '/')
+  .replace(/&#x5C;/g, '\\')
+  .replace(/&#96;/g, '`'));
+}
+if (typeof module !== "undefined") {
+  module.exports.showMessage = showMessage;
+  module.exports.showError = showError;
+  module.exports.parseDate = parseDate;
+  module.exports.unescapeHtml = unescapeHtml;
+}

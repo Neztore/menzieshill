@@ -24,7 +24,7 @@ const base = (
 				<div className='column is-3 fullHeight' style={leftStyle}>
 					<Sidebar />
 				</div>
-				<div className='column' style={{ marginRight: '0.5em' }}>
+				<div className='column admin-right' style={{ marginRight: '0.5em' }}>
 					<PanelRouter />
 				</div>
 			</div>
