@@ -166,9 +166,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  const loginBox = document.getElementsByClassName("nav-login-button")[0];
+  (async function getUserInfo () {
+    if (!loginBox) return;
+    const userInfo = await Api.get("/users/@me");
+    if (!userInfo.error) {
+      removeChildren(loginBox)
+      const userText = document.createElement("p")
+      userText.innerText = userInfo.username
+      loginBox.appendChild(userText)
+
+      window.user = userInfo;
+    }
+  })()
   // TODO: Remove (TEMP)
   if (!document.cookie.includes("DISCLAIMER_ACCEPTED")) {
     const disc = document.getElementById("disclaimer")
+    if (!disc) return;
     disc.className = disc.className + "is-active"
 
     const accepted = document.getElementById("disc-accepted");

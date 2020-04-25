@@ -1,11 +1,3 @@
-// Code which manages the
-const rootType = location.href.split('=')[1].split('&')[0]
-const Api = parent.Api
-const BaseUrl = parent.BaseUrl
-const parseDate = parent.parseDate;
-const removeChildren = parent.removeChildren
-
-
 class DocStore {
   constructor (baseElement, rootType) {
     this.base = baseElement
@@ -30,6 +22,32 @@ class DocStore {
       store.addFolder()
 
     })
+    // A timeout. Really?
+    // Terrible? Absolutely.
+    setTimeout(function () {
+      if (!window.user) {
+        console.log("aa")
+        removeButtons()
+      } else {
+        // Check permissions of user
+        let hasAccess = false;
+        for (let counter = 0; counter < window.user.groups.length; counter++) {
+          let curr = window.user.groups[counter];
+          if (curr.manageFiles || curr.admin) {
+            hasAccess = true;
+            break;
+          }
+        }
+        if (!hasAccess) {
+          removeButtons()
+        }
+      }
+    }, 1000)
+
+    function  removeButtons () {
+      addFolder.remove();
+      addFiles.remove();
+    }
   }
   async addFolder () {
     const folderName = prompt("Please enter a name for the new folder.", "New folder")
@@ -230,5 +248,5 @@ class DocStore {
 
 }
 document.addEventListener("DOMContentLoaded", function () {
-  const doc = new DocStore(document.getElementsByClassName("docstore-parent")[0], rootType)
+  const doc = new DocStore(document.getElementsByClassName("docstore-parent")[0], window.rootType)
 })

@@ -10,17 +10,19 @@
 <body>
 <noscript><h1 class="notification is-warning compat-warn">Please enable Javascript to make use of all the features on this site.</h1></noscript>
 <%- include('../shared/partials/navbar.ejs'); %>
-
+<section class="section main-section">
     <div class="columns">
         <div class="column is-10 is-offset-1">
             <h1 class="has-text-centered title">File archive</h1>
             <h2 class="has-text-centered subtitle">You can find old files and documents here.</h2>
-            <iframe scrolling="no" src = "../shared/docstore.html?root=archive" class="docstore">
-                Sorry your browser does not support inline frames.
-            </iframe>
+            <%- include('../shared/partials/docstore.ejs', {rootType: "archive"}); %>
         </div>
 
     </div>
+
+
+</section>
+
 
 
 <%- include('../shared/partials/footer.ejs'); %>

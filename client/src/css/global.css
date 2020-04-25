@@ -1,6 +1,6 @@
 /*
 Global (Shared CSS)
-Copyright Menzieshill Whitehall Swimming and Water Polo club 2019.
+Copyright Menzieshill Whitehall Swimming and Water Polo club 2020.
  */
 
 .docstore {
@@ -26,5 +26,8 @@ Copyright Menzieshill Whitehall Swimming and Water Polo club 2019.
     border-radius: 5px;
 }
 .page-content {
+    min-height: 60vh;
+}
+.main-section {
     min-height: 60vh;
 }
