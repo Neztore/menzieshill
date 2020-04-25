@@ -10,7 +10,7 @@ module.exports = {
   "logging": false,
   // JS because thats the file extension when they're compiled.
   "entities": [
-    `src/db/entity/*.entity.js`
+    `${__dirname}/build/src/db/entity/*.js`
   ],
   "migrations": [
     "src/db/migration/*.js"
@@ -19,3 +19,4 @@ module.exports = {
     "src/db/subscriber/*.js"
   ]
 }
+console.log(module.exports.entities);
