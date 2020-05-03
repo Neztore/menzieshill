@@ -28,7 +28,7 @@ app.use('/admin', express.static(distPath))
 // TODO: Move to app.render for caching of generated pages.
 // TODO: Update file viewer to use a partial instead of iframe.
 // No point in doing it now - will just make development harder.
-const simpleFiles = ["swimming", "waterpolo", "openwater", "archive", "photos", "register", "login", "contact", "terms", "docs", "welcome", "history"];
+const simpleFiles = ["swimming", "waterpolo", "openwater", "archive", "photos", "register", "login", "contact", "terms", "docs", "welcome", "history", "kit"];
 for (let file of simpleFiles) {
 	app.get(`/${file}`, (req, res) =>
 		res.render(path.join(pagePath, `${file}.ejs`))

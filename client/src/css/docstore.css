@@ -1,35 +1,46 @@
-.data tr:hover {
-    background: #efefef;
+#list-data tr {
+    cursor: pointer;
+
+}
+#prev-parent * {
+    display: inline-block;
+}
+#prev-parent .button {
+    margin-right: 0.5vw;
 }
 
-.data tr:hover {
-    background: #efefef;
+#grid-data .is-vcentered {
+    height: 100%;
+    text-align: center;
 }
-
-.data td:nth-child(2) {
+#grid-data .outerBox .is-vcentered .icon {
+    margin:auto;
+}
+.outerBox {
+    height: 17.5vw;
     cursor: pointer;
 }
-
-.data {
-    border-bottom: 1px solid #0a0a0a;
+.file-box {
+    height: 100%;
 }
-/*Affects all apart from last child.*/
-.docstore-parent .trail li:nth-last-child(n+2)  {
-    cursor: pointer;
-    color: blue;
+.modal img {
+    max-height: 70vh;
 }
+.m-box {
 
-
-.docstore-parent .table{
-    width: 100%;
 }
-.docstore-parent {
-    width: 100%;
-    padding-left: 0.3em;
-    padding-right: 0.1em;
+.modal .modal-content .box {
+    min-height: 30vh;
+    margin-bottom: 0.2em;
 }
-
-.docstore-parent .icon-cog {
-    cursor: pointer;
+.modal .modal-content .image img {
+    width: auto;
+    margin: auto;
 }
-
+#main-container {
+    min-height: 90vh;
+    padding-bottom: 5vh;
+}
+#prev-parent {
+    margin-bottom: 2vh;
+}

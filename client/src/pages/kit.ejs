@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Menzieshill Whitehall home</title>
+    <link rel="stylesheet" type="text/css" href="/css/global.css">
+    <link rel="stylesheet" type="text/css" href="/css/bulma.min.css">
+
+    <link rel="icon" href="/img/favicon.png">
+    <script src="/js/index.js"></script>
+    <script src="/js/apiFetch.js"></script>
+
+    <style>
+        .kit-image {
+            width: 100%;
+        }
+    </style>
+
+
+</head>
+<body>
+<noscript><h1 class="notification is-warning compat-warn">Please enable Javascript to make use of all the features on this site.</h1></noscript>
+<%- include('../shared/partials/navbar.ejs'); %>
+
+<section class="section main-section club-kit">
+    <h1 class="title has-text-centered">Club kit</h1>
+    <div class="columns is-centered">
+        <div class="column is-11">
+            <div class="columns is-centered">
+                <div class="column">
+                    <figure class="image is-3by2">
+                        <img src="/img/kit/shirt.png" alt="Club Swimmers T-shirt"/>
+                    </figure>
+                </div>
+                <div class="column">
+
+                    <figure class="image is-3by2">
+                        <img src="/img/kit/unisex-shorts.png" alt="Unisex board shorts"/>
+                    </figure>
+
+                </div>
+                <div class="column ">
+                    <figure class="image is-3by2">
+                        <img src="/img/kit/female-shorts.png"  alt="Female board shorts"/>
+                    </figure>
+
+                </div>
+
+                <div class="column ">
+                    <figure class="image is-3by2">
+                        <img src="/img/kit/hoodie.png" alt="Hoodie"/>
+                    </figure>
+                </div>
+            </div>
+
+            <div class="columns is-centered">
+                <div class="column is-3">
+                    <p class="has-text-centered has-text-weight-bold">Water Polo costume/trunks</p>
+                    <figure class="image is-square">
+                        <img src="/img/kit/trunks2.png" alt="Water Polo - Costume/Trunks" class="smooth-corners"/>
+                    </figure>
+                </div>
+            </div>
+            <div class="columns is-centered">
+                <div class="column is-6">
+                    <p>These items are purchased through external companies, which require minimum
+                        orders. Notification of ordering windows are sent out when there is sufficient
+                        demand.</p>
+                </div>
+
+            </div>
+
+            <div class="columns top-separator">
+                <div class="column is-3 is-offset-3">
+                    <p class="has-text-centered has-text-weight-bold">Swimming cap</p>
+                    <figure class="image is-square">
+                        <img src="/img/kit/cap.jpg" alt="Swimming cap image" class="smooth-corners"/>
+                    </figure>
+                </div>
+                <div class="column is-3">
+                    <br>
+                    <p class="has-text-weight-bold">Colours available: White, <span class="has-text-link">blue</span> and  <span class="has-text-danger">red</span>.</p>
+                    <p class="">Stock available on request, special
+                        orders for personalisation available when there is sufficient demand.</p>
+                </div>
+            </div>
+
+            <div class="columns is-centered">
+                <div class="column is-6 top-separator">
+                    <h1 class="title has-text-centered">Enquires & Orders</h1>
+                    <p>If you would like to enquire for further information or make an order for any kit shown here, please send an email to the email address <a href="mailto:kit@menzieshillwhitehall.co.uk">kit@menzieshillwhitehall.co.uk</a>.</p>
+                    <p>For enquires not related to club kit, please use the <a href="/contact">Contact us</a> form.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</section>
+
+<!-- Footer-->
+<%- include('../shared/partials/footer.ejs'); %>
+
+</body>
+</html>
+
