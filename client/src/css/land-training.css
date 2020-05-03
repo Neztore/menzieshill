@@ -1,0 +1,22 @@
+.hero-img {
+    background-image: url("/img/land-training.png");
+    background-repeat: no-repeat;
+    background-position-x: center;
+    height: 450px;
+}
+.section-one {
+    padding-top: 11px;
+    height: 90vh;
+}
+.section-one .left-part {
+    height: 100%;
+    padding: 1em 1em 1em 3em;
+}
+.section-one .columns {
+    height: 100%;
+    margin-bottom: 0;
+
+}
+.vertical-divider {
+    border-right: 1px solid gray;
+}
