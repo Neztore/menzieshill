@@ -1,5 +1,5 @@
 # Some basic redirects (Future urls should be directed to /pages/whatever
-/            /pages/ 200
+/            /pages/index.html 200
 /swimming    /pages/swimming.html 200
 /water-polo    /pages/waterpolo.html 200
 /contact    /pages/contact.html 200
