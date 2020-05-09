@@ -25,10 +25,11 @@ app.use('/admin', express.static(distPath));
 
 
 
-// TODO: Move to app.render for caching of generated pages.
+// TODO: Move ot Netlify & Create a new "Build step" using EJS
+// Consider: Netlify CMS or some similar CMS.
 
 // No point in doing it now - will just make development harder.
-const simpleFiles = ["swimming", "waterpolo", "openwater", "archive", "photos", "register", "login", "contact", "terms", "docs", "welcome", "history", "kit", "land-training"];
+const simpleFiles = ["swimming", "waterpolo", "open-water", "archive", "photos", "register", "login", "contact", "terms", "docs", "welcome", "history", "kit", "land-training"];
 for (let file of simpleFiles) {
 	app.get(`/${file}`, (req, res) =>
 		res.render(path.join(pagePath, `${file}.ejs`))

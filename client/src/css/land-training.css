@@ -6,11 +6,11 @@
 }
 .section-one {
     padding-top: 11px;
-    height: 90vh;
+    height: 70vh;
 }
 .section-one .left-part {
-    height: 100%;
-    padding: 1em 1em 1em 3em;
+    height: 103%;
+    padding: 1vw 1vw 1vw 3vw;
 }
 .section-one .columns {
     height: 100%;

@@ -1,9 +1,9 @@
 /*
-Copyright Menzieshill Whitehall Swimming and Water Polo club 2019.
+Copyright Menzieshill Whitehall Swimming and Water Polo club 2020.
  */
 
 .main-img {
-    background-image: url("/img/banner.jpg");
+    background-image: url("/img/banner_new2.jpg");
     background-color: #ff3333;
     background-repeat: no-repeat;
     background-size: cover;
@@ -47,7 +47,7 @@ iframe {
 }
 
 #img-four {
-    background-image: url("/img/fundraising.jpeg");
+    background-image: url("/img/land-training.jpg");
 }
 
 .fixed-message {

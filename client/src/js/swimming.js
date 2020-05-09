@@ -29,9 +29,9 @@ function showContent (pos) {
 
   for (let i =0; i<content.children.length; i++) {
     if (i===pos) {
-      content.children[i].style.display = "block"
+      content.children[i].classList.remove("is-hidden")
     } else {
-      content.children[i].style.display = "none"
+      content.children[i].classList.add("is-hidden")
     }
   }
 }

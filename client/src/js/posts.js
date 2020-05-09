@@ -14,10 +14,10 @@ const Posts = {
             return createErrorMessage(posts.error.message);
         }
         // starts at 4 to force initial row
-        let rowSize = 4;
+        let rowSize = 3;
         let currentRow;
         for (let counter = 0; counter < posts.length; counter++) {
-            if (rowSize === 4) {
+            if (rowSize === 3) {
                 const newRow = document.createElement("div")
                 newRow.className = "columns"
                 this.postsContainer.appendChild(newRow)
@@ -31,7 +31,7 @@ const Posts = {
     addPost (postInfo, parent) {
       // Todo: Add facebook/image support;
         const column = document.createElement("div")
-        column.className = "column is-one-quarter"
+        column.className = "column is-one-third"
         parent.appendChild(column)
 
         const card = document.createElement("div")
