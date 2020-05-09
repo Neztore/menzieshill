@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "admin:dev": "parcel src/admin/index.html --out-dir public/admin --public-url=/admin",
-    "admin:build":"parcel build src/admin/index.html --public-url=/admin --out-dir public/admin --no-source-maps",
+    "admin:build": "parcel build src/admin/index.html --public-url=/admin --out-dir public/admin --no-source-maps",
     "build": "concurrently \"npm run admin:build\" \"npm run render\"",
     "render": "node index.js"
   },
@@ -31,6 +31,7 @@
     "@babel/preset-env": "^7.8.3",
     "concurrently": "^5.2.0",
     "cssnano": "^4.1.10",
+    "parcel-bundler": "^1.12.4",
     "typescript": "^3.7.5"
   }
 }
