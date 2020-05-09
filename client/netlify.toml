@@ -21,3 +21,15 @@
   to = "/pages/:splat"
   status = 200
   force = false
+
+[[redirects]]
+  from = "/admin/*"
+  to = "/pages/admin/index.html"
+  status = 200
+  force = false
+
+[[redirects]]
+  from = "/posts/*"
+  to = "/pages/post.html"
+  status = 200
+  force = false
