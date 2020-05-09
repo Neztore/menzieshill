@@ -10,3 +10,8 @@
   autoLaunch = true
   dir = "public"
 
+[[redirects]]
+  from = "/"
+  to = "/pages/index.html"
+  status = 200
+  force = true
