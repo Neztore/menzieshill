@@ -330,8 +330,7 @@ class EventModal extends GlobalModal {
     this.body.appendChild(time)
 
     const about = document.createElement("p")
-    about.innerText = this.info.description
-    about.className = "cancel-reason"
+    about.innerText = unescapeHtml(this.info.description)
     this.body.appendChild(about)
 
     const level = document.createElement("div")

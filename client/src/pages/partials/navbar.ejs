@@ -79,3 +79,11 @@
         </div>
     </div>
 </nav>
+<script>
+	try {
+      <%# Looks weird and kinda is weird, but passes the user to the client. %>
+		window.ApiUrl = "<%- ApiUrl %>"
+	} catch (e) {
+		console.error("User was not provided by server!")
+	}
+</script>

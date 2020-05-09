@@ -1,5 +1,4 @@
 # Netlify.toml
-# We call it development but it's not really development.
 [build]
   command = "npm run build"
   publish = "public"
@@ -10,3 +9,4 @@
   publish = "public"
   autoLaunch = true
   dir = "public"
+
