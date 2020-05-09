@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {UserRow} from "./UserRow";
-import * as Api from '../../../../js/apiFetch'
+import * as Api from '../../../../../public/js/apiFetch'
 import {UserModal} from "./ModifyUser/UserModal";
 import {User} from "../../shared/Types";
 
@@ -24,7 +24,7 @@ export function UserList() {
                         throw new Error(users.error.message)
                     }
                 })();
-            
+
     }, [modalItem]);
     function saveChanges(newUser: User) {
         // If newUser is false, modal was just closed.

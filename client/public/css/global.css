@@ -1,0 +1,41 @@
+/*
+Global (Shared CSS)
+Copyright Menzieshill Whitehall Swimming and Water Polo club 2020.
+ */
+
+.docstore {
+    width: 100%;
+    min-height: 100vh;
+}
+
+.dropzone {
+    min-height: 30vh;
+    text-align: center;
+    font-weight: bold;
+}
+.line-through {
+    text-decoration: line-through;
+}
+
+/* Used on multiple pages */
+.posts-parent .card-content {
+    padding: 1rem
+}
+
+.posts-parent .card {
+    border-radius: 5px;
+}
+.page-content {
+    min-height: 60vh;
+}
+.main-section {
+    min-height: 60vh;
+}
+.top-separator {
+    border-top: 1px solid #ababab;
+    margin-top: 1rem;
+    padding-top: 0.5rem;
+}
+.smooth-corners {
+    border-radius: 4px;
+}

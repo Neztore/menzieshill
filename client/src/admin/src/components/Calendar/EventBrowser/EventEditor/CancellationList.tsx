@@ -1,7 +1,7 @@
 // Created by josh on 16/04/2020
 import React, {FunctionComponent} from "react";
 import CalendarEvent, {Cancellation} from "../../../../shared/Types";
-import { parseDate } from '../../../../../../js'
+import { parseDate } from '../../../../../../../public/js'
 
 interface CancellationListProps {
 	handleClick: Function,

@@ -1,8 +1,6 @@
-import * as Api_original from '../../../js/apiFetch'
+import * as Api_original from '../../../../public/js/apiFetch'
 export const Api = Api_original;
 
-// Shared items
-export * from '../../../js/index'
 
 // Calendar related
 export const Months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October" , "November", "December"];

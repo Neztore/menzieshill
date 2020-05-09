@@ -1,5 +1,5 @@
 import React, {FunctionComponent, useEffect, useState} from "react";
-import * as Api from '../../../../js/apiFetch'
+import * as Api from '../../../../../public/js/apiFetch'
 import { User } from '../../shared/Types'
 import { Message } from "../../../bulma/Message";
 

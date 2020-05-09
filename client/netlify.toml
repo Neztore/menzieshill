@@ -1,0 +1,12 @@
+# Netlify.toml
+# We call it development but it's not really development.
+[build]
+  command = "npm run build"
+  publish = "public"
+
+[dev]
+  port = 80
+  framework = "#static"
+  publish = "public"
+  autoLaunch = true
+  dir = "public"

@@ -2,7 +2,7 @@
 import React, {FunctionComponent} from "react";
 import {Form, Formik} from "formik";
 import {Api} from "../../../../shared/util";
-import { showMessage, unescapeHtml } from '../../../../../../js';
+import { showMessage, unescapeHtml } from '../../../../../../../public/js';
 import {Dropdown, NormalInput, TextArea, Field} from "../../../../../bulma/Field";
 import CalendarEvent, {EventColour, EventType, Repeat} from "../../../../shared/Types";
 

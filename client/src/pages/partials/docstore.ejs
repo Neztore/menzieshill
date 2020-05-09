@@ -1,0 +1,112 @@
+<!-- Document store -->
+<link rel="stylesheet" type="text/css" href="/css/docstore.css">
+<link rel="stylesheet" type="text/css" href="/css/icons.css">
+<script src="/js/docmodal.js"></script>
+<script src="/js/docstore.js"></script>
+
+<script>
+		window.rootType = "<%- rootType %>"
+
+</script>
+
+
+<div class="columns is-mobile is-centered">
+    <div class="column is-10">
+        <section id="main-container">
+            <div class="img-modal modal" id="img-modal">
+                <div class="modal-background"></div>
+                <div class="modal-content">
+                    <p class="image">
+                        <a href="#" id="img-link">
+                            <img alt="Modal image" src="">
+                        </a>
+                    </p>
+                    <div class="box" style="display:none;">
+                        <h2 class="title has-text-centered" id="m-file-text"></h2>
+                        <p class="subtitle has-text-centered" id="m-file-desc"></p>
+                        <div class="has-text-centered">
+                            <a class="button is-info" id="modal-open">Open file.</a>
+                        </div>
+
+                    </div>
+                    <div class="level">
+                        <div class="level-left">
+                            <div class="level-item has-text-white" id="modal-meta-text">
+                                01/02/03
+                            </div>
+                        </div>
+
+                        <div class="level-right">
+                            <div class="level-item">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="modal-close is-large" aria-label="close"></button>
+            </div>
+
+            <div class="columns">
+                <div class="column is-10 is-offset-1">
+                    <div class="level" id="doc-control">
+                        <div class="level-left" id="user-buttons">
+                            <div class="level-item">
+                                <button class="button" id="add-files-button">Add files(s)</button>
+                            </div>
+                            <div class="level-item">
+                                <button class="button" id="add-folder-button">Add folder</button>
+                            </div>
+                        </div>
+                        <div class="level-right">
+                            <div class="level-item">
+                                <div class="field has-addons">
+                                    <p class="control">
+                                        <button class="button" id="list-view-button">
+                                            <span>List view</span>
+                                        </button>
+                                    </p>
+                                    <p class="control">
+                                        <button class="button" id="grid-view-button">
+                                            <span>Grid view</span>
+                                        </button>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="prev-parent">
+                        <button class="button is-info is-small is-outlined" id="go-back-button">Previous folder</button>
+                        <p id="current-folder">
+                            You are in: FolderName
+                        </p>
+                    </div>
+
+                    <div id="grid" style="display: none">
+                        <div class="columns is-offset-1 is-multiline" id="grid-data">
+
+
+
+                        </div>
+                    </div>
+                    <table class="table is-fullwidth is-hoverable" id="list-table">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th class="name-heading">Name</th>
+                            <th>Type</th>
+                            <th>Created</th>
+                            <th><span class="icon-cog icon"></span></th>
+                        </tr>
+                        </thead>
+
+                        <tbody class="data" id="list-data">
+                        </tbody>
+
+                    </table>
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+</div>

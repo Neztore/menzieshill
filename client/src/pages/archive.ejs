@@ -4,18 +4,18 @@
     <meta charset="UTF-8">
     <title>Menzieshill Whitehall home</title>
     <link rel="stylesheet" type="text/css" href="/css/index.css">
-    <%- include('../shared/partials/sharedMeta.ejs'); %>
+    <%- include('./partials/sharedMeta.ejs'); %>
 
 </head>
 <body>
 <noscript><h1 class="notification is-warning compat-warn">Please enable Javascript to make use of all the features on this site.</h1></noscript>
-<%- include('../shared/partials/navbar.ejs'); %>
+<%- include('./partials/navbar.ejs'); %>
 <section class="section main-section">
     <div class="columns">
         <div class="column is-10 is-offset-1">
             <h1 class="has-text-centered title">File archive</h1>
             <h2 class="has-text-centered subtitle">You can find old files and documents here.</h2>
-            <%- include('../shared/partials/docstore.ejs', {rootType: "archive"}); %>
+            <%- include('./partials/docstore.ejs', {rootType: "archive"}); %>
         </div>
 
     </div>
@@ -25,6 +25,6 @@
 
 
 
-<%- include('../shared/partials/footer.ejs'); %>
+<%- include('./partials/footer.ejs'); %>
 </body>
 </html>

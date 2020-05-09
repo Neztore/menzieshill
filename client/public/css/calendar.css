@@ -1,0 +1,145 @@
+ul {list-style-type: none;}
+body {font-family: Verdana, sans-serif;}
+
+/* Month header */
+.month {
+    padding: 70px 25px;
+    width: 100%;
+    background: #1abc9c;
+    text-align: center;
+}
+
+.specialColour {
+    background: #1abc9c;
+}
+
+/* Month list */
+.month ul {
+    margin: 0;
+    padding: 0;
+}
+
+.month ul li {
+    color: white;
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
+
+/* Previous button inside month header */
+.month .prev {
+    float: left;
+    padding-top: 10px;
+}
+
+/* Next button */
+.month .next {
+    float: right;
+    padding-top: 10px;
+}
+
+.month .prev:hover {
+    color: #7a7a7a;
+    cursor: pointer;
+}
+
+.month .next:hover {
+    color: #7a7a7a;
+    cursor: pointer;
+}
+
+.calendar .columns {
+    margin-bottom: 0;
+}
+
+/* Weekdays (Mon-Sun) */
+.weekdays {
+    padding: 10px 0;
+    margin: 0 !important;
+    background-color:#ddd;
+}
+
+/* Days (1-31) */
+.days {
+    padding: 10px 0;
+    background: #eee;
+    margin: 0;
+
+}
+
+.days li {
+    list-style-type: none;
+    text-align: center;
+    margin-bottom: 5px;
+    color: #777;
+    padding: 0.4em 0;
+    cursor: pointer;
+    box-sizing: content-box;
+}
+.days li:hover {
+    font-weight: bold;
+}
+
+
+/* Highlight the "current" day */
+.days ul .active {
+    background: #1abc9c;
+    color: white !important;
+    border-radius: 10px;
+}
+
+.days ul .blank {
+    visibility: hidden;
+}
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Opera and Firefox */
+}
+
+.events-display .events-padding {
+    padding: 0 1em 1em 0;
+}
+
+
+.events-display .notification {
+    margin-bottom: 0.5em;
+    cursor: pointer;
+}
+
+.events-display .time {
+    margin-left: 0.75em;
+}
+.events-display {
+    overflow-y: scroll;
+    max-height: 200vh;
+}
+
+.cancel-reason {
+    margin-left: 0.25em;
+    min-height: 3em;
+    margin-top: 0.25em;
+    margin-bottom: 0.5em;
+}
+
+.calendar-modal .level {
+    margin-top: 0.2em;
+}
+.calendar-modal .level-item:not(:last-child) {
+    border-right: 0.5px solid gray;
+}
+.calendar .days .column {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.days {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+

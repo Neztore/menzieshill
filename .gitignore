@@ -95,3 +95,4 @@ api/build/
 client/dist/
 
 !.idea
+client/public/admin/

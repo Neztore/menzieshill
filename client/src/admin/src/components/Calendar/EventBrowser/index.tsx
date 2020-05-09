@@ -4,7 +4,7 @@ import EventEditor from "./EventEditor";
 import EventList from "./EventList";
 import CalendarEvent, {HttpError, Repeat} from "../../../shared/Types";
 import { showError } from '../../../shared/util';
-import * as Api from "../../../../../js/apiFetch";
+import * as Api from "../../../../../../public/js/apiFetch";
 import Notification from "../../../../bulma/notification";
 
 interface EventBrowserProps {

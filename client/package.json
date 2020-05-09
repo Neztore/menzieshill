@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
-    "dev": "parcel watch src/admin/index.html --public-url=/admin",
-    "build": "parcel build src/admin/index.html --public-url=/admin --no-source-maps"
+    "admin:dev": "parcel src/admin/index.html --out-dir public/admin --public-url=/admin",
+    "admin:build":"parcel build src/admin/index.html --public-url=/admin --out-dir public/admin --no-source-maps",
+    "build": "concurrently \"npm run admin:build\" \"npm run render\"",
+    "render": "node index.js"
   },
   "author": "Josh Muir",
   "license": "UNLICENSED",
@@ -28,6 +29,7 @@
   "devDependencies": {
     "@babel/core": "^7.8.3",
     "@babel/preset-env": "^7.8.3",
+    "concurrently": "^5.2.0",
     "cssnano": "^4.1.10",
     "typescript": "^3.7.5"
   }
