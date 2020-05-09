@@ -2,15 +2,16 @@
 // This file is executed by Netlify and used to build EJS to static HTML for serving.
 const ejs = require("ejs");
 const { join } = require("path");
-const { readdir, writeFile, stat } = require("fs");
+const { readdir, writeFile, stat, mkdir } = require("fs");
 const outputDir = join(__dirname, "public", "pages");
 const pagesDir = join(__dirname, "src", "pages");
 console.log(`EJS: Building pages.`)
 
 // Doesn't affect admin since it's not built with EJS
 const apiUrl = process.env.NODE_ENV === "production" ? "https://api.menzieshillwhitehall.co.uk":"http://localhost:3000"
-readdir(pagesDir, function (err, files) {
+readdir(pagesDir, async function (err, files) {
 	if(err) throw new Error(err);
+	await ensureExits(outputDir);
 	for (let fileName of files) {
 		stat(join(pagesDir, fileName), function (err, stats) {
 			if (stats.isFile()) {
@@ -32,12 +33,26 @@ readdir(pagesDir, function (err, files) {
 			}
 		});
 	}
-})
+});
 
-// Plan:
-// Move CSS, images & JS to public done
-// Move pages to a pages directory done
-// Move partials with pages done
-// Move Admin output to public/admin or public/dashboard done
-// Set up some redirects
-// Create 404.html
+function ensureExits (path) {
+	return new Promise(function (resolve, reject) {
+		stat(path, function (err, s) {
+			if (err) {
+				if (err.code === "ENOENT") {
+					mkdir(path, {
+						recursive: true
+					}, function (err) {
+						if (err) reject(err);
+						resolve(true);
+					});
+				} else {
+					reject(err);
+				}
+			} else {
+				resolve(true);
+			}
+
+		});
+	})
+}
