@@ -20,4 +20,4 @@
   from = "/*"
   to = "/pages/:splat"
   status = 200
-  force = true
+  force = false
