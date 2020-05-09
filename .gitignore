@@ -96,5 +96,4 @@ client/dist/
 
 !.idea
 client/public/admin/
-
-client/public/pages/
+client/public/pages/*
