@@ -17,12 +17,6 @@
   force = true
 
 [[redirects]]
-  from = "/*"
-  to = "/pages/:splat"
-  status = 200
-  force = false
-
-[[redirects]]
   from = "/admin/*"
   to = "/admin/index.html"
   status = 200
@@ -33,3 +27,10 @@
   to = "/pages/post.html"
   status = 200
   force = false
+
+[[redirects]]
+  from = "/*"
+  to = "/pages/:splat"
+  status = 200
+  force = false
+
