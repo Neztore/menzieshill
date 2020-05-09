@@ -1,8 +1,0 @@
-# Some basic redirects (Future urls should be directed to /pages/whatever
-/            /pages/index.html 200
-/swimming    /pages/swimming.html 200
-/water-polo    /pages/waterpolo.html 200
-/contact    /pages/contact.html 200
-/open-water    /pages/open-water.html 200
-/swimming    /pages/swimming.html 200
-/*           /pages/404.html 404
