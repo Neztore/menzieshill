@@ -2,12 +2,9 @@ import React from "react";
 import { AdminPanel } from "./AdminPanel";
 import UserBox from "./User";
 
-const SidebarStyle = {
-    marginLeft: "0.2em"
-};
 
 export const Sidebar = ()=>{
-    return <div style={SidebarStyle}>
+    return <div className="sidebar">
         <UserBox/>
         <AdminPanel/>
     </div>

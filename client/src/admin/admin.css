@@ -133,3 +133,10 @@
     cursor: pointer;
     overflow-x: hidden;
 }
+.sidebar-menu {
+    margin-top: 1vh;
+    padding-left: 0.75rem;
+}
+.sidebar {
+    padding-top: 0.75rem;
+}

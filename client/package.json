@@ -9,11 +9,13 @@
     "admin:build": "parcel build src/admin/index.html --public-url=/admin --out-dir public/admin --no-source-maps",
     "build": "concurrently \"npm run admin:build\" \"npm run render\"",
     "render": "node index.js",
-    "dev": "netlify dev"
+    "watch": "node index.js watch",
+    "dev": "concurrently \"npm run watch\" \"netlify dev\""
   },
   "author": "Josh Muir",
   "license": "UNLICENSED",
   "dependencies": {
+    "@babel/helper-compilation-targets": "^7.10.2",
     "@types/react": "^16.9.17",
     "@types/react-dom": "^16.9.4",
     "@types/react-router-dom": "^5.1.3",
@@ -21,14 +23,14 @@
     "ejs": "^3.0.1",
     "eslint-config-standard": "^14.1.0",
     "express": "^4.17.1",
-    "formik": "^2.1.3",
+    "formik": "^2.1.4",
     "react": "^16.12.0",
     "react-day-picker": "^7.4.5",
     "react-dom": "^16.12.0",
     "react-router-dom": "^5.1.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.8.3",
+    "@babel/core": "^7.10.2",
     "@babel/preset-env": "^7.8.3",
     "concurrently": "^5.2.0",
     "cssnano": "^4.1.10",

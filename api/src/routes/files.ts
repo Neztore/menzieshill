@@ -384,15 +384,27 @@ async function canAccessFolder(user: User|undefined, folder: Folder): Promise<bo
     } else return false
 }
 
+interface deniedFolder {
+    name: string,
+    hasAccess: boolean,
+    created: Date
+}
+
 function checkChildrenPermissions(folder: Folder, user: User | undefined) {
     function checkItemsAccess(items: Array<File>): Array<File>
     function checkItemsAccess(items: Array<Folder>): Array<Folder>
-    function checkItemsAccess(items: Array<File|Folder>): Array<File|Folder> {
+    function checkItemsAccess(items: Array<File|Folder>): Array<File|Folder|deniedFolder> {
         const returnArr = [];
         if (items && Array.isArray(items)) {
             for (let item of items) {
                 if (hasGroups(user,item.accessGroups )) {
                     returnArr.push(item)
+                } else {
+                    returnArr.push({
+                        name: item.name,
+                        hasAccess: false,
+                        created: item.created
+                    })
                 }
             }
         }

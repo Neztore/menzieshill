@@ -2,7 +2,7 @@
 
 import React, {FunctionComponent} from "react";
 import {Form, Formik} from "formik";
-import {Api, unescape, showError} from "../../../../shared/util";
+import {Api, unescape} from "../../../../shared/util";
 import {EditModal} from "../../../../../bulma/EditModal";
 import {Field, TextArea} from "../../../../../bulma/Field";
 import CalendarEvent, {Cancellation, Repeat} from "../../../../shared/Types";
@@ -38,7 +38,7 @@ export const CancellationModal: FunctionComponent<CancellationModalProps> = ({ca
 
 			const resp = await Api.delete(`/events/${event.id}/cancel/${id}`);
 			if (resp.error) {
-				showError(resp.error);
+				throw new Error(resp.error.message)
 			} else {
 				handleDone(false);
 			}
@@ -60,7 +60,7 @@ export const CancellationModal: FunctionComponent<CancellationModalProps> = ({ca
 		onSubmit={async (values, { setSubmitting, setErrors }) => {
 			if (!event.id) {
 				// Shouldn't get here
-				return showError("You must save the event before adding cancellations.");
+				throw new Error("You must save the event before adding cancellations.");
 			}
 			const postRequest = id ? Api.patch(`/events/${event.id}/cancel/${id}`, { body: values }) : Api.post(`/events/${event.id}/cancel`, {
 				noCache: true,

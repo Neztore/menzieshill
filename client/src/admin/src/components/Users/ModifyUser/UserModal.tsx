@@ -83,7 +83,7 @@ export const UserModal:FunctionComponent<UserRowProps> = (props) => {
         }}
         >
             {({ isSubmitting, handleSubmit }) => (
-                <EditModal close={()=>props.handleDone(false)} save={handleSubmit} isSubmitting={isSubmitting} title={`Editing ${username}`}>
+                <EditModal close={()=>props.handleDone(false)} save={handleSubmit} isSubmitting={isSubmitting} title={`Editing ${username}`} delete={console.log}>
                 <Form>
                     <HorizontalField type="text" name="username" label="Username:"/>
                     <HorizontalMultipleField label="Name: " fields={[

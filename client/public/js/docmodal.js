@@ -11,6 +11,37 @@ class DocModal extends  ParentModal {
   }
 }
 
+class PermissionModal extends  DocModal {
+  constructor (where, folderInfo) {
+    super(where)
+    this.folderInfo = folderInfo;
+  }
+  addContent () {
+    const content = document.createElement("div")
+    content.className = "notification has-background-white"
+    // Since CSS doesn't apply to parent doc
+    content.style = "min-height:10vh;"
+    this.content.appendChild(content)
+    const title = document.createElement("h3")
+    title.className = "is-size-4"
+    title.innerText = `You do not have access to ${this.folderInfo.name}!`
+    content.appendChild(title)
+
+    const hr = document.createElement("hr")
+    content.appendChild(hr)
+
+    const subtitle = document.createElement("h2");
+    subtitle.className = "subtitle has-text-centered"
+    subtitle.appendChild(document.createTextNode(`${window.user ? "You do not have permission to access that folder":"You are not logged in. Please log in or create an account."}`))
+
+    const text = document.createElement("p");
+    text.className = "notification is-warning"
+    content.appendChild(subtitle)
+    text.innerHTML = 'If you are logged in and think you should have access to this folder (for example if you are a club member trying to access club minutes) please contact the <a href="mailto:ppo@menzieshillwhitehall.co.uk">Press and publicity officer</a> to request access.'
+    content.appendChild(text)
+  }
+}
+
 
 class UploadModal extends DocModal {
   constructor (where, folder, uploaded) {

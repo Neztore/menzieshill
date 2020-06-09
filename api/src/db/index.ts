@@ -104,16 +104,13 @@ class Database extends EventEmitter {
 
     async getAuthByToken (token: string): Promise<Auth | undefined> {
         // We get groups as well as this is only used by the auth middleware.
-        const auth = this.auth.createQueryBuilder("auth")
+        return this.auth.createQueryBuilder("auth")
             .leftJoinAndSelect("auth.user", "user")
             .leftJoinAndSelect("user.groups", "groups")
             .where("auth.token = :token", { token})
             .getOne();
-        //const auth = await this.auth.findOne({token}, {relations: [ "user" ]});
-        if (!auth) return;
-        return auth
     }
-
+//X95itlkaAeZBKVMYy3YRFXomrk0IEm5qcPx+yE7QMxEMQNl6t8L16feQ/0e9wB3npkPJM7b/GC5zcPjyZWDcbkSwr/no0ratSVMS
     // Modify or create group
     modifyGroup (group: Group) {
         return this.groups.save(group);
@@ -152,7 +149,7 @@ class Database extends EventEmitter {
             .limit(500) // We should never hit this, but just incase.
             .getMany();
     }
-    
+
 
     getEvent (eventId: number) {
         return this.events.createQueryBuilder('event')

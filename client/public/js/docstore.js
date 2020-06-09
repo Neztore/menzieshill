@@ -45,7 +45,12 @@ const imgExtensions = ["jpeg", "jpg", "gif", "png", "exif", "bmp", "webp", "svg"
     gridButton.onclick = function () {
       setViewType(true);
     }
-
+    setTimeout(function () {
+      if (!window.user) {
+        addFolderButton.remove();
+        addFilesButton.remove();
+      }
+    }, 5000)
 
 
 
@@ -287,7 +292,14 @@ const imgExtensions = ["jpeg", "jpg", "gif", "png", "exif", "bmp", "webp", "svg"
           name.appendChild(document.createTextNode(fileInfo.name))
 
           name.addEventListener("click", function () {
-            setFolder(fileInfo.id)
+            if (fileInfo.hasAccess === false) {
+              // Display ask for access modal
+              const displ = new PermissionModal(document.body, fileInfo)
+              displ.show();
+            } else {
+              setFolder(fileInfo.id)
+            }
+
           })
 
           typeString = "Folder"
@@ -299,7 +311,6 @@ const imgExtensions = ["jpeg", "jpg", "gif", "png", "exif", "bmp", "webp", "svg"
         row.appendChild(type)
 
         const created = document.createElement("td")
-
         const timeString = parseDate(new Date(fileInfo.created), true);
         created.appendChild(document.createTextNode(timeString))
         row.appendChild(created)
@@ -308,14 +319,17 @@ const imgExtensions = ["jpeg", "jpg", "gif", "png", "exif", "bmp", "webp", "svg"
         const editCog = document.createElement("span")
         editCog.className = "icon icon-cog clickable"
         editCog.addEventListener("click", function () {
-          const modal = new EditModal(parent.document.body, fileInfo, function (deleted) {
-            if (deleted) {
-              setFolder(rootType)
-            } else {
-              setFolder(currentFolderId)
-            }
-          });
-          modal.show()
+          if (fileInfo.hasAccess !== false) {
+            const modal = new EditModal(parent.document.body, fileInfo, function (deleted) {
+              if (deleted) {
+                setFolder(rootType)
+              } else {
+                setFolder(currentFolderId)
+              }
+            });
+            modal.show()
+          }
+
         })
 
         editRow.appendChild(editCog)

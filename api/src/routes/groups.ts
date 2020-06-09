@@ -14,7 +14,8 @@ groups.use(checkAuth([Perms.Member]));
 
 // Get all groups
 groups.get('/', errorCatch(async (_req: Request, res:Response) => {
-    res.send(await Database.getGroups())
+    const grps = await Database.getGroups()
+    res.send(grps);
 }));
 
 // Admin only

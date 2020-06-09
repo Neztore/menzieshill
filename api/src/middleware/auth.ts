@@ -45,10 +45,11 @@ function makeMiddleware (requiredPerms?: Perms[]) {
                 // Check auth age
                 const numLife = Number(authLife);
                 const oldest = auth.created.getTime() + (numLife * 1000);
-                if (oldest < Date.now()) {
+                if (oldest > Date.now()) {
                     // It's expired.
+                    console.log("Expired auth token: Removing!")
                     await Database.deleteAuth(auth);
-                    res.status(401).send(errorGenerator(401, "Token expired, please login again.", {action: "login"}));
+                    return res.status(401).send(errorGenerator(401, "Token expired, please login again.", {action: "login"}));
                 }
                 // Check if it's member only
                 if (auth.user && requiredPerms) {
