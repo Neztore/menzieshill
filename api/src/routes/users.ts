@@ -277,6 +277,9 @@ users.patch('/:userId', errorCatch(async (req: Request, res: Response) =>{
 
     if (userId && validId(userId)) {
         let parsedId = parseInt(userId,10);
+        if (req.user && req.user.id === parsedId && req.body.password) {
+            return res.status(403).send(errorGenerator(403, "Cannot update password", {errors: [{field: "password", msg: "For security reasons, you cannot update your own password here. Use the 'My account' page to do so."}]}));
+        }
         let user = await Database.getUser(parsedId)
         if (user) {
             user = Object.assign({}, user);
