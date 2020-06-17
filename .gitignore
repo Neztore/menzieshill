@@ -97,3 +97,5 @@ client/dist/
 client/public/admin/
 client/public/404.html
 client/public/pages/*
+
+.idea/
