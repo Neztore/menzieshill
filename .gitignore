@@ -88,13 +88,12 @@ typings/
 .dynamodb/
 
 # Local files
-.idea
+
 api/build/
 
 
 client/dist/
 
-!.idea
 client/public/admin/
 client/public/404.html
 client/public/pages/*
