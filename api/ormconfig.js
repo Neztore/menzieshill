@@ -19,4 +19,4 @@ module.exports = {
     "src/db/subscriber/*.js"
   ]
 }
-console.log(module.exports.entities);
+

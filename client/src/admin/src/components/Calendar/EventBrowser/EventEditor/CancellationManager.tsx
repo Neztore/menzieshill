@@ -71,9 +71,11 @@ export default CancellationManager
 
 const Title = ({event}: {event: CalendarEvent})=> (<p className="subtitle">
 	{
-		event.repeat === Repeat.None ?
+		event.cancellations ?
+			(event.repeat === Repeat.None ?
 			event.cancellations.length !== 0 ? "This event has been cancelled":"This event has not been cancelled"
 			:
-			(<span>This event has <code>{event.cancellations.length}</code> cancellations.</span>)
+			(<span>This event has <code>{event.cancellations.length}</code> cancellations.</span>))
+			: "This event has been cancelled"
 	}
 </p>);

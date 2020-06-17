@@ -192,7 +192,13 @@ users.get('/:id', errorCatch(async (req: Request, res:Response) => {
             const auth = await Database.getAuthByToken(req.cookies.token)
             if (auth && auth.user) {
                 const fullUser = await Database.getUser(auth.user.id)
-                return res.send(fullUser);
+                if (fullUser) {
+                    const perms = getPerms(fullUser);
+                    return res.send({...fullUser, perms});
+                } else {
+                    throw new Error("That shouldn't happen");
+                }
+
             } else {
                 return  res.status(400).send(errorGenerator(401, "You are not logged in."));
             }

@@ -3,22 +3,22 @@ import React, {FunctionComponent, useEffect, useState} from "react";
 import EventEditor from "./EventEditor";
 import EventList from "./EventList";
 import CalendarEvent, {HttpError, Repeat} from "../../../shared/Types";
-import { showError } from '../../../shared/util';
 import * as Api from "../../../../../../public/js/apiFetch";
 import Notification from "../../../../bulma/notification";
 
 interface EventBrowserProps {
 	filterNo: number,
 	displayDate: Date
+	selectedId?: number,
+	setSelectedId: Function
 }
 export interface EventsResponse {
 	success: boolean,
 	recurring: CalendarEvent[],
-	events: CalendarEvent[]
+	events: CalendarEvent[],
 }
 // Handles state and fetching events
-export const EventBrowser: FunctionComponent<EventBrowserProps> = ({filterNo, displayDate}) => {
-	const [selectedId, setSelectedId] = useState();
+export const EventBrowser: FunctionComponent<EventBrowserProps> = ({filterNo, displayDate, selectedId, setSelectedId}) => {
 	const [err, setError] = useState<HttpError["error"]>();
 	const [events, setEvents] = useState<EventsResponse>();
 
@@ -47,23 +47,25 @@ export const EventBrowser: FunctionComponent<EventBrowserProps> = ({filterNo, di
 							console.log(`Merging cancellations`);
 							// The Edit API does not return cancellations. For ease, we just merge the old one if a new one isn't provided
 							const cancellations = outArr[i].cancellations;
-							eventInfo.cancellations = [...cancellations]
+							// It will be
+							if (cancellations) {
+								eventInfo.cancellations = [...cancellations]
+							}
+
 						}
 						outArr[i] = eventInfo;
 						updated = true;
 						break;
 					}
 				}
-				// Failed to find it.. what? Refresh the page.
+				// Failed to find it.. It's probably new
 				if (!updated) {
-					console.error(`Failed to find event: Panic refresh.`);
-					return document.location.reload();
-				} else {
-					const newEvents = {...events};
-					newEvents[arrStr] = outArr;
-					setEvents(newEvents);
-					console.log("set events ", newEvents[arrStr])
+					console.log(`Adding new event!`);
+					outArr.push(eventInfo)
 				}
+				const newEvents = {...events};
+				newEvents[arrStr] = outArr;
+				setEvents(newEvents);
 
 			}
 		}
@@ -97,21 +99,27 @@ export const EventBrowser: FunctionComponent<EventBrowserProps> = ({filterNo, di
 		</Notification>
 	}
 	if (events) {
-		const sel = getEvent(selectedId);
-		if (!sel && selectedId) {
-			// wont happen
-			showError("Failed to obtain event object.");
+		let sel;
+		if (selectedId) {
+			sel = getEvent(selectedId);
+			if (!sel && selectedId) {
+				// wont happen
+				return <p>Failed to get event object!</p>;
+			}
 		}
 		return <div className="columns">
 			<div className="column is-4">
 				<EventList filterNo={filterNo} setSelected={(e:CalendarEvent)=>setSelectedId(e.id)} selectedEvent={sel} events={events.events} recurringEvents={events.recurring} displayDate={displayDate}/>
 			</div>
 			<div className="column">
-				<EventEditor selectedEvent={sel} refresh={updateEvent}/>
+				{selectedId === undefined ?
+                    <p className="has-text-centered has-text-grey">No event selected.</p>
+					:
+					<EventEditor selectedEvent={sel||{}} refresh={updateEvent}/>}
 			</div>
 		</div>
 	} else {
-		return <p>Loading...</p>
+		return <p className="has-text-centered">Loading...</p>
 	}
 
 

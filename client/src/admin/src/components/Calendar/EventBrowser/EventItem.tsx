@@ -22,6 +22,7 @@ export const EventItem: FunctionComponent<EventItemProps> = ({event: calEvent, h
 	}
 	const timeStr = (d: Date)=>`${addZeros(d.getHours())}:${addZeros(d.getMinutes())}`;
 	function isCancelled(): boolean {
+		if (!calEvent.cancellations) return false;
 		if (calEvent.repeat === Repeat.None && calEvent.cancellations.length !==0) return true;
 		for (let counter =0; counter<calEvent.cancellations.length; counter++) {
 			const curr = calEvent.cancellations[counter];

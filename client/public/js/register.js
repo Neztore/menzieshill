@@ -190,6 +190,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 function  removeWhitespace (str) {
+  if (!str) return undefined;
   str.replace(/ /g,'')
   if (str === "") return undefined
   return str

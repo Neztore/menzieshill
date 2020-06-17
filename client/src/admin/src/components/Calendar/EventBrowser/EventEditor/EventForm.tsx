@@ -12,7 +12,7 @@ interface EventFormProps {
 }
 
 export const EventForm: FunctionComponent<EventFormProps> = (props) => {
-	const {
+	let {
 		name = "",
 		when = new Date(),
 		length = 1,
@@ -20,8 +20,10 @@ export const EventForm: FunctionComponent<EventFormProps> = (props) => {
 		colour = EventColour.White,
 		type = EventType.Global,
 		repeat = Repeat.None
-	} = props.event;
-
+	} = props.event||{};
+	if (description === null) {
+	    description = ""
+    }
 	return <Formik
 		enableReinitialize
 		initialValues={{name, when, length, description: unescapeHtml(description), colour, type, repeat}}
@@ -121,7 +123,11 @@ export const EventForm: FunctionComponent<EventFormProps> = (props) => {
 					</Field>
 
 					<Field>
-						<button type="submit" className={`button is-info ${isSubmitting && "is-loading"}`}>Submit</button>
+						<div className = "buttons is-multiple">
+							<button type="submit" className={`button is-info ${isSubmitting && "is-loading"}`}>Submit</button>
+							<button className={`button is-danger ${isSubmitting && "is-loading"}`}>Delete</button>
+						</div>
+
 					</Field>
 
 				</Form>

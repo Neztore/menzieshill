@@ -99,3 +99,5 @@ client/public/404.html
 client/public/pages/*
 
 .idea/
+
+client/build/

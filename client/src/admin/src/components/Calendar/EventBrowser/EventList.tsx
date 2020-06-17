@@ -30,7 +30,7 @@ export const EventList: FunctionComponent<EventListProps> = ({recurringEvents, e
 		}
 
 		// Recurring events :/
-		if (filterNo === FilterType.all || filterNo ===FilterType.recurring) {
+		if ((filterNo === FilterType.all || filterNo ===FilterType.recurring) && events[0]) {
 			const targetDate = new Date(events[0].when);
 			const targetMonth = targetDate.getDate(), targetYear = targetDate.getFullYear();
 			const limit = daysInMonth(targetYear, targetMonth);

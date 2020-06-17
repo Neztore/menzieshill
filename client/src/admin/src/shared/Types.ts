@@ -4,13 +4,18 @@ export interface Group {
     id: number,
     name: string
 }
+export type PermString = "admin" | "managePosts" | "manageEvents" | "managePages" | "member"
+type perm = {
+    [key in PermString]: boolean;
+};
 export interface User {
     firstName: string,
     lastName: string
     id: number,
     username: string,
     groups: Array<Group>,
-    email: string
+    email: string,
+    perms?: perm
 }
 
 export interface HttpError {
@@ -76,7 +81,7 @@ export class CalendarEvent {
     type: EventType;
     repeat: Repeat;
     created: string;
-    cancellations: Cancellation[];
+    cancellations?: Cancellation[];
 	__loc?: number;
 }
 

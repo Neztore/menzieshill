@@ -1,10 +1,12 @@
 import {Route, Switch, Redirect} from "react-router";
 import Home from "./Home";
-import React from "react";
+import React, {useContext} from "react";
 import Users from "./Users";
 import Calendar from "./Calendar";
 import AccountPage from "./Account";
 import Posts from "./Posts";
+
+import PermCheck from "./PermCheck";
 
 export const PanelRouter = ()=> {
     return <Switch>
@@ -13,16 +15,28 @@ export const PanelRouter = ()=> {
         </Route>
 
         <Route exact path="/admin">
-            <Home />
+            <PermCheck requiredPerm="member" errorMessage="This console is for those with edit access, and you current lack 'member' permission.">
+                <Home />
+            </PermCheck>
+
         </Route>
         <Route path="/admin/users">
-            <Users/>
+            <PermCheck requiredPerm="admin">
+                <Users/>
+            </PermCheck>
+
         </Route>
         <Route path="/admin/calendar">
-            <Calendar/>
+            <PermCheck requiredPerm="manageEvents">
+                <Calendar/>
+            </PermCheck>
+
         </Route>
         <Route path="/admin/posts">
-            <Posts/>
+            <PermCheck requiredPerm="managePosts">
+                <Posts/>
+            </PermCheck>
+
         </Route>
 
         <Route path="/admin/account">

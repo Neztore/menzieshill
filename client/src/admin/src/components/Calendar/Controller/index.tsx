@@ -7,15 +7,22 @@ interface ControllerProps {
 	setFilter: Function,
 	filterNo: number,
 	displayDate: Date,
-	setDate: Function
+	setDate: Function,
+	setSelected: Function
 }
 
-export const Controller: FunctionComponent<ControllerProps> = ({setFilter, filterNo, setDate, displayDate}) => {
+export const Controller: FunctionComponent<ControllerProps> = ({setFilter, filterNo, setDate, displayDate, setSelected}) => {
+	function handleClick() {
+		console.log("Click!")
+		setSelected(0)
+
+	}
 	return <div className="level">
 		<div className="level-left">
 			<div className="level-item">
-				<h1 className="title">Calendar</h1>
 
+				<h1 className="title">Calendar</h1>
+				<button className="button is-info is-outlined is-small add-margin-left" onClick={handleClick}>Add</button>
 			</div>
 
 		</div>
