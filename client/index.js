@@ -68,13 +68,15 @@ let watchDeb;
 // Partial deb is longer as it's "more expensive"
 let partialDeb;
 if (watchMode) {
-	watch(pagesDir, function (eventType, filename) {
-		if (!watchDeb) {
-			// if it doesn't exist, stat will catch
-			buildFile(filename, true);
-			watchDeb = setTimeout(function() { watchDeb=null }, 3000)
-		}
+	// This builds files twice but usually the second is the one with the edits, so we'll leave it I guess
+	// Two builds isn't efficient as possible but it ain't too bad for a temporary hack.
 
+	watch(pagesDir, function (eventType, filename) {
+		if (filename && !filename.includes("~")) {
+			// if it doesn't exist, stat will catch
+			// Temporary
+			buildFile(filename, true);
+		}
 	});
 
 	watch(partialDir, function (eventType, filename) {

@@ -2,7 +2,7 @@
 import React, {FunctionComponent, useState} from "react";
 import CalendarEvent, {Repeat} from "../../../../shared/Types";
 import {CancellationModal} from "./CancellationModal";
-import {Api, showError} from '../../../../shared/util'
+import {Api} from '../../../../shared/util'
 import CancellationList from "./CancellationList";
 
 interface CancellationManagerProps {
@@ -30,18 +30,17 @@ export const CancellationManager: FunctionComponent<CancellationManagerProps> = 
 				const ev = await Api.get(`/events/${event.id}`, {
 					noCache: true
 				});
-				console.log("bb",ev.event)
 				if (ev.error) {
-					showError(ev.error);
+					throw new Error(ev.error);
 				} else {
 					if (ev.event) {
 						refresh(ev.event);
 					} else {
-						showError("No event was supplied from refresh.")
+						throw new Error("No event was supplied from refresh.")
 					}
 				}
 			} else {
-				return showError("Failed to reload event from server: ")
+				throw new Error("Failed to reload event from server: ")
 			}
 		}
 		setOpen(false);
