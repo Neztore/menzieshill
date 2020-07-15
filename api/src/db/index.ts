@@ -129,9 +129,8 @@ class Database extends EventEmitter {
     // Inclusive. I.e. minMonth is the min month that WILL be taken.
     getEvents (min: Date, max: Date): Promise<CalendarEvent[]> {
         return this.events.createQueryBuilder('event')
-            .where('event.when >= :min', {min})
-            .andWhere('event.when <= :max', {max})
-            .where('event.repeat = :none', {none: Repeat.None})
+            .where('event.when between :min and :max', {min, max})
+            .andWhere('event.repeat = :none', {none: Repeat.None})
             .leftJoinAndSelect("event.cancellations", "cancellation", "cancellation.when >= :min AND cancellation.when <= :max", { min, max})
             .leftJoinAndSelect("cancellation.cancelledBy", "cancelledBy")
             .orderBy("event.when", "ASC")

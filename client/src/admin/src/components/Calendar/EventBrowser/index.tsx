@@ -35,7 +35,10 @@ export const EventBrowser: FunctionComponent<EventBrowserProps> = ({filterNo, di
 		})()
 	},  [displayDate]);
 
-	function updateEvent(eventInfo: CalendarEvent):any {
+	function updateEvent(eventInfo?: CalendarEvent, isDeletion?: boolean):any {
+		if (!eventInfo) {
+			return setSelectedId(undefined);
+		}
 		if (events) {
 			const arrStr = eventInfo.repeat === Repeat.None ? "events" : "recurring";
 			if (events[arrStr] && events[arrStr].length > 0) {
@@ -43,19 +46,27 @@ export const EventBrowser: FunctionComponent<EventBrowserProps> = ({filterNo, di
 				let updated = false;
 				for (let i=0; i<outArr.length; i++) {
 					if (outArr[i].id === eventInfo.id) {
-						if (!eventInfo.cancellations) {
-							console.log(`Merging cancellations`);
-							// The Edit API does not return cancellations. For ease, we just merge the old one if a new one isn't provided
-							const cancellations = outArr[i].cancellations;
-							// It will be
-							if (cancellations) {
-								eventInfo.cancellations = [...cancellations]
-							}
+						if (isDeletion) {
+							outArr.splice(i, 1);
+							updated = true;
+							setSelectedId(undefined);
+							break;
+						} else {
+							if (!eventInfo.cancellations) {
+								console.log(`Merging cancellations`);
+								// The Edit API does not return cancellations. For ease, we just merge the old one if a new one isn't provided
+								const cancellations = outArr[i].cancellations;
+								// It will be
+								if (cancellations) {
+									eventInfo.cancellations = [...cancellations]
+								}
 
+							}
+							outArr[i] = eventInfo;
+							updated = true;
+							break;
 						}
-						outArr[i] = eventInfo;
-						updated = true;
-						break;
+
 					}
 				}
 				// Failed to find it.. It's probably new
@@ -69,6 +80,10 @@ export const EventBrowser: FunctionComponent<EventBrowserProps> = ({filterNo, di
 
 			}
 		}
+		if (!isDeletion) {
+			setSelectedId(eventInfo.id);
+		}
+
 	}
 
 	function getEvent(id: number):CalendarEvent|undefined {

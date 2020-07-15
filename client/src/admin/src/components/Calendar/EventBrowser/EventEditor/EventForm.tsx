@@ -5,16 +5,16 @@ import {Api} from "../../../../shared/util";
 import { showMessage, unescapeHtml } from '../../../../../../../public/js';
 import {Dropdown, NormalInput, TextArea, Field} from "../../../../../bulma/Field";
 import CalendarEvent, {EventColour, EventType, Repeat} from "../../../../shared/Types";
+import DayPicker from "../../DayPicker";
 
 interface EventFormProps {
 	event: Partial<CalendarEvent>,
 	refresh: Function
 }
-
 export const EventForm: FunctionComponent<EventFormProps> = (props) => {
 	let {
 		name = "",
-		when = new Date(),
+		when = new Date,
 		length = 1,
 		description = "",
 		colour = EventColour.White,
@@ -24,10 +24,20 @@ export const EventForm: FunctionComponent<EventFormProps> = (props) => {
 	if (description === null) {
 	    description = ""
     }
-	return <Formik
+	if (typeof when === "string") {
+		when = new Date(when)
+	}
+	let time: string = "";
+	if (props.event) {
+		const hours = `${when.getHours()}`.length === 2 ? `${when.getHours()}` : `0${when.getHours()}`;
+		const minutes = `${when.getMinutes()}`.length === 2 ? `${when.getMinutes()}` : `0${when.getMinutes()}`;
+		time = `${hours}:${minutes}`;
+	}
+		return <Formik
 		enableReinitialize
-		initialValues={{name, when, length, description: unescapeHtml(description), colour, type, repeat}}
+		initialValues={{name, when, length, description: unescapeHtml(description), colour, type, repeat, time}}
 		onSubmit={async (values, { setSubmitting, setErrors }) => {
+			console.log(values);
 			const postRequest = props.event.id ? Api.patch(`/events/${props.event.id}`, { body: values }) : Api.post(`/events`, {body: values});
 			const res = await postRequest;
 			if (res.error) {
@@ -50,8 +60,30 @@ export const EventForm: FunctionComponent<EventFormProps> = (props) => {
 			} else {
 				errors.name = "A name is required."
 			}
+			if (values.time) {
+				const [hours, minutes] = values.time.split(":");
+				const parsedHours = parseInt(hours);
+				const parsedMinutes = parseInt(minutes);
+				if (parsedMinutes && parsedHours && !isNaN(parsedHours) && !isNaN(parsedMinutes)) {
+					if (parsedMinutes < 0 || parsedMinutes >= 60) {
+						errors.time = "Minutes must be between 0 and 60."
+					} else if (parsedHours < 0 || parsedHours >= 24) {
+						errors.time = "Hours must be between 0 and 24."
+					} else {
+						values.when.setHours(parsedHours);
+						values.when.setMinutes(parsedMinutes);
+					}
+				} else {
+					errors.time = "Invalid time: Please specify hours and minutes."
+				}
+			} else {
+				errors.time = "You must specify a time."
+			}
 
 			// Check date
+			if (!values.when || typeof values.when !== "object") {
+				errors.date = "Invalid date";
+			}
 
 			//
 			if (values.length) {
@@ -87,34 +119,49 @@ export const EventForm: FunctionComponent<EventFormProps> = (props) => {
 					<Field>
 						<NormalInput type="text" name="name" label="Event name"/>
 					</Field>
-
-					{ /* WHEN FIELD   */}
+					<Field grouped>
+						<DayPicker name="when" label="Date (Y-M-D)"/>
+						<div className="control">
+							<NormalInput label="Start time" name="time" type="time"/>
+						</div>
+						<div className="control">
+							<NormalInput type="number" name="length" label="Length (Hours)" min="1" max="168" step="1"/>
+						</div>
+					</Field>
 					<Field>
-						<NormalInput type="number" name="length" label="Length (Hours)" min="1" max="168" step="1"/>
+
 					</Field>
 					<Field grouped>
-						<Dropdown label="Colour: " name="colour">
-							<option>Turqoise</option>
-							<option>Blue</option>
-							<option value="LightGrey">Light Grey</option>
-							<option>Red</option>
-							<option>Yellow</option>
-							<option>Green</option>
-							<option>White</option>
-							<option>Black</option>
-						</Dropdown>
-						<Dropdown label="Type: " name="type">
-							<option>Global</option>
-							<option>Swimming</option>
-							<option value="WaterPolo">Water Polo</option>
-							<option value="OpenWater">Open Water</option>
-						</Dropdown>
-						<Dropdown label="Repeat: " name="repeat">
-							<option>None</option>
-							<option>Daily</option>
-							<option>Weekly</option>
-							<option>Monthly</option>
-						</Dropdown>
+						<div className="control">
+							<Dropdown label="Colour: " name="colour">
+								<option>Turqoise</option>
+								<option>Blue</option>
+								<option value="LightGrey">Light Grey</option>
+								<option>Red</option>
+								<option>Yellow</option>
+								<option>Green</option>
+								<option>White</option>
+								<option>Black</option>
+							</Dropdown>
+						</div>
+						<div className="control">
+							<Dropdown label="Type: " name="type">
+								<option>Global</option>
+								<option>Swimming</option>
+								<option value="WaterPolo">Water Polo</option>
+								<option value="OpenWater">Open Water</option>
+							</Dropdown>
+						</div>
+
+						<div className="control">
+							<Dropdown label="Repeat: " name="repeat">
+								<option>None</option>
+								<option>Daily</option>
+								<option>Weekly</option>
+								<option>Monthly</option>
+							</Dropdown>
+						</div>
+
 					</Field>
 
 
@@ -123,11 +170,7 @@ export const EventForm: FunctionComponent<EventFormProps> = (props) => {
 					</Field>
 
 					<Field>
-						<div className = "buttons is-multiple">
-							<button type="submit" className={`button is-info ${isSubmitting && "is-loading"}`}>Submit</button>
-							<button className={`button is-danger ${isSubmitting && "is-loading"}`}>Delete</button>
-						</div>
-
+						<button type="submit" className={`button is-info ${isSubmitting && "is-loading"}`}>Submit</button>
 					</Field>
 
 				</Form>

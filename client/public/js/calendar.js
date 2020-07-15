@@ -112,6 +112,12 @@ const calendar = {
     removeChildren(eventsContainer)
     const hours = []
     const events = await this.getEventsOnDay(this.selectedDate)
+    if (events.length === 0) {
+      const p = document.createElement("p");
+      p.className = "has-text-grey has-text-centered"
+      p.innerText = "There are no events to show."
+      eventsContainer.appendChild(p)
+    }
     for (const event of events) {
       const time = new Date(event.when)
       const hour = time.getHours()+"",

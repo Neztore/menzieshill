@@ -17,16 +17,16 @@ function  displayPost (info) {
   postInfo.appendChild(document.createTextNode("By: "))
   const author = document.createElement("a")
   author.href = "#"
-  author.appendChild(document.createTextNode(info.author.firstName + info.author.lastName))
+  author.appendChild(document.createTextNode(info.author.firstName + " " + info.author.lastName))
   postInfo.appendChild(author)
 
-  postInfo.appendChild(document.createTextNode(". Created: "))
+  postInfo.appendChild(document.createTextNode(" Created: "))
   const cDate = new Date(info.created)
   const created = document.createElement("strong")
   created.appendChild(document.createTextNode(`${cDate.getDate()}/${cDate.getMonth()}/${cDate.getFullYear()}`))
   postInfo.appendChild(created)
 
-  postInfo.appendChild(document.createTextNode(". Updated: "))
+  postInfo.appendChild(document.createTextNode(" Updated: "))
   const uDate = new Date(info.created)
   const updated = document.createElement("strong")
   const minString = uDate.getMinutes().length > 1 ? uDate.getMinutes() : `0${uDate.getMinutes()}`
