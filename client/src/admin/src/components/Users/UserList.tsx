@@ -16,7 +16,6 @@ export function UserList() {
     useEffect(function(){
 
                 (async function doIt() {
-                    console.log("Fetching users...");
                     const users = await Api.get("/users")
                     if (users.success) {
                         setUsers(users.users)

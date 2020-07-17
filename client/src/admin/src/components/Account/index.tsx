@@ -19,7 +19,7 @@ export function AccountPage() {
         })()
     }, []);
     if (info) {
-        return <div>
+        return <div className="admin-canscroll">
             <h1 className="title is-3">My account</h1>
             <div className="columns is-centered">
                 <div className="column is-10">

@@ -14,7 +14,7 @@ readdirSync(directory).forEach(file => {
         });
     }
 });
-export type templateType =  "contactUs" |"passwordReset"
+export type templateType =  "contactUs" |"passwordReset"|"welcome"
 export function fillTemplate(templateName: templateType, values: any) {
     const template  = templates[templateName];
     if (template) {

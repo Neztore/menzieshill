@@ -26,9 +26,6 @@
 .modal img {
     max-height: 70vh;
 }
-.m-box {
-
-}
 .modal .modal-content .box {
     min-height: 30vh;
     margin-bottom: 0.2em;
@@ -43,4 +40,7 @@
 }
 #prev-parent {
     margin-bottom: 2vh;
+}
+.doc-modal {
+    border-radius: 4px;
 }

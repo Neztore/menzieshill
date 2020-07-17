@@ -72,7 +72,7 @@ export function Posts() {
 
     } else {
         // Woot. No errors - Render posts.
-        return <div>
+        return <div className="admin-canscroll">
                 <h1 className="title is-3">Posts <button onClick={()=>openPost("new")} className="button is-info is-outlined">Create</button></h1>
             <Route exact path="/admin/posts/:id">
                 {({match})=>  match ? <PostModal handleDone={handleDone} postId={isNaN(match.params.id) ? undefined : match.params.id}/>: "" }

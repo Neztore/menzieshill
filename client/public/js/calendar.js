@@ -201,16 +201,17 @@ const calendar = {
     }
     // Handle repeating events
     for (let recurringEvent of this.events[monthString].recurring) {
+      const d = new Date(recurringEvent.when);
       if (recurringEvent.repeat === Repeats.Daily) { // we always take. it's daily.
         eventsOnDay.push(recurringEvent)
 
       } else if (recurringEvent.repeat === Repeats.Weekly) {
-        if (recurringEvent.when.getDay() === targetDay) { //only take if day of the WEEK matches
+        if (d.getDay() === targetDay) { //only take if day of the WEEK matches
           eventsOnDay.push(recurringEvent)
         }
 
       } else if (recurringEvent.repeat === Repeats.Monthly) {
-        if (recurringEvent.when.getDate() === targetMonth) { // Only take if day of the MONTH matches
+        if (d.getDate() === targetMonth) { // Only take if day of the MONTH matches
           eventsOnDay.push(recurringEvent)
         }
       }

@@ -18,10 +18,8 @@ type List = CalendarEvent[][];
 // Handles filtering and lists
 export const EventList: FunctionComponent<EventListProps> = ({recurringEvents, events, filterNo, displayDate, setSelected, selectedEvent}) => {
 	// Each number corresponds to day of the month - 1
-	console.log("Re-render__");
 	const [lists, setLists] = useState<List>([]);
 	useEffect(function () {
-		console.log("RE-DO");
 		const arrOut: List = [];
 		if (filterNo !== FilterType.recurring) {
 			for (let event of events) {
@@ -32,9 +30,8 @@ export const EventList: FunctionComponent<EventListProps> = ({recurringEvents, e
 		}
 
 		// Recurring events :/
-		if ((filterNo === FilterType.all || filterNo ===FilterType.recurring) && events[0]) {
-			const targetDate = new Date(events[0].when);
-			const targetMonth = targetDate.getDate(), targetYear = targetDate.getFullYear();
+		if ((filterNo === FilterType.all || filterNo ===FilterType.recurring) && recurringEvents[0]) {
+			const targetMonth = displayDate.getDate(), targetYear = displayDate.getFullYear();
 			const limit = daysInMonth(targetYear, targetMonth);
 
 			for (let event of recurringEvents) {
@@ -76,7 +73,7 @@ export const EventList: FunctionComponent<EventListProps> = ({recurringEvents, e
 			}
 		}
 		return undefined;
-	}, [filterNo,events, recurringEvents ]);
+	}, [filterNo,events, recurringEvents, displayDate ]);
 	function setSelect(loc:number, e:CalendarEvent) {
 			setSelected({
 				_loc: loc,

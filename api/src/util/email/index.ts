@@ -29,13 +29,12 @@ class Email {
             if (error) {
                 console.log(error);
             } else {
-                console.log("E system online");
+                console.log("Email system online");
             }
         });
 
         this._transporter = transporter
     }
-    // todo: add formating
     async sendMail (to: string, subject:string, content:string) {
         try {
             let f = await this._transporter.sendMail({

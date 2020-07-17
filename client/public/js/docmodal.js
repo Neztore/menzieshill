@@ -54,7 +54,7 @@ class UploadModal extends DocModal {
     const that = this
 
     const content = document.createElement("div")
-    content.className = "container has-background-white"
+    content.className = "container has-background-white doc-modal"
     this.content.appendChild(content)
 
     // The drop zone - CSS is in global.

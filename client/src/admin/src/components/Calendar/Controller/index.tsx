@@ -13,9 +13,7 @@ interface ControllerProps {
 
 export const Controller: FunctionComponent<ControllerProps> = ({setFilter, filterNo, setDate, displayDate, setSelected}) => {
 	function handleClick() {
-		console.log("Click!")
 		setSelected(0)
-
 	}
 	return <div className="level">
 		<div className="level-left">

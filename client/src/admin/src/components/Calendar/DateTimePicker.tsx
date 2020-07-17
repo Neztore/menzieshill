@@ -25,7 +25,6 @@ export const DateTimePicker: FunctionComponent<DayPickerProps> = ({name, small, 
 
 		const parsedHours = parseInt(hours, 10);
 		const parsedMinutes = parseInt(minutes, 10);
-		console.log(`Hours: ${parsedHours} Minutes: ${parsedMinutes}`);
 		// Normally we'd leave validation to Formik, but because this is custom we've got to do it.
 		if (parsedHours >= 0 && parsedHours < 24 && parsedMinutes >= 0 && parsedMinutes < 59) {
 			newDate.setHours(hours);

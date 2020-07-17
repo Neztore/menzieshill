@@ -53,7 +53,6 @@ export const EventBrowser: FunctionComponent<EventBrowserProps> = ({filterNo, di
 							break;
 						} else {
 							if (!eventInfo.cancellations) {
-								console.log(`Merging cancellations`);
 								// The Edit API does not return cancellations. For ease, we just merge the old one if a new one isn't provided
 								const cancellations = outArr[i].cancellations;
 								// It will be
@@ -71,7 +70,6 @@ export const EventBrowser: FunctionComponent<EventBrowserProps> = ({filterNo, di
 				}
 				// Failed to find it.. It's probably new
 				if (!updated) {
-					console.log(`Adding new event!`);
 					outArr.push(eventInfo)
 				}
 				const newEvents = {...events};
@@ -119,7 +117,8 @@ export const EventBrowser: FunctionComponent<EventBrowserProps> = ({filterNo, di
 			sel = getEvent(selectedId);
 			if (!sel && selectedId) {
 				// wont happen
-				return <p>Failed to get event object!</p>;
+				setSelectedId(undefined);
+				return <p>Loading...</p>
 			}
 		}
 		return <div className="columns">

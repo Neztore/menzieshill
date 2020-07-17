@@ -37,7 +37,6 @@ export const EventForm: FunctionComponent<EventFormProps> = (props) => {
 		enableReinitialize
 		initialValues={{name, when, length, description: unescapeHtml(description), colour, type, repeat, time}}
 		onSubmit={async (values, { setSubmitting, setErrors }) => {
-			console.log(values);
 			const postRequest = props.event.id ? Api.patch(`/events/${props.event.id}`, { body: values }) : Api.post(`/events`, {body: values});
 			const res = await postRequest;
 			if (res.error) {
@@ -64,7 +63,7 @@ export const EventForm: FunctionComponent<EventFormProps> = (props) => {
 				const [hours, minutes] = values.time.split(":");
 				const parsedHours = parseInt(hours);
 				const parsedMinutes = parseInt(minutes);
-				if (parsedMinutes && parsedHours && !isNaN(parsedHours) && !isNaN(parsedMinutes)) {
+				if (!isNaN(parsedHours) && !isNaN(parsedMinutes)) {
 					if (parsedMinutes < 0 || parsedMinutes >= 60) {
 						errors.time = "Minutes must be between 0 and 60."
 					} else if (parsedHours < 0 || parsedHours >= 24) {

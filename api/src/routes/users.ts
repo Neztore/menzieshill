@@ -98,6 +98,13 @@ users.post('/register', errorCatch(async (req: Request, res: Response): Promise<
                 lastName,
                 hash: result
             });
+            await EmailSystem.send("welcome", email, `Account created`, {
+                name: firstName,
+                fullName: `${firstName} ${lastName}`,
+                username,
+                email
+            });
+
             res.send({
                 msg: "Success: User created",
                 success: true,
@@ -115,10 +122,10 @@ users.post('/login', errorCatch(async (req: Request, res: Response) => {
     let { username, password } = req.body;
     const errors = [];
     // Validation
-    if (!validUsername(username)) {
-        errors.push('Username must be between 3 and 20 characters and contain only letters, numbers and the symbols ".", "-" or "_".');
+    if (!validUsername(username) && !isEmail(username)) {
+        errors.push('Username must be between 3 and 20 characters and contain only letters, numbers and the symbols ".", "-" or "_" - or be email.');
     } else {
-        username = trim(escape(username))
+        username = trim(username)
     }
 
     if (!validPassword(password)) {

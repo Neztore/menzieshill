@@ -179,19 +179,6 @@ document.addEventListener('DOMContentLoaded', () => {
       window.user = userInfo;
     }
   })()
-  // TODO: Remove (TEMP)
-  if (!document.cookie.includes("DISCLAIMER_ACCEPTED")) {
-    const disc = document.getElementById("disclaimer")
-    if (!disc) return;
-    disc.className = disc.className + "is-active"
-
-    const accepted = document.getElementById("disc-accepted");
-    accepted.onclick = function () {
-      document.cookie = "DISCLAIMER_ACCEPTED=yes"
-      disc.remove();
-    }
-  }
-
 });
 
 function removeChildren(element) {
@@ -240,6 +227,7 @@ class Modal {
 var GlobalModal = Modal
 // From https://github.com/validatorjs/validator.js/blob/master/src/lib/unescape.js
 function unescapeHtml (str) {
+  if (!str || typeof str !== "string") return "";
   return (str.replace(/&amp;/g, '&')
   .replace(/&quot;/g, '"')
   .replace(/&#x27;/g, "'")

@@ -41,8 +41,6 @@ function getEmailAddress (area: keyof Subjects, subject: string) {
     console.log(`Email: Not production!`);
     return emailSubjects.testing
   }
-
-  return "";
   if (emailSubjects[area]) {
     // @ts-ignore
     if (emailSubjects[area][subject]) {
