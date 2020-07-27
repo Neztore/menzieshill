@@ -1,5 +1,5 @@
 /*
-  Copyright © Josh Muir 2019.
+  Copyright © Josh Muir 2020.
   Produced for Menzieshill Whitehall Swimming and Water Polo club, a registered charity.
   The unauthorised distribution of this software or any derivative works is strictly prohibited.
  */
@@ -31,14 +31,19 @@ const app = express();
 sentry.init({ dsn: sentryDsn });
 // TODO: Set CORS
 app.use(cors({ //
-  origin: ["localhost", "http://localhost:1234", "https://localhost", "api.menzieshillwhitehall.co.uk", "https://menzieshillwhitehall.co.uk"],
+  origin: ["localhost", "https://menzieshillwhitehall.co.uk", "http://menzieshillwhitehall.co.uk", "https://api.menzieshillwhitehall.co.uk", "https://menzieshillwhitehall.co.uk"],
   credentials: true
 }));
+app.use(function (req, res, next) {
+  console.log(req.get("origin"));
+  next();
+})
+
+app.use(helmet());
 app.options('*', cors())
 
 // Global middleware
 app.use(sentry.Handlers.requestHandler());
-app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
