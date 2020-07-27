@@ -1,6 +1,6 @@
 {
   "name": "menzieshill-client",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Client side for the Menzieshill Whitehall site (And the server which hosts it)",
   "main": "index.js",
   "scripts": {

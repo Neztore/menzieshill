@@ -58,7 +58,7 @@ const Posts = {
           contentString = postInfo.content.substr(0, 150);
           contentString += "..."
         }
-        text.innerText = contentString
+        text.innerText = unescapeHtml(contentString)
         innerContent.appendChild(text)
 
         card.appendChild(content)

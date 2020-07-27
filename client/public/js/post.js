@@ -36,13 +36,17 @@ function  displayPost (info) {
   post.appendChild(postInfo)
 
   const contentContainer = document.createElement("div")
-  const spl = info.content.split("\r\n")
-  for (let line of spl) {
-    const p = document.createElement("p")
-    p.appendChild(document.createTextNode(line))
-    contentContainer.appendChild(p)
+  if (info.content) {
+    const content = unescapeHtml(info.content);
+    const spl = content.split("\r\n")
+    for (let line of spl) {
+      const p = document.createElement("p")
+      p.appendChild(document.createTextNode(line))
+      contentContainer.appendChild(p)
+    }
+    post.appendChild(contentContainer)
   }
-  post.appendChild(contentContainer)
+
 }
 
 document.addEventListener("DOMContentLoaded", async function () {
