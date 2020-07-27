@@ -34,7 +34,7 @@ app.use(cors({ //
   origin: ["localhost", "https://menzieshillwhitehall.co.uk", "http://menzieshillwhitehall.co.uk", "https://api.menzieshillwhitehall.co.uk", "https://menzieshillwhitehall.co.uk"],
   credentials: true
 }));
-app.use(function (req, res, next) {
+app.use(function (req, _res, next) {
   console.log(req.get("origin"));
   next();
 })
