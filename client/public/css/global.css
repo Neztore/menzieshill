@@ -47,6 +47,10 @@ Copyright Menzieshill Whitehall Swimming and Water Polo club 2020.
 }
 .mark {
     padding: 5px;
+    margin-top: 1rem;
     background-color: #fff;
     border-radius: 4px;
+}
+footer.footer {
+    padding-bottom: 3rem;
 }

@@ -42,7 +42,7 @@ function buildFile (fileName, rebuilt) {
 				}
 				const outputName = fileName.split(".")[0];
 				// for 404 page rewrite it up by 1 directory
-				const outputPath = outputName === "404" ? join(outputDir, "..",`${outputName}.html`) : join(outputDir, `${outputName}.html`)
+				const outputPath = join(outputDir, `${outputName}.html`)
 				writeFile(outputPath, str, function (err) {
 					if (err) return console.error(`Failed to create ${outputPath}:\n`, err);
 					console.log(`- ${rebuilt ? "Rebuilding" : "Built"} file ${outputName}.html`);
