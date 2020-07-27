@@ -15,7 +15,7 @@ interface AccountFormProps {
 export const AccountForm: FunctionComponent<AccountFormProps> = (props) => {
 	const {username, firstName, lastName, email} = props.user;
 	return <Formik
-		initialValues={{username: username || "", firstName: firstName || "", lastName: lastName || "", email: email || "", password:"", confirmPassword: ""}}
+		initialValues={{username: username || "", firstName: firstName || "", lastName: lastName || "", email: email || "", password:"", confirmPassword: "", oldPassword: ""}}
 		onSubmit={async (values, { setSubmitting, setErrors }) => {
 			const res = await Api.patch(`/users/@me`, {body: values});
 			if (res.error) {
@@ -62,6 +62,12 @@ export const AccountForm: FunctionComponent<AccountFormProps> = (props) => {
 				if (values.password.length < 8 || values.password.length > 50) {
 					errors.password = "Invalid length - Must be more than 8 characters and less than 50."
 				}
+				if (values.password !== values.confirmPassword) {
+					errors.password = "Password confirmations must match."
+				}
+				if (!values.oldPassword) {
+					errors.oldPasword = "You must supply your current password."
+				}
 			}
 
 			return errors
@@ -84,7 +90,7 @@ export const AccountForm: FunctionComponent<AccountFormProps> = (props) => {
 					<h2 className="subtitle">Password management</h2>
 					<HorizontalField type="text" name="oldPassword" label="Current password:" small="Only needed if updating your password. If you do not know it, contact admin@menzieshillwhitehall.co.uk."/>
 					<HorizontalField type="text" name="password" label="New Password:" small="Leave blank - Only provide a value if you want to change it."/>
-					<HorizontalField type="text" name="password" label="Confirm new Password:" small="Same as above."/>
+					<HorizontalField type="text" name="confirmPassword" label="Confirm new Password:" small="Same as above."/>
 					<button type="submit" className={`is-success button is-fullwidth ${isSubmitting ? "is-loading":""}`} onClick={()=>handleSubmit}>Submit</button>
 				</Form>
 		)}
