@@ -88,9 +88,9 @@ export const AccountForm: FunctionComponent<AccountFormProps> = (props) => {
 						}]} />
 					<HorizontalField type="email" name="email" label="Email:"/>
 					<h2 className="subtitle">Password management</h2>
-					<HorizontalField type="text" name="oldPassword" label="Current password:" small="Only needed if updating your password. If you do not know it, contact admin@menzieshillwhitehall.co.uk."/>
-					<HorizontalField type="text" name="password" label="New Password:" small="Leave blank - Only provide a value if you want to change it."/>
-					<HorizontalField type="text" name="confirmPassword" label="Confirm new Password:" small="Same as above."/>
+					<HorizontalField type="password" name="oldPassword" label="Current password:" small="Only needed if updating your password. If you do not know it, contact admin@menzieshillwhitehall.co.uk."/>
+					<HorizontalField type="password" name="password" label="New Password:" small="Leave blank - Only provide a value if you want to change it."/>
+					<HorizontalField type="password" name="confirmPassword" label="Confirm new Password:" small="Same as above."/>
 					<button type="submit" className={`is-success button is-fullwidth ${isSubmitting ? "is-loading":""}`} onClick={()=>handleSubmit}>Submit</button>
 				</Form>
 		)}
