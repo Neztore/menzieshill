@@ -31,7 +31,7 @@ const app = express();
 sentry.init({ dsn: sentryDsn });
 // TODO: Set CORS
 app.use(cors({ //
-  origin: ["localhost", "http://localhost:1234", "https://localhost", "new.menzieshillwhitehall.co.uk", "api.menzieshillwhitehall.co.uk", "https://api.menzieshillwhitehall.co.uk", "https://menzieshillwhitehall.co.uk"],
+  origin: ["localhost", "http://localhost:1234", "https://localhost", "api.menzieshillwhitehall.co.uk", "https://menzieshillwhitehall.co.uk"],
   credentials: true
 }));
 app.options('*', cors())
