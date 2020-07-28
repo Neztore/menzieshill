@@ -24,11 +24,29 @@ const imgExtensions = ["jpeg", "jpg", "gif", "png", "exif", "bmp", "webp", "svg"
     const goBackButton = document.getElementById("go-back-button");
     const listButton = document.getElementById("list-view-button");
     const gridButton = document.getElementById("grid-view-button");
+    const dropback = document.getElementById("dropback");
 
     // Initial
     // TODO: Parse out the "initial" folder from hash/update it also?
     setFolder(window.rootType || "docs")
     setViewType(false, true);
+
+    // Drag n' drop support
+    dropback.ondrop = function (ev) {
+      ev.preventDefault();
+      if (!window.user) {
+        return createErrorMessage("You cannot upload content: You are not logged in.")
+      }
+      const modal = new UploadModal(parent.document.body, currentFolderId, function () {
+        setFolder(currentFolderId)
+      })
+      modal.show();
+      modal.ondrop(ev);
+    }
+
+    dropback.ondragover = function () {
+      return false
+    }
 
     addFilesButton.onclick = function () {
       const modal = new UploadModal(parent.document.body, currentFolderId, function () {

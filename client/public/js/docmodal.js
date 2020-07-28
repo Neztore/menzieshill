@@ -138,19 +138,18 @@ class UploadModal extends DocModal {
         this.uploadedCallback(true)
         this.remove()
       } else {
-        parent.createErrorMessage(res.error.message)
+        createErrorMessage(res.error.message)
         this.remove()
       }
     } catch (e) {
       console.error(e.message)
-      parent.createErrorMessage(e.message)
+      createErrorMessage(e.message)
     }
 
 
   }
   ondrop (ev) {
     ev.preventDefault()
-    console.log("drop!!")
     let someAdded = false
     if (ev.dataTransfer.items) {
       // Use DataTransferItemList interface to access the file(s)
@@ -220,7 +219,7 @@ class EditModal extends DocModal {
     const dropDown = document.createElement("select")
     dropDownWrapper.appendChild(dropDown)
 
-    const groups = await window.parent.Api.getGroups()
+    const groups = await Api.getGroups()
     this.allGroups = groups
 
     for (let grp of groups) {
@@ -325,7 +324,7 @@ class EditModal extends DocModal {
     const newName = prompt(msg,this.info.name)
     if (newName) {
       // Validation
-      if (parent.isValidName(newName)) {
+      if (isValidName(newName)) {
         const rename = await this.save({
           name: newName
         })
@@ -371,7 +370,7 @@ class EditModal extends DocModal {
     const res = await this.save({accessGroups: sendArray})
     if (res.error) {
       console.error(res.error.message)
-      parent.createErrorMessage(res.error.message)
+      createErrorMessage(res.error.message)
       this.remove()
     } else {
       this.addGroupTag(this.allGroups.find(g=>g.id === grpId))
@@ -381,11 +380,11 @@ class EditModal extends DocModal {
   }
 
   async delete () {
-    let url = this.isFolder ? `/files/${this.info.id}`:`/files/parent/${this.info.loc}`
-    const res = await parent.Api.delete(url);
+    let url = this.isFolder ? `/files/${this.info.id}`:`/files/${this.info.loc}`
+    const res = await Api.delete(url);
     if (res.error) {
       console.error(res.error)
-      parent.createErrorMessage("You cannot delete a folder which is not empty. This is a feature which will be added at a later date.")
+      createErrorMessage("You cannot delete a folder which is not empty. This is a feature which will be added at a later date.")
     } else {
       this.changeCb(true)
       this.remove()
