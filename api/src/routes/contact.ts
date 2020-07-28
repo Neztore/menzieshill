@@ -36,16 +36,20 @@ const emailSubjects = {
     "club president":"president@menzieshillwhitehall.co.uk"
   }
 };
-function getEmailAddress (area: keyof Subjects, subject: string) {
+function getEmailAddress (area: string, subject: string) {
   if (process.env.NODE_ENV !== "production") {
     console.log(`Email: Not production!`);
     return emailSubjects.testing
   }
-  if (emailSubjects[area]) {
+  // @ts-ignore
+  const lArea:keyof Subjects = area.toLowerCase()
+  const lSubject:string= subject.toLowerCase()
+  if (emailSubjects[lArea]) {
     // @ts-ignore
-    if (emailSubjects[area][subject]) {
+    if (emailSubjects[lArea][lSubject]) {
+      console.log(`Did not find area ${area} and subject ${subject}`);
       // @ts-ignore
-      return emailSubjects[area][subject]
+      return emailSubjects[lArea][lSubject]
     } else {
       return emailSubjects.default;
     }
