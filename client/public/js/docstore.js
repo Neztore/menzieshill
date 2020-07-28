@@ -119,7 +119,7 @@ const imgExtensions = ["jpeg", "jpg", "gif", "png", "exif", "bmp", "webp", "svg"
 
     }
     const getExt = function (str) {
-      return str.substring(str.indexOf(".") + 1, str.length);
+      return str.substring(str.lastIndexOf(".") + 1, str.length);
     }
 
 
@@ -139,7 +139,6 @@ const imgExtensions = ["jpeg", "jpg", "gif", "png", "exif", "bmp", "webp", "svg"
       for (let i = 0; i < folderInfo.files.length; i++) {
         const file = folderInfo.files[i];
         const ext = getExt(file.loc);
-        console.log(ext);
         if (ext && imgExtensions.includes(ext.toLowerCase())) {
           showGridImage(file);
         } else {
