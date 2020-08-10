@@ -1,28 +1,43 @@
-import {Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToMany, JoinTable} from "typeorm";
-import Auth from "./Auth.entity";
-import {Group, Permission} from "./Group.entity";
+import {
+  Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn
+} from "typeorm";
+
+import { Auth } from "./Auth.entity";
+import { Group, Permission } from "./Group.entity";
 
 @Entity()
 export class User {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ length: 30, unique: true})
+    @Column({
+      length: 30,
+      unique: true
+    })
     username: string;
 
-    @Column({ length: 200, select: false })
+    @Column({
+      length: 200,
+      select: false
+    })
     hash: string;
 
-    @Column({ length: 50, unique: true, /*select: false*/})
+    @Column({
+      length: 50,
+      unique: true
+    })
     email: string;
 
-    @Column({length: 30})
+    @Column({ length: 30 })
     firstName: string;
 
-    @Column({length: 30})
+    @Column({ length: 30 })
     lastName: string;
 
-    @Column({type: "timestamptz", default: "NOW()"})
+    @Column({
+      type: "timestamptz",
+      default: "NOW()"
+    })
     created: Date;
 
     @OneToMany(() => Auth, auth => auth.user)

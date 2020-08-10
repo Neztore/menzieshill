@@ -1,5 +1,8 @@
-import {Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany} from "typeorm";
-import Cancellation from "./Cancellation.entity";
+import {
+  Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn
+} from "typeorm";
+
+import { Cancellation } from "./Cancellation.entity";
 
 /*
     For client - colour mappings
@@ -16,78 +19,74 @@ import Cancellation from "./Cancellation.entity";
  */
 
 export enum EventColour {
-    Turqoise = "Turqoise",
-    Blue = "Blue",
-    LightGrey = "LightGrey",
-    Red = "Red",
-    Yellow = "Yellow",
-    Green = "Green",
-    White = "White",
-    Black = "Black"
+    turqoise = "Turqoise",
+    blue = "Blue",
+    lightGrey = "LightGrey",
+    red = "Red",
+    yellow = "Yellow",
+    green = "Green",
+    white = "White",
+    black = "Black"
 }
 export enum EventType {
-    Global = "Global",
-    Swimming = "Swimming",
-    WaterPolo = "WaterPolo",
-    OpenWater = "OpenWater"
+    global = "Global",
+    swimming = "Swimming",
+    waterPolo = "WaterPolo",
+    openWater = "OpenWater"
 }
 export enum Repeat{
-    None = "None",
-    Daily = "Daily",
-    Weekly = "Weekly",
-    Monthly = "Monthly"
+    none = "None",
+    daily = "Daily",
+    weekly = "Weekly",
+    monthly = "Monthly"
 }
-
 
 @Entity()
 export class CalendarEvent {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ length: 100})
+    @Column({ length: 100 })
     name: string;
 
-    @Column({type: "timestamptz"})
+    @Column({ type: "timestamptz" })
     when: Date;
 
     @Column() // Hours
     length: number;
 
-    @Column({  type: "text", nullable: true })
+    @Column({
+      type: "text",
+      nullable: true
+    })
     description?: string;
 
     @Column({
-        type: "enum",
-        enum: EventColour,
-        default: EventColour.Blue
+      type: "enum",
+      enum: EventColour,
+      default: EventColour.blue
     })
     colour: EventColour;
 
     @Column({
-        type: "enum",
-        enum: EventType,
-        default: EventType.Global
+      type: "enum",
+      enum: EventType,
+      default: EventType.global
     })
     type: EventType;
 
     @Column({
-        type: "enum",
-        enum: Repeat,
-        default: Repeat.None
+      type: "enum",
+      enum: Repeat,
+      default: Repeat.none
     })
     repeat: Repeat;
-
 
     @CreateDateColumn()
     created: Date;
 
     @OneToMany(() => Cancellation, cancellation => cancellation.event)
     cancellations: Cancellation[];
-
-
-
-
-
 }
 
 export default CalendarEvent;

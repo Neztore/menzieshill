@@ -1,21 +1,22 @@
 import {
-    Entity,
-    Tree,
-    TreeChildren,
-    TreeParent,
-    OneToMany, PrimaryGeneratedColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  Tree,
+  TreeChildren, TreeParent
 } from "typeorm";
-import File from "./File.entity";
-import FSElement from "./FSElement.abstract.entity";
+
+import { FSElement } from "./FSElement.abstract.entity";
+import { File } from "./File.entity";
 
 @Entity()
 @Tree("closure-table")
-export class Folder extends FSElement{
+export class Folder extends FSElement {
     // Contains all files held by THIS folder.
     @PrimaryGeneratedColumn()
     id: number;
 
-    @OneToMany(()=>File, file =>file.folder)
+    @OneToMany(() => File, file => file.folder)
     files: File[];
 
     @TreeChildren({
@@ -26,4 +27,4 @@ export class Folder extends FSElement{
     @TreeParent()
     parent: Folder;
 }
-export default Folder
+export default Folder;

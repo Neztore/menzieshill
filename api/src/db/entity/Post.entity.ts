@@ -1,22 +1,23 @@
 import {
-    Entity,
-    Column,
-    PrimaryGeneratedColumn,
-    ManyToMany,
-    JoinTable,
-    CreateDateColumn,
-    UpdateDateColumn,
-    ManyToOne
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn
 } from "typeorm";
-import {Group} from "./Group.entity";
-import User from "./User.entity";
+
+import { Group } from "./Group.entity";
+import { User } from "./User.entity";
 
 @Entity()
 export class Post {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ length: 50})
+    @Column({ length: 50 })
     title: string;
 
     @Column({ type: "text" })

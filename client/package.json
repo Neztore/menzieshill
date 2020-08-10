@@ -10,7 +10,7 @@
     "build": "concurrently \"npm run admin:build\" \"npm run render\"",
     "render": "node index.js",
     "watch": "node index.js watch",
-    "dev": "concurrently \"npm run watch\" \"netlify dev\""
+    "dev": "concurrently \"npm run watch\" \"node dev-server.js\""
   },
   "author": "Josh Muir",
   "license": "UNLICENSED",
@@ -22,7 +22,6 @@
     "babel-polyfill": "^6.26.0",
     "ejs": "^3.0.1",
     "eslint-config-standard": "^14.1.0",
-    "express": "^4.17.1",
     "formik": "^2.1.4",
     "react": "^16.12.0",
     "react-day-picker": "^7.4.5",
@@ -34,7 +33,11 @@
     "@babel/preset-env": "^7.8.3",
     "concurrently": "^5.2.0",
     "cssnano": "^4.1.10",
-    "netlify-cli": "^2.54.0",
+    "eslint": "^7.6.0",
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-import-resolver-typescript": "^2.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "express": "^4.17.1",
     "parcel": "^1.12.4",
     "typescript": "^3.7.5"
   }

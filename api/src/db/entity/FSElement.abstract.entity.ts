@@ -1,5 +1,8 @@
-import {Column, CreateDateColumn, JoinTable, ManyToMany} from "typeorm";
-import Group from "./Group.entity";
+import {
+  Column, CreateDateColumn, JoinTable, ManyToMany
+} from "typeorm";
+
+import { Group } from "./Group.entity";
 
 export abstract class FSElement {
     @Column()
@@ -8,8 +11,8 @@ export abstract class FSElement {
     @CreateDateColumn()
     created: Date;
 
-    @ManyToMany(()=>Group, {eager: true})
+    @ManyToMany(() => Group, { eager: true })
     @JoinTable()
     accessGroups: Group[];
 }
-export default FSElement
+export default FSElement;
