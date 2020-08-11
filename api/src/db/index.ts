@@ -150,7 +150,7 @@ class Database extends EventEmitter {
           min,
           max
         })
-        .andWhere("event.repeat = :none", { none: Repeat.none })
+        .andWhere("event.repeat = :none", { none: Repeat.None })
         .leftJoinAndSelect("event.cancellations", "cancellation", "cancellation.when >= :min AND cancellation.when <= :max", {
           min,
           max
@@ -163,7 +163,7 @@ class Database extends EventEmitter {
 
     getRecurringEvents (min: Date, max: Date): Promise<CalendarEvent[]> {
       return this.events.createQueryBuilder("event")
-        .where("event.repeat <> :none", { none: Repeat.none })
+        .where("event.repeat <> :none", { none: Repeat.None })
         .leftJoinAndSelect("event.cancellations", "cancellation", "cancellation.when >= :min AND cancellation.when <= :max", {
           min,
           max

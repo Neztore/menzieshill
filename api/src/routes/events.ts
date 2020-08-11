@@ -208,7 +208,7 @@ events.post("/:eventId/cancel", errorCatch(async (req: Request, res: Response) =
   if (req.event && req.user) {
     // Event exists: Validate cancellation params.
     const cancellation = modifyCancellation(new Cancellation(), req.body, req.event);
-    if (!cancellation.when && req.event.repeat !== Repeat.none) {
+    if (!cancellation.when && req.event.repeat !== Repeat.None) {
       return res.status(400).send(errorGenerator(400, "Missing or invalid 'when' value for repeating event."));
     }
     // Valid
@@ -281,7 +281,7 @@ function modifyCancellation (cancellation: Cancellation, body: any, event: Calen
     newCancellation.reason = cleanString(body.reason);
   }
   // Only required if event is a repeatable.
-  if (body.when && event.repeat !== Repeat.none) {
+  if (body.when && event.repeat !== Repeat.None) {
     if (!isEmpty(body.when) && isISO8601(body.when)) {
       const parsed = new Date(body.when);
       if (parsed.getTime() >= event.when.getTime()) {
