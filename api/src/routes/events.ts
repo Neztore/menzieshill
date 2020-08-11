@@ -131,7 +131,7 @@ events.patch("/:eventId", errorCatch(async (req: Request, res: Response) => {
     res.send({
       message: `Successfully edited event ${newEvent.name}!`,
       success: true,
-      event
+      event: newEvent
     });
   } else {
     res.status(404).send(errorGenerator(404, "Failed to edit event: Event not found."));

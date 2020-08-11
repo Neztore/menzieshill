@@ -12,7 +12,7 @@ import { isEmpty, isLength } from "validator";
 import { authLife } from "../../config";
 import Database from "../db";
 import {
-  errorGenerator, errors, hasPerms, Perms
+  errorGenerator, errors, generateToken, hasPerms, Perms
 } from "../util";
 
 function makeMiddleware (requiredPerms?: Perms[]) {
@@ -50,7 +50,11 @@ function makeMiddleware (requiredPerms?: Perms[]) {
       if (oldest < Date.now()) {
         // It's expired.
         console.log("Expired auth token: Removing!");
-        await Database.deleteAuth(auth);
+        const p1 = Database.deleteAuth(auth);
+        const p2 = generateToken();
+        await p1;
+        const token = await p2;
+        await Database.setAuth(auth.user.id, token);
         return res.status(401).send(errorGenerator(401, "Token expired, please login again.", { action: "login" }));
       }
       // Check if it's member only

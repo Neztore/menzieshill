@@ -1,10 +1,8 @@
 // Created by josh on 09/06/2020
 import React, {FunctionComponent} from "react";
 import {Api} from "../../shared/util";
-import EditModal from "../../../bulma/EditModal";
 import {Form, Formik} from "formik";
 import {HorizontalField, HorizontalMultipleField} from "../../../bulma/Field";
-import GroupEditor from "../Users/ModifyUser/GroupEditor";
 import {User} from "../../shared/Types";
 
 interface AccountFormProps {

@@ -32,10 +32,10 @@ export const CancellationList: FunctionComponent<CancellationListProps> = ({canc
 };
 export default CancellationList
 
-const CancellationItem = ({cancellation, handleClick, when}: {cancellation: Cancellation, handleClick: Function, when: Date})=> (
+const CancellationItem = ({cancellation, handleClick, when}: {cancellation: Cancellation, handleClick: Function, when: string})=> (
 	<tr className="cancellation-item" onClick={()=>handleClick(cancellation)}>
 		<td>
-			{parseDate(when)}
+			{parseDate(new Date(when))}
 		</td>
 		<td>
 			{cancellation.cancelledBy.firstName} {cancellation.cancelledBy.lastName} {`<${cancellation.cancelledBy.username}>`}
