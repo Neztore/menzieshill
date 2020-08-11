@@ -133,15 +133,31 @@ Api.delete = function (url, options) {
   }
 };
 
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i <ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) === ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) === 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
 
 Api._makeRequest = async function (url, options) {
   const startChar = url.substr(0, 1);
+  if (!options.headers) options.headers = {};
   options.credentials = "include"
   if (options.noCache) {
-    if (!options.headers) options.headers = {};
     options.headers["cache-control"] = "no-cache"
     delete options.noCache;
   }
+  options.headers["CSRF-Token"] = getCookie("CSRF-Token");
 
 
   url = (startChar === '/') ? `${BaseUrl}${url}` : `/${url}`;

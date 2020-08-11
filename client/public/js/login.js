@@ -19,11 +19,11 @@ document.addEventListener("DOMContentLoaded", function () {
        const res = await Api.post("/users/login", {
          body: {
            username,
-           password,
+           password
          }
        });
       if (res.error) {
-        showError(`Incorrect username or password: Please check them and try again.`)
+        showError(res.error.message)
       } else {
         window.document.location.href = "/admin"
       }

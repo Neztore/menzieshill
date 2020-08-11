@@ -39,7 +39,6 @@ document.addEventListener("DOMContentLoaded", function () {
         if (res.error) {
           if (res.error.errors) {
             for (let err of res.error.errors) {
-              console.log("in")
               const ele = fields[err.field]
               if (!ele) {
                 createErrorMessage(err.msg)

@@ -497,7 +497,7 @@ users.get("/", errorCatch(async (_req: Request, res: Response): Promise<any> => 
   const userList:Array<User> = await Database.getUsers();
   res.send({
     success: true,
-    userList
+    users: userList
   });
 }));
 

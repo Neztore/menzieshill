@@ -16,7 +16,7 @@ posts.get("/list", errorCatch(async (_req: Request, res: Response) => {
   const allPosts = await Database.getPosts(0, pageSize);
   res.send({
     success: true,
-    allPosts
+    posts: allPosts
   });
 }));
 // Gets (Unauthenticated)
@@ -26,7 +26,7 @@ posts.get("/list/:page", errorCatch(async (req: Request, res: Response) => {
     const postsPage = await Database.getPosts(pageNo * pageSize, pageSize);
     return res.send({
       success: true,
-      postsPage
+      posts: postsPage
     });
   }
   return res.status(400).send(errorGenerator(400, "Bad page number."));
