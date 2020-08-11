@@ -24,7 +24,7 @@ export async function csrfMiddleware (req: Request, res: Response, next: NextFun
       maxAge: 172800000,
       sameSite: "strict",
       httpOnly: false,
-      domain: process.env.NODE_ENV === "production" ? "https://menzieshillwhitehall.co.uk" : undefined
+      domain: process.env.NODE_ENV === "production" ? "menzieshillwhitehall.co.uk" : undefined
     });
   }
   return next();
