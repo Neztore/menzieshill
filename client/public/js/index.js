@@ -5,6 +5,7 @@ console.log("%c Site made by Josh Muir for Menzieshill Whitehall.", "font-size: 
 console.log("%c Please do NOT type anything here, unless you know exactly what you are doing.", "font-size: 1.5em; color: red; font-weight: bold;")
 console.log("%c The console may be used to trick you into giving other people access to your account.", "font-size: 1.25em; color: orange;")
 
+Sentry.init({ dsn: 'https://f120824f080e4dc49677ad203a228004@o386921.ingest.sentry.io/1532075' });
 // IE detector.
 function getIEVersion() {
   var sAgent = window.navigator.userAgent;
