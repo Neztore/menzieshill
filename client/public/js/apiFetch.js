@@ -161,7 +161,13 @@ Api._makeRequest = async function (url, options) {
 
 
   url = (startChar === '/') ? `${BaseUrl}${url}` : `/${url}`;
-  const req = await fetch(url, options);
-  const json = await req.json();
-  return json
+  try {
+    const req = await fetch(url, options);
+    return await req.json()
+  } catch (e) {
+    console.error(e);
+    console.error(e.message);
+    throw e;
+  }
+
 }
