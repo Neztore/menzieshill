@@ -1,17 +1,26 @@
-import * as Api_original from '../../../../public/js/apiFetch'
+import * as Api_original from "../../../../public/js/apiFetch";
+
 export const Api = Api_original;
 
-
 // Calendar related
-export const Months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October" , "November", "December"];
+export const Months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 export const Days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 export const Repeats = {
-    None: "None",
-    Daily:"Daily",
-    Weekly:"Weekly",
-    Monthly:"Monthly"
+  None: "None",
+  Daily: "Daily",
+  Weekly: "Weekly",
+  Monthly: "Monthly"
 };
+export function getExt(str: string): string|undefined {
+  const num = str.lastIndexOf(".");
+  if (num === -1) return undefined;
+  return str.substring(str.lastIndexOf(".") + 1)
+}
 
-export function unescape(str:string) {
-    return str.replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#x27;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&#x2F;/g, '/').replace(/&#x5C;/g, '\\').replace(/&#96;/g, '`');
+export function unescape (str:string) {
+  return str.replace(/&amp;/g, "&").replace(/&quot;/g, "\"").replace(/&#x27;/g, "'").replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&#x2F;/g, "/")
+    .replace(/&#x5C;/g, "\\")
+    .replace(/&#96;/g, "`");
 }

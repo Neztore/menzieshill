@@ -15,7 +15,6 @@ export class Permission {
     this.managePosts = false;
     this.manageEvents = false;
     this.manageFiles = false;
-    this.managePages = false;
     this.member = false;
   }
 
@@ -26,8 +25,6 @@ export class Permission {
     manageEvents: boolean;
 
     manageFiles: boolean;
-
-    managePages: boolean;
 
     member: boolean
 }
@@ -57,10 +54,6 @@ export class Group {
     // Can create, edit and delete images and files.
     @Column({ default: "false" })
     manageFiles: boolean;
-
-    // Can modify, add and remove pages.
-    @Column({ default: "false" })
-    managePages: boolean;
 
     // Can view 'private' posts. For users who are known to be a member.
     @Column({ default: "false" })

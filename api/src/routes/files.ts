@@ -23,7 +23,7 @@ import {
   checkExists, generateFileExtra, getPath, removeFile, storage
 } from "../util/fileManager";
 
-export const roots = ["archive", "docs", "photos"];
+export const roots = ["archive", "docs", "photos", "content"];
 
 const files = express.Router();
 
@@ -55,6 +55,11 @@ files.get("/archive", errorCatch(async (req: Request, res: Response): Promise<an
 
 files.get("/docs", errorCatch(async (req: Request, res: Response): Promise<any> => {
   const folder = await Database.getFolderRoot("docs");
+  checkChildrenPermissions(folder, req.user);
+  res.send(folder);
+}));
+files.get("/content", errorCatch(async (req: Request, res: Response): Promise<any> => {
+  const folder = await Database.getFolderRoot("content");
   checkChildrenPermissions(folder, req.user);
   res.send(folder);
 }));

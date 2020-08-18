@@ -1,10 +1,10 @@
-import {ReactNode} from "react";
+import { ReactNode } from "react";
 
 export interface Group {
     id: number,
     name: string
 }
-export type PermString = "admin" | "managePosts" | "manageEvents" | "managePages" | "member"
+export type PermString = "admin" | "managePosts" | "manageEvents" | "manageFiles" | "member"
 type perm = {
     [key in PermString]: boolean;
 };
@@ -20,7 +20,7 @@ export interface User {
 
 export interface HttpError {
     error: {
-        status:  number,
+        status: number,
         message: string,
     }
 }
@@ -28,8 +28,6 @@ export interface HttpError {
 export interface ReactProps {
     children?: ReactNode[] | string[] | Element[]
 }
-
-
 
 export interface Post {
     id: number,
@@ -73,26 +71,40 @@ export enum Repeat{
 // Date fields are strings because that's what they are until they are parsed client side
 export class CalendarEvent {
     id: number;
+
     name: string;
+
     when: string;
+
     length: number;
+
     description?: string;
+
     colour: EventColour;
+
     type: EventType;
+
     repeat: Repeat;
+
     created: string;
+
     cancellations?: Cancellation[];
+
 	__loc?: number;
 }
 
 export class Cancellation {
     id: number;
-    when?: string;
-    reason?: string;
-    created: string;
-    cancelledBy: Partial<User>;
-    event: CalendarEvent;
 
+    when?: string;
+
+    reason?: string;
+
+    created: string;
+
+    cancelledBy: Partial<User>;
+
+    event: CalendarEvent;
 }
 
 export default CalendarEvent;

@@ -1,0 +1,14 @@
+.pages {
+  textarea.page-editor-textarea {
+    width: 100%;
+    min-height: 50vh;
+  }
+  .preview {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    border: 1px solid #f8f7f7;
+    padding-top: 2rem;
+    min-height: 50vh;
+    border-radius: 4px;
+  }
+}

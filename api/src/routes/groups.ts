@@ -97,9 +97,6 @@ function modifyGroup (group: Group, body: any): Group {
   if (validPerm(body.manageFiles)) {
     newGroup.manageFiles = body.manageFiles;
   }
-  if (validPerm(body.managePages)) {
-    newGroup.managePages = body.managePages;
-  }
 
   if (validPerm(body.joinable)) {
     newGroup.joinable = body.joinable;

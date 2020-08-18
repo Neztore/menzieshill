@@ -1,7 +1,7 @@
 var Api = {}
 // Guess at whether it's localhost or api.
 var BaseUrl = window.BaseUrl || window.location.href.includes("menzieshill") ? "https://api.menzieshillwhitehall.co.uk":"http://localhost:3000"
-
+Api.BaseUrl = BaseUrl;
 if (typeof module !== 'undefined') {
   module.exports = Api
 }

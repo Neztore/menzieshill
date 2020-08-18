@@ -1,10 +1,11 @@
 // Created by josh on 14/02/2020
 // This component does FAR too much. Oops.
 
-import React, {FunctionComponent, useEffect, useState} from "react";
-import {HttpError, Post} from "../../shared/Types";
-import {Api} from "../../shared/util";
+import React, { FunctionComponent, useEffect, useState } from "react";
+
 import Message from "../../../bulma/Message";
+import { HttpError, Post } from "../../shared/Types";
+import { Api } from "../../shared/util";
 import PostForm from "./PostForm";
 
 interface PostModalProps {
@@ -12,13 +13,13 @@ interface PostModalProps {
     handleDone: Function // Is either passed the new post, or false.
 }
 
-export const PostModal: FunctionComponent<PostModalProps> = (props) => {
-    const [post, setPostInfo] = useState<Partial<Post>>({
-        title: "",
-        content: ""
-    });
-    const [error, setError] = useState<HttpError["error"]>();
-/*
+export const PostModal: FunctionComponent<PostModalProps> = props => {
+  const [post, setPostInfo] = useState<Partial<Post>>({
+    title: "",
+    content: ""
+  });
+  const [error, setError] = useState<HttpError["error"]>();
+  /*
     Cases:
      postId: Undefined (Create)
      postId: Defined.
@@ -26,42 +27,42 @@ export const PostModal: FunctionComponent<PostModalProps> = (props) => {
         Display post.
  */
 
-    useEffect(()=> {
-        async function getPost() {
-            const postInfo = await Api.get(`/posts/${props.postId}`)
-            if (postInfo.error) {
-                setError(postInfo.error)
-            } else {
-                setPostInfo(postInfo.post)
-            }
-        }
-        if (props.postId) {
-            getPost();
-        }
-
-        return undefined
-    }, [props.postId]);
-
-    if (error) {
-        return <Message title={`${error.status}: Oops. Failed to get post.`} text={error.message} colour="danger"/>
+  useEffect(() => {
+    async function getPost () {
+      const postInfo = await Api.get(`/posts/${props.postId}`);
+      if (postInfo.error) {
+        setError(postInfo.error);
+      } else {
+        setPostInfo(postInfo.post);
+      }
     }
-    // A post to be loaded has been supplied, but it isn't loaded yet.
-    if (post.id === undefined && props.postId) {
-        return <div className="modal is-active">
-            <div className="modal-background"/>
-            <div className="modal-content">
-                <div className="box">
-                    <h2 className="subtitle" >Loading post - <a className="is-size-6" onClick={()=>props.handleDone(false)}>Cancel</a></h2>
-                    <progress className="progress is-small is-primary" max="100">15%</progress>
+    if (props.postId) {
+      getPost();
+    }
 
-                </div>
+    return undefined;
+  }, [props.postId]);
 
-            </div>
+  if (error) {
+    return <Message title={`${error.status}: Oops. Failed to get post.`} text={error.message} colour="danger" />;
+  }
+  // A post to be loaded has been supplied, but it isn't loaded yet.
+  if (post.id === undefined && props.postId) {
+    return (
+      <div className="modal is-active">
+        <div className="modal-background" />
+        <div className="modal-content">
+          <div className="box">
+            <h2 className="subtitle">Loading post - <a className="is-size-6" onClick={() => props.handleDone(false)}>Cancel</a></h2>
+            <progress className="progress is-small is-primary" max="100">15%</progress>
+
+          </div>
+
         </div>
-    } else {
-        // The form itself. Handles submission, validation and all that jazz.
-        return <PostForm post={post} handleDone={props.handleDone}/>
-    }
-
+      </div>
+    );
+  }
+  // The form itself. Handles submission, validation and all that jazz.
+  return <PostForm post={post} handleDone={props.handleDone} />;
 };
-export default PostModal
+export default PostModal;

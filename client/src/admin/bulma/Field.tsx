@@ -1,5 +1,5 @@
-import React, {Fragment, FunctionComponent} from "react";
-import {Field as FormikField, ErrorMessage} from "formik";
+import { ErrorMessage, Field as FormikField } from "formik";
+import React, { Fragment, FunctionComponent } from "react";
 
 interface baseProps{
     type?: string,
@@ -12,7 +12,7 @@ interface baseProps{
     step?: string
 }
 
-interface Props extends  baseProps{
+interface Props extends baseProps{
     label: string
 }
 
@@ -23,99 +23,95 @@ interface TextareaProps extends Props{
 type FieldProps = {
     grouped?: boolean
 }
-export const Field:FunctionComponent<FieldProps> = ({grouped, ...props}) => {
-    return <div className={`field ${grouped && "is-grouped"}`} {...props}>
+export const Field:FunctionComponent<FieldProps> = ({ grouped, ...props }) => (
+  <div className={`field ${grouped && "is-grouped"}`} {...props} />
+);
 
-    </div>
-};
-
-const TextAreaInput = (props: Props)=> (
-    <textarea className={`textarea is-${props.colour}`} {...props}/>);
-const SelectInput = (props: Props)=> (<div className={`select is-${props.colour}`}>
-      <select {...props}/>
-  </div>
-  );
-
-
-export const Dropdown:FunctionComponent<Props> = (props) => {
-    return <Fragment>
-        <label className="label">{props.label}</label>
-        <FormControl CustomInput={SelectInput} {...props} />
-    </Fragment>
-};
-
-export const TextArea:FunctionComponent<TextareaProps> = (props) => {
-    return <Fragment>
-        <label className="label">{props.label}</label>
-        <FormControl CustomInput={TextAreaInput} {...props} />
-    </Fragment>
-};
-
-
-const CheckboxInput = (props: Props)=> (<div className="checkbox">
-      <input type="checkbox" {...props}/>
+const TextAreaInput = (props: Props) => (
+  <textarea className={`textarea is-${props.colour}`} {...props} />);
+const SelectInput = (props: Props) => (
+  <div className={`select is-${props.colour}`}>
+    <select {...props} />
   </div>
 );
-export const Checkbox:FunctionComponent<Props> = (props) => {
-    return <Fragment>
-        <label className="label">{props.label}</label>
-            <FormControl CustomInput={CheckboxInput} {...props} />
 
-    </Fragment>
-};
+export const Dropdown:FunctionComponent<Props> = props => (
+  <Fragment>
+    <label className="label">{props.label}</label>
+    <FormControl CustomInput={SelectInput} {...props} />
+  </Fragment>
+);
 
+export const TextArea:FunctionComponent<TextareaProps> = props => (
+  <Fragment>
+    <label className="label">{props.label}</label>
+    <FormControl CustomInput={TextAreaInput} {...props} />
+  </Fragment>
+);
 
-export const NormalInput:FunctionComponent<Props> = (props) => {
-    return <Fragment>
-        <label className="label">{props.label}</label>
+const CheckboxInput = (props: Props) => (
+  <div className="checkbox">
+    <input type="checkbox" {...props} />
+  </div>
+);
+export const Checkbox:FunctionComponent<Props> = props => (
+  <Fragment>
+    <label className="label">{props.label}</label>
+    <FormControl CustomInput={CheckboxInput} {...props} />
+
+  </Fragment>
+);
+
+export const NormalInput:FunctionComponent<Props> = props => (
+  <Fragment>
+    <label className="label">{props.label}</label>
+    <FormControl {...props} />
+  </Fragment>
+);
+
+export const HorizontalField:FunctionComponent<Props> = props => (
+  <div className="field is-horizontal">
+    <div className="field-label is-normal">
+      <label className="label">{props.label}</label>
+    </div>
+    <div className="field-body">
+      <div className="field">
         <FormControl {...props} />
-    </Fragment>
-};
+      </div>
+    </div>
 
-export const HorizontalField:FunctionComponent<Props> = (props) => {
-    return <div className="field is-horizontal">
-        <div className="field-label is-normal">
-            <label className="label">{props.label}</label>
-        </div>
-        <div className="field-body">
-            <div className="field">
-                <FormControl {...props}/>
-            </div>
-        </div>
-
-    </div>;
-};
+  </div>
+);
 interface MultipleProps {
     label: string,
     fields: baseProps[]
 }
-export const HorizontalMultipleField:FunctionComponent<MultipleProps> = (props) => {
-    return <div className="field is-horizontal">
-        <div className="field-label is-normal">
-            <label className="label">{props.label}</label>
-        </div>
-        <div className="field-body">
-            {
-                props.fields.map((f)=>{
-                    return <div className="field" key={f.name}>
-                        <FormControl {...f}/>
-                    </div>
-
-                })
+export const HorizontalMultipleField:FunctionComponent<MultipleProps> = props => (
+  <div className="field is-horizontal">
+    <div className="field-label is-normal">
+      <label className="label">{props.label}</label>
+    </div>
+    <div className="field-body">
+      {
+                props.fields.map(f => (
+                  <div className="field" key={f.name}>
+                    <FormControl {...f} />
+                  </div>
+                ))
             }
-        </div>
+    </div>
 
-    </div>;
-};
-
+  </div>
+);
 
 // These classes are used to interact with Formik.
 
 // ErrorComponent is passed to the ErrorMessage so that the message gets appropriate CSS.
-const ErrorComponent:FunctionComponent = (props) =>(
-    <p className="help is-danger">
-        {props.children}
-</p>);
+const ErrorComponent:FunctionComponent = props => (
+  <p className="help is-danger">
+    {props.children}
+  </p>
+);
 
 // Applies to all form controls - encompasses both error and custom field
 
@@ -123,17 +119,19 @@ interface FormControlProps extends baseProps {
     CustomInput?: any
 }
 
-export const FormControl: FunctionComponent<FormControlProps> = (props)=>{
-    const passProps = {...props};
-    delete passProps["CustomInput"];
+export const FormControl: FunctionComponent<FormControlProps> = props => {
+  const passProps = { ...props };
+  delete passProps.CustomInput;
 
-    return <div className="control">
-        <FormikField  as={props.CustomInput || CustomInput} name={props.name} {...passProps}/>
-        {props.small ? <p className="help">{props.small}</p>:""}
-        <ErrorMessage component={ErrorComponent} name={props.name}/>
+  return (
+    <div className="control">
+      <FormikField as={props.CustomInput || CustomInput} name={props.name} {...passProps} />
+      {props.small ? <p className="help">{props.small}</p> : ""}
+      <ErrorMessage component={ErrorComponent} name={props.name} />
     </div>
+  );
 };
 
 // Implements bulma formatting to Formik fields.
-export const CustomInput = (props: Props)=> (
-        <input className={`input is-${props.colour}`} type={props.type || "text"} {...props}/>);
+export const CustomInput = (props: Props) => (
+  <input className={`input is-${props.colour}`} type={props.type || "text"} {...props} />);

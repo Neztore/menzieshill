@@ -43,7 +43,6 @@ function getPerms (user: User, override?: boolean) {
     if (grp.manageEvents) userPermission.manageEvents = true;
     if (grp.manageFiles) userPermission.manageFiles = true;
     if (grp.managePosts) userPermission.managePosts = true;
-    if (grp.managePages) userPermission.managePages = true;
     if (grp.member) userPermission.member = true;
   }
   // eslint-disable-next-line no-param-reassign
@@ -87,7 +86,6 @@ enum Perms {
     admin = "admin",
     managePosts = "managePosts",
     member = "member",
-    managePages = "managePages",
     manageEvents = "manageEvents",
     manageFiles = "manageFiles"
 }
@@ -162,7 +160,7 @@ async function makeRequest (url: string, options: any) {
 }
 
 const cleanString = (str: string): string => escape(stripLow(trim(str), true));
-export type RootString = "archive"|"photos"|"docs"
+export type RootString = "archive"|"photos"|"docs"|"content"
 
 export {
   errorHandler,

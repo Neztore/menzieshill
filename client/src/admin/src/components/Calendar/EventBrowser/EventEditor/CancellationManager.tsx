@@ -1,9 +1,10 @@
 // Created by josh on 16/04/2020
-import React, {FunctionComponent, useState} from "react";
-import CalendarEvent, {Repeat} from "../../../../shared/Types";
-import {CancellationModal} from "./CancellationModal";
-import {Api} from '../../../../shared/util'
+import React, { FunctionComponent, useState } from "react";
+
+import CalendarEvent, { Repeat } from "../../../../shared/Types";
+import { Api } from "../../../../shared/util";
 import CancellationList from "./CancellationList";
+import { CancellationModal } from "./CancellationModal";
 
 interface CancellationManagerProps {
 	refresh: Function,
@@ -15,66 +16,64 @@ interface CancellationManagerProps {
 	Stores the selected cancellation state.
 	If it's not recurring, add is greyed out after 1 is added.
  */
-export const CancellationManager: FunctionComponent<CancellationManagerProps> = ({event, refresh}) => {
-	const [cancellation, setOpen] = useState();
-	if (!event || !event.id || !event.cancellations) {
-		return <p className="has-text-grey">Please save this event before adding cancellations.</p>
-	}
+export const CancellationManager: FunctionComponent<CancellationManagerProps> = ({ event, refresh }) => {
+  const [cancellation, setOpen] = useState();
+  if (!event || !event.id || !event.cancellations) {
+    return <p className="has-text-grey">Please save this event before adding cancellations.</p>;
+  }
 
-	const isRecurring = event.repeat !== Repeat.None;
-	const canAdd = isRecurring || event.cancellations.length === 0;
-	async function handleDone(modified: boolean) {
-		if (modified) {
-			// Load new event from the API and pass it up
-			if (event && event.id) {
-				const ev = await Api.get(`/events/${event.id}`, {
-					noCache: true
-				});
-				if (ev.error) {
-					throw new Error(ev.error);
-				} else {
-					if (ev.event) {
-						refresh(ev.event);
-					} else {
-						throw new Error("No event was supplied from refresh.")
-					}
-				}
-			} else {
-				throw new Error("Failed to reload event from server: ")
-			}
-		}
-		setOpen(false);
+  const isRecurring = event.repeat !== Repeat.None;
+  const canAdd = isRecurring || event.cancellations.length === 0;
+  async function handleDone (modified: boolean) {
+    if (modified) {
+      // Load new event from the API and pass it up
+      if (event && event.id) {
+        const ev = await Api.get(`/events/${event.id}`, { noCache: true });
+        if (ev.error) {
+          throw new Error(ev.error);
+        } else if (ev.event) {
+          refresh(ev.event);
+        } else {
+          throw new Error("No event was supplied from refresh.");
+        }
+      } else {
+        throw new Error("Failed to reload event from server: ");
+      }
+    }
+    setOpen(false);
+  }
+  if (cancellation) {
+    return <CancellationModal cancellation={cancellation} handleDone={handleDone} event={event} />;
+  }
 
-	}
-	if (cancellation) {
-		return <CancellationModal cancellation={cancellation} handleDone={handleDone} event={event}/>
-	}
-
-	return <div>
-		<div className="level">
-			<div className="level-left">
-				<div className="level-item">
-					<Title event={event}/>
-				</div>
-			</div>
-			<div className="level-right">
-				<div className="level-item">
-					<button className="button is-danger"  onClick={()=>setOpen(true)} disabled={!canAdd}>Add cancellation</button>
-				</div>
-			</div>
-		</div>
-		<CancellationList handleClick={setOpen} cancellations={event && event.cancellations} event={event}/>
-	</div>
+  return (
+    <div>
+      <div className="level">
+        <div className="level-left">
+          <div className="level-item">
+            <Title event={event} />
+          </div>
+        </div>
+        <div className="level-right">
+          <div className="level-item">
+            <button className="button is-danger" onClick={() => setOpen(true)} disabled={!canAdd}>Add cancellation</button>
+          </div>
+        </div>
+      </div>
+      <CancellationList handleClick={setOpen} cancellations={event && event.cancellations} event={event} />
+    </div>
+  );
 };
-export default CancellationManager
+export default CancellationManager;
 
-const Title = ({event}: {event: CalendarEvent})=> (<p className="subtitle">
-	{
-		event.cancellations ?
-			(event.repeat === Repeat.None ?
-			event.cancellations.length !== 0 ? "This event has been cancelled":"This event has not been cancelled"
-			:
-			(<span>This event has <code>{event.cancellations.length}</code> cancellations.</span>))
-			: "This event has been cancelled"
+const Title = ({ event }: {event: CalendarEvent}) => (
+  <p className="subtitle">
+    {
+		event.cancellations
+		  ? (event.repeat === Repeat.None
+		    ? event.cancellations.length !== 0 ? "This event has been cancelled" : "This event has not been cancelled"
+		    :			(<span>This event has <code>{event.cancellations.length}</code> cancellations.</span>))
+		  : "This event has been cancelled"
 	}
-</p>);
+  </p>
+);
