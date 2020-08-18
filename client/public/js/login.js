@@ -1,4 +1,4 @@
-Sentry.init({ dsn: 'https://f120824f080e4dc49677ad203a228004@o386921.ingest.sentry.io/1532075' });
+//Sentry.init({ dsn: 'https://f120824f080e4dc49677ad203a228004@o386921.ingest.sentry.io/1532075' });
 document.addEventListener("DOMContentLoaded", function () {
   const fields = {
     username: document.getElementById("username"),
