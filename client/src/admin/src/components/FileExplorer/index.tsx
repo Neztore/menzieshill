@@ -1,9 +1,10 @@
-import React, {FunctionComponent, useEffect, useState} from "react";
+import React, {FunctionComponent, useContext, useEffect, useState} from "react";
 import ExplorerLevel from "./ExplorerLevel";
 import {Folder} from "./types";
 import {getFolder, uploadFiles} from "./api";
 import {FileTable} from "./FileTable";
 import UploadModal from "./UploadModal";
+import UserContext from "../../context/UserContext";
 
 interface FileExplorerProps {
   root: string,
@@ -20,6 +21,8 @@ export const FileExplorer: FunctionComponent<FileExplorerProps> = ({root, handle
   const [folder, setFolder] = useState<Folder|undefined>();
   const [error, setError] = useState<string|undefined>();
   const [uploadInfo, setUpload] = useState<UploadInfo|undefined>();
+  const user = useContext(UserContext);
+  const canEdit = user && user.perms && (user.perms.admin || user.perms.manageFiles)
 
   useEffect(function () {
     getInfo(root);
@@ -74,7 +77,6 @@ export const FileExplorer: FunctionComponent<FileExplorerProps> = ({root, handle
   // See about a way to split this into more files
   // Maybe: Use children?
 
-  // Hide editing features if no access
   // Configuration modal
   // File 'path'
   //   * Server
@@ -117,8 +119,8 @@ export const FileExplorer: FunctionComponent<FileExplorerProps> = ({root, handle
                onDragOver={discardEvent}
                onDrop={handleDrop}
   >
-    <ExplorerLevel folderId={folder.id} handleUpload={handleUpload} handleEditable={handleEditable} refresh={getInfo}/>
-    <FileTable folder={folder} setFolder={setFolder} handleEditable={handleEditable}/>
+    <ExplorerLevel folderId={folder.id} handleUpload={handleUpload} handleEditable={handleEditable} refresh={getInfo} canEdit={canEdit}/>
+    <FileTable folder={folder} setFolder={setFolder} handleEditable={handleEditable} canEdit={canEdit}/>
 
 
   </div>);

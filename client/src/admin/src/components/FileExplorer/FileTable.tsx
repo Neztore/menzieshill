@@ -7,14 +7,16 @@ import {getFolder, BaseUrl} from "./api";
 interface FileTableProps {
   folder: Folder,
   setFolder: Function,
-  handleEditable?: Function
+  handleEditable?: Function,
+  canEdit: boolean
 }
 const editable = ["js", "css", "json", "txt", "md", "html", "markdown"]
-export const FileTable: FunctionComponent<FileTableProps> = ({folder, setFolder, handleEditable}) => {
+export const FileTable: FunctionComponent<FileTableProps> = ({folder, setFolder, handleEditable, canEdit}) => {
   const [error, setError] = useState<string|undefined>();
   function configItem (item: File|Folder) {
+    if (canEdit) {
 
-
+    }
   }
   async function changeFolder (newId: number) {
     try {
@@ -30,7 +32,7 @@ export const FileTable: FunctionComponent<FileTableProps> = ({folder, setFolder,
   }
   function openFile(e: React.MouseEvent<HTMLAnchorElement>, file: File) {
     const ext = getExt(file.loc);
-    if (ext && editable.includes(ext.toLowerCase()) && handleEditable) {
+    if (ext && editable.includes(ext.toLowerCase()) && handleEditable && canEdit) {
       e.preventDefault();
       return handleEditable(file);
     }

@@ -1,4 +1,4 @@
-import React, {FunctionComponent} from "react";
+import React, {FunctionComponent, Fragment} from "react";
 import FileDropdown from "./FileDropdown";
 import {createFolder} from "./api";
 
@@ -6,10 +6,11 @@ interface ExplorerLevelProps {
   folderId: number,
   handleUpload: Function,
   handleEditable?: Function,
-  refresh: Function
+  refresh: Function,
+  canEdit: boolean
 }
 
-export const ExplorerLevel: FunctionComponent<ExplorerLevelProps> = ({handleEditable, handleUpload, folderId, refresh}) => {
+export const ExplorerLevel: FunctionComponent<ExplorerLevelProps> = ({handleEditable, handleUpload, folderId, refresh, canEdit}) => {
   async function addFolder () {
     const folderName = prompt("Please enter a name for the new folder.", "New folder")
     if (folderName) {
@@ -26,12 +27,16 @@ export const ExplorerLevel: FunctionComponent<ExplorerLevelProps> = ({handleEdit
   }
   return (<div className="level">
     <div className="level-left">
-      <div className="level-item">
-        <FileDropdown handleEdit={handleEditable} handleUpload={handleUpload} />
-      </div>
-      <div className="level-item">
-        <button className="button" onClick={addFolder}>Add folder</button>
-      </div>
+      {canEdit ?
+          (<Fragment><div className="level-item">
+            <FileDropdown handleEdit={handleEditable} handleUpload={handleUpload} />
+          </div>
+            <div className="level-item">
+              <button className="button" onClick={addFolder}>Add folder</button>
+            </div></Fragment>)
+          :
+          ""
+      }
     </div>
 
     <div className="level-right">
