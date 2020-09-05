@@ -1,5 +1,6 @@
 // Will later take env variables and provide them to app.
 const path = require("path");
+
 const {
   port = 3000,
   authLife = 604800,
@@ -7,7 +8,7 @@ const {
   recaptchaToken,
   sentryDsn,
   emailToken
-} = process.env
+} = process.env;
 
 module.exports = {
   port,
@@ -16,4 +17,4 @@ module.exports = {
   recaptchaToken,
   sentryDsn,
   emailToken
-}
+};

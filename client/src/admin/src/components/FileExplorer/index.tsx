@@ -1,10 +1,13 @@
-import React, {FunctionComponent, useContext, useEffect, useState} from "react";
-import ExplorerLevel from "./ExplorerLevel";
-import {Folder} from "./types";
-import {getFolder, uploadFiles} from "./api";
-import {FileTable} from "./FileTable";
-import UploadModal from "./UploadModal";
+import React, {
+  FunctionComponent, useContext, useEffect, useState
+} from "react";
+
 import UserContext from "../../context/UserContext";
+import { ExplorerLevel } from "./ExplorerLevel";
+import { FileTable } from "./FileTable";
+import { UploadModal } from "./UploadModal";
+import { getFolder, uploadFiles } from "./api";
+import { Folder } from "./types";
 
 interface FileExplorerProps {
   root: string,
@@ -16,27 +19,27 @@ interface UploadInfo {
   controller?: AbortController
 }
 
-export const FileExplorer: FunctionComponent<FileExplorerProps> = ({root, handleEditable}) => {
+export const FileExplorer: FunctionComponent<FileExplorerProps> = ({ root, handleEditable }) => {
   // Hooks
   const [folder, setFolder] = useState<Folder|undefined>();
   const [error, setError] = useState<string|undefined>();
   const [uploadInfo, setUpload] = useState<UploadInfo|undefined>();
   const user = useContext(UserContext);
-  const canEdit = user && user.perms && (user.perms.admin || user.perms.manageFiles)
+  const canEdit = !!(user && user.perms && (user.perms.admin || user.perms.manageFiles));
 
-  useEffect(function () {
+  useEffect(() => {
     getInfo(root);
-    return undefined
-  }, [root])
+    return undefined;
+  }, [root]);
 
   // Functions
-  async function getInfo(id: string|number) {
+  async function getInfo (id: string|number) {
     try {
-      const folder = await getFolder(id);
-      setFolder(folder);
+      const fold = await getFolder(id);
+      setFolder(fold);
     } catch (e) {
       if (e.http) {
-        setError(`${e.http.error.status}: ${e.http.error.message}`)
+        setError(`${e.http.error.status}: ${e.http.error.message}`);
       } else {
         setError(e.message);
       }
@@ -45,11 +48,11 @@ export const FileExplorer: FunctionComponent<FileExplorerProps> = ({root, handle
 
   async function handleUpload (files: FileList) {
     // Not all Browsers support AbortController.
-    const controller: AbortController|undefined= AbortController ? new AbortController() : undefined
+    const controller: AbortController|undefined = AbortController ? new AbortController() : undefined;
     setUpload({
       info: files.length > 1 ? `${files.length} files` : files[0].name,
       controller
-    })
+    });
     if (!folder) {
       throw new Error("Folder is not set!");
     }
@@ -63,14 +66,14 @@ export const FileExplorer: FunctionComponent<FileExplorerProps> = ({root, handle
     setUpload(undefined);
   }
 
-  function discardEvent(e:any) {
+  function discardEvent (e:any) {
     e.stopPropagation();
     e.preventDefault();
     return false;
   }
-  function handleDrop(e: React.DragEvent) {
+  function handleDrop (e: React.DragEvent) {
     discardEvent(e);
-    const files = e.dataTransfer.files;
+    const { files } = e.dataTransfer;
     handleUpload(files);
   }
 
@@ -93,36 +96,38 @@ export const FileExplorer: FunctionComponent<FileExplorerProps> = ({root, handle
   // Test all
   // Move all file browsers? (Probably won't bother with this, for now at least. The other one works!)
   // Rename 'admin' to dashboard?
-
+  function cancelUpload () {
+    if (uploadInfo && uploadInfo.controller) {
+      uploadInfo.controller.abort();
+      setUpload(undefined);
+    }
+  }
   // Returns
   if (uploadInfo) {
-    function cancelUpload () {
-      if (uploadInfo && uploadInfo.controller) {
-        uploadInfo.controller.abort();
-        setUpload(undefined);
-      }
-    }
-    return <UploadModal info={uploadInfo.info} handleCancel={cancelUpload} />
+    return <UploadModal info={uploadInfo.info} handleCancel={cancelUpload} />;
   }
   if (error) {
-    return <div className="has-text-centered has-text-danger">
-      <p className="is-size-3 has-text-centered">Oops! something went wrong.</p>
-      <p className="has-text-centered">{error}</p>
-    </div>
+    return (
+      <div className="has-text-centered has-text-danger">
+        <p className="is-size-3 has-text-centered">Oops! something went wrong.</p>
+        <p className="has-text-centered">{error}</p>
+      </div>
+    );
   }
   if (!folder) {
-    return <p className="has-text-centered has-text-grey">Loading...</p>
+    return <p className="has-text-centered has-text-grey">Loading...</p>;
   }
-  return (<div className="file-explorer"
-               onDrag={discardEvent}
-               onDragEnter={discardEvent}
-               onDragOver={discardEvent}
-               onDrop={handleDrop}
-  >
-    <ExplorerLevel folderId={folder.id} handleUpload={handleUpload} handleEditable={handleEditable} refresh={getInfo} canEdit={canEdit}/>
-    <FileTable folder={folder} setFolder={setFolder} handleEditable={handleEditable} canEdit={canEdit}/>
+  return (
+    <div
+      className="file-explorer"
+      onDrag={discardEvent}
+      onDragEnter={discardEvent}
+      onDragOver={discardEvent}
+      onDrop={handleDrop}>
+      <ExplorerLevel folderId={folder.id} handleUpload={handleUpload} handleEditable={handleEditable} refresh={getInfo} canEdit={canEdit} />
+      <FileTable folder={folder} setFolder={setFolder} handleEditable={handleEditable} canEdit={canEdit} />
 
-
-  </div>);
+    </div>
+  );
 };
 export default FileExplorer;

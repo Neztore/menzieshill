@@ -1,13 +1,12 @@
 import "babel-polyfill";
 import React from "react";
 import ReactDOM from "react-dom";
-
 import "../../../public/css/global.css";
 import "../../../public/css/bulma.min.css";
 import "../admin.css";
 import { BrowserRouter as Router } from "react-router-dom";
 
-import App from "./components/App";
+import { App } from "./components/App";
 import ErrorBoundary from "./components/ErrorBoundary";
 import NavBar from "./components/navbar";
 // @ts-ignore

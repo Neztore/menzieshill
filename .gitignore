@@ -89,7 +89,7 @@ typings/
 
 # Local files
 
-api/build/
+backend/build/
 
 
 client/dist/
@@ -101,3 +101,4 @@ client/public/pages/*
 .idea/
 
 client/build/
+/content/

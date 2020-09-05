@@ -1,7 +1,10 @@
 import express, { Request, Response } from "express";
+import { writeFile } from "fs";
 import multer from "multer";
+import { join } from "path";
 import { isEmpty, isLength, trim } from "validator";
 
+import { filesLoc } from "../../config";
 import Database from "../db";
 import { File } from "../db/entity/File.entity";
 import { Folder } from "../db/entity/Folder.entity";
@@ -17,7 +20,7 @@ import {
   RootString,
   validFileName,
   validId,
-  validName
+  validName, validString
 } from "../util";
 import {
   checkExists, generateFileExtra, getPath, removeFile, storage
@@ -286,6 +289,33 @@ files.patch("/:parent/files/:loc", errorCatch(async (req: Request, res: Response
         success: true,
         file
       });
+    }
+    return res.status(404).send(errorGenerator(404, "File not found"));
+  }
+  return res.status(400).send(errorGenerator(400, "Invalid file loc."));
+}));
+
+// Edit Content: Only for text-based
+files.patch("/:parent/files/:loc/content", errorCatch(async (req: Request, res: Response): Promise<any> => {
+  if (validFileName(req.params.loc)) {
+    const file = await Database.getFile(req.params.loc);
+    if (file) {
+      if (!await canAccessFile(req.user, file)) return res.status(Errors.forbidden.error.status).send(errorGenerator(Errors.forbidden.error.status, "You do not have access to that file."));
+      if (req.body.name && validName(req.body.name)) {
+        file.name = req.body.name;
+        await Database.saveFile(file);
+      }
+      if (req.body.content && validString(req.body.content)) {
+        return writeFile(join(filesLoc, file.loc), req.body.content, e => {
+          if (e) {
+            console.error(e.message);
+            throw new Error(e.message);
+          }
+          // Trigger re-build
+          return res.send({ success: true });
+        });
+      }
+      return res.status(400).send(errorGenerator(400, "Bad request: You must supply content."));
     }
     return res.status(404).send(errorGenerator(404, "File not found"));
   }

@@ -26,7 +26,7 @@ import groups from "./routes/groups";
 import posts from "./routes/posts";
 import users from "./routes/users";
 import { errorGenerator, errorHandler } from "./util";
-
+import { generateStatic } from "./util/contentManager";
 // Set up
 const app = express();
 sentry.init({ dsn: sentryDsn });
@@ -51,7 +51,6 @@ app.use("/users", users);
 app.use("/posts", posts);
 app.use("/events", events);
 app.use("/contact", contact);
-
 app.use("/groups", groups);
 
 app.get("/", (_req, res) => res.send({
@@ -74,5 +73,7 @@ process.on("uncaughtException", err => {
 });
 
 db.once("ready", () => {
+  generateStatic();
+
   app.listen(port, () => console.log(`Menzieshill API starting on ${port}.`));
 });

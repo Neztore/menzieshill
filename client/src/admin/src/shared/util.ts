@@ -11,10 +11,10 @@ export const Repeats = {
   Weekly: "Weekly",
   Monthly: "Monthly"
 };
-export function getExt(str: string): string|undefined {
+export function getExt (str: string): string|undefined {
   const num = str.lastIndexOf(".");
   if (num === -1) return undefined;
-  return str.substring(str.lastIndexOf(".") + 1)
+  return str.substring(str.lastIndexOf(".") + 1);
 }
 
 export function unescape (str:string) {
