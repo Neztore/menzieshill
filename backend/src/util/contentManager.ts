@@ -53,13 +53,39 @@ async function doFolder (path: string, folder: Folder) {
   for (const file of kids) {
     doFile(newPath, file)
       .then(() => console.log(`Created file ${file.name}`))
-      .catch(console.error);
+      .catch(async e => {
+        if (e.code === "ENOENT") {
+          console.warn(`File ${file.name} has no source file. Removing from database.`);
+          await Database.files.remove(file);
+        } else {
+          throw e;
+        }
+      });
   }
   for (const child of folder.children) {
     doFolder(newPath, child)
       .catch(e => console.error(`Failed to do folder ${child.name}: ${e.message}`));
   }
 }
+// Rebuilds it if it's within content. Otherwise, does nothing.
+export async function rebuildFolder (folder: Folder) {
+  const tree = await Database.folders.findAncestorsTree(folder);
+  // Iterate upwards
+  function iterateFolder (fold: Folder): boolean {
+    if (fold.parent) {
+      return iterateFolder(fold.parent);
+    }
+    return folder.name === "content_ROOT";
+  }
+  const isContent = iterateFolder(tree);
+  if (isContent) {
+    // Here I could use the path to iterateFolder to generate a path
+    // and update the specific folder
+    // but i cant be bothered and it barely makes a difference anyhow.
+    generateStatic();
+  }
+}
+
 async function doFile (path: string, file: File) {
   // Do MD rendering as required
   const ext = getExt(file.loc);

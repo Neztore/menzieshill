@@ -7,10 +7,10 @@ const port = process.env.port || 1234;
 const { readdir } = require("fs");
 const { join } = require("path");
 
-const publicDir = join(__dirname, "..", "content");
-console.log(publicDir)
+const publicDir = join(__dirname, "..", "frontend");
+
 app.use(express.static(publicDir));
-app.use("/admin", express.static(join(publicDir, "admin")));
+app.use("/admin", express.static(join(__dirname, "public", "admin")));
 app.use(express.static(join(publicDir, "admin")));/*
 readdir(pagesDir, { withFileTypes: true }, (err, files) => {
   if (err) throw new Error(err);
@@ -23,10 +23,9 @@ readdir(pagesDir, { withFileTypes: true }, (err, files) => {
       });
     }
   }
-});*/
+}); */
 app.get("/admin/*", (_, res) => {
-  console.log("f");
-  res.sendFile(join(publicDir, "admin", "index.html"));
+  res.sendFile(join(__dirname, "public", "admin", "index.html"));
 });
 app.listen(port, () => {
   console.log(`Menzieshill dev-server listening on port ${port}`);

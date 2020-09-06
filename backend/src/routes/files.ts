@@ -22,6 +22,7 @@ import {
   validId,
   validName, validString
 } from "../util";
+import { generateStatic, rebuildFolder } from "../util/contentManager";
 import {
   checkExists, generateFileExtra, getPath, removeFile, storage
 } from "../util/fileManager";
@@ -131,6 +132,7 @@ files.post("/:parent", errorCatch(async (req: Request, res: Response): Promise<a
       return res.status(400).send(errorGenerator(400, `Invalid folder name.`));
     }
     await Database.addFolder(parent, newFolder);
+    rebuildFolder(newFolder);
     return res.send({
       success: true,
       newFolder: {
@@ -155,6 +157,7 @@ files.patch("/:folderId", errorCatch(async (req: Request, res: Response): Promis
         return res.status(400).send(errorGenerator(400, "Bad folder parameters", { errors }));
       }
       await Database.saveFolder(folder);
+      rebuildFolder(folder);
       return res.send({
         success: true,
         folder,
@@ -196,6 +199,7 @@ files.delete("/:folderId", errorCatch(async (req: Request, res: Response): Promi
         }
       });
     }
+    generateStatic().catch(console.error);
     return res.send({
       success: true,
       message: "Folder removed."
@@ -228,6 +232,7 @@ files.post("/:parent/files", upload.array("files", 200), errorCatch(async (req: 
         }
         await Promise.all(promises);
         await Database.saveFolder(parent);
+        rebuildFolder(parent);
         return res.send({
           success: true,
           message: `Uploaded ${promises.length} files.`
@@ -236,6 +241,7 @@ files.post("/:parent/files", upload.array("files", 200), errorCatch(async (req: 
         // It's a single file.
         await handleFile(req.files, parent, req.user.id);
         await Database.saveFolder(parent);
+        rebuildFolder(parent);
         return res.send({
           success: true,
           message: `Uploaded 1 file.`
@@ -284,6 +290,7 @@ files.patch("/:parent/files/:loc", errorCatch(async (req: Request, res: Response
       if (errors && errors.length !== 0) {
         return res.status(400).send(errorGenerator(400, "Bad file options.", { errors }));
       }
+      rebuildFolder(file.folder);
       await Database.saveFile(file);
       return res.send({
         success: true,
@@ -312,6 +319,7 @@ files.patch("/:parent/files/:loc/content", errorCatch(async (req: Request, res: 
             throw new Error(e.message);
           }
           // Trigger re-build
+          rebuildFolder(file.folder);
           return res.send({ success: true });
         });
       }
@@ -328,7 +336,9 @@ files.delete("/:parent/:loc", errorCatch(async (req: Request, res: Response): Pr
     const file = await Database.getFile(req.params.loc);
     if (file) {
       if (!await canAccessFile(req.user, file)) return res.status(Errors.forbidden.error.status).send(errorGenerator(Errors.forbidden.error.status, "You do not have access to that file."));
+      const folder = { ...file.folder };
       await Database.deleteFile(file);
+      rebuildFolder(folder);
       return res.send({
         success: true,
         message: "File deleted"
