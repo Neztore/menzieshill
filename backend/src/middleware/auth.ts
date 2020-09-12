@@ -28,7 +28,7 @@ function makeMiddleware (requiredPerms?: Perms[]) {
       }
       return next();
     }
-
+    console.log("__auth__");
     if (!req.cookies || !req.cookies.token || isEmpty(req.cookies.token) || !isLength(req.cookies.token, {
       min: 100,
       max: 100

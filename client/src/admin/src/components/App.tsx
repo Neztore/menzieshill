@@ -1,11 +1,14 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
+import { Route, Switch } from "react-router-dom";
 
 import * as Api from "../../../../public/js/apiFetch";
 import { Message } from "../../bulma/Message";
 import { UserProvider } from "../context/UserContext";
 import { HttpError, User } from "../shared/Types";
-import PanelRouter from "./Router";
-import Sidebar from "./Sidebar";
+import { Login } from "./Authentication/Login";
+import { Register } from "./Authentication/Register";
+import { PanelRouter } from "./Router";
+import { Sidebar } from "./Sidebar";
 
 const leftStyle = {
   backgroundColor: "#fbfbfb",
@@ -15,7 +18,7 @@ export const App:FunctionComponent = () => {
   const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState<HttpError|undefined>();
   useEffect(() => {
-    (async function () {
+    (async function checkLogin () {
       const userInfo:User|HttpError = await Api.get("/users/@me");
       if ("error" in userInfo) {
         if (userInfo.error.status === 401) {
@@ -35,15 +38,25 @@ export const App:FunctionComponent = () => {
   }
   return (
     <UserProvider value={user}>
-      <div className="columns">
-        <div className="column is-3 fullHeight" style={leftStyle}>
-          <Sidebar />
-        </div>
-        <div className="column admin-right" style={{ marginRight: "0.5em" }}>
-          <PanelRouter />
-        </div>
-      </div>
+      <Switch>
+        <Route path="/admin/login" exact>
+          <Login />
+        </Route>
+        <Route path="/admin/register" exact>
+          <Register />
+        </Route>
+        <Route>
+          <div className="columns">
+            <div className="column is-3 fullHeight" style={leftStyle}>
+              <Sidebar />
+            </div>
+            <div className="column admin-right" style={{ marginRight: "0.5em" }}>
+              <PanelRouter />
+            </div>
+          </div>
+        </Route>
 
+      </Switch>
     </UserProvider>
   );
 };

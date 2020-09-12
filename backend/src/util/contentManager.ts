@@ -2,8 +2,8 @@
   Responsible for producing the "Public facing" representation of the site's content.
   Based upon the "Content" Database root.
  */
-import { renderFile } from "ejs";
-import { promises } from "fs";
+import { compile } from "ejs";
+import { promises, readFileSync } from "fs";
 import marked from "marked";
 import { join } from "path";
 
@@ -24,12 +24,21 @@ marked.setOptions({
   mangle: true
 });
 const contentBase = join(process.cwd(), "..", "..", "frontend");
+const pageSource = readFileSync(join(process.cwd(), "..", "pageTemplate.ejs"), { encoding: "utf-8" });
+const renderFile = compile(pageSource, { async: true });
+const reg = /{{(.*?)}}/gm;
+
+// Partials cache
+let partials: {[key: string]: string} = {};
+
 export async function generateStatic () {
   const contentRoot = await Database.getFolderRoot("content");
   const res = await Database.folders.findDescendantsTree(contentRoot);
+  // Clear partials cache
+  partials = {};
   return doFolder(contentBase, res);
 }
-export default generateStatic;
+
 // Outputs a folder and recurse over all it's children
 async function doFolder (path: string, folder: Folder) {
   const fold = await Database.folders.findOne({ id: folder.id }, { relations: ["files"] });
@@ -82,7 +91,8 @@ export async function rebuildFolder (folder: Folder) {
     // Here I could use the path to iterateFolder to generate a path
     // and update the specific folder
     // but i cant be bothered and it barely makes a difference anyhow.
-    generateStatic();
+    generateStatic()
+      .catch(console.error);
   }
 }
 
@@ -111,7 +121,21 @@ function getExt (str: string): string|undefined {
   if (num === -1) return undefined;
   return str.substring(str.lastIndexOf(".") + 1);
 }
-function renderMarkdown (content: string, file: File): Promise<string> {
+async function getPartial (name: string): Promise<string|void> {
+  const target = name.substring(2, name.length - 2);
+  const partial = await Database.files.createQueryBuilder("file")
+    .where("LOWER(file.name) = :target OR LOWER(file.name) = :target || '.md'", { target })
+    .getOne();
+  if (partial) {
+    // Fetch the file itself
+    const content: string = await readFile(join(filesLoc, partial.loc), { encoding: "utf-8" });
+    partials[name] = content;
+    return content;
+  }
+  return undefined;
+}
+
+async function renderMarkdown (content: string, file: File): Promise<string> {
   // Rendering logic
   // noinspection DuplicatedCode
   let highestLevel = 100;
@@ -144,11 +168,25 @@ function renderMarkdown (content: string, file: File): Promise<string> {
       break;
     }
   }
-  const rdyContent = newLines.join("\n");
+  let rdyContent = newLines.join("\n");
+  const toHandle = rdyContent.match(reg);
+  if (toHandle && Array.isArray(toHandle)) {
+    for (const partial of toHandle) {
+      // eslint-disable-next-line no-await-in-loop
+      const cont = await getPartial(partial);
+      if (cont) {
+        rdyContent = rdyContent.replace(partial, marked(cont));
+      } else {
+        rdyContent = rdyContent.replace(partial, `Failed to find content for ${partial}`);
+      }
+    }
+  }
   const body = marked(rdyContent);
-  return renderFile(join(process.cwd(), "..", "pageTemplate.ejs"), {
+  // Custom partial implementation
+  return renderFile({
     title,
     description,
-    body
+    body, // todo: move to env
+    ApiUrl: "http://localhost:3000"
   });
 }

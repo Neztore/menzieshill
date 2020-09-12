@@ -196,8 +196,7 @@ users.post("/login", errorCatch(async (req: Request, res: Response) => {
     res
       .cookie("token", token, {
         httpOnly: true,
-        /* A week */
-        expires: new Date(Date.now() + 604800000)
+        maxAge: 1209600000
         // secure: true During dev we have no https. Probably should enable in future.
       });
     // TODO: Make this compatible with client somehow.

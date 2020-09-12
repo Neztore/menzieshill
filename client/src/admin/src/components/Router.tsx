@@ -1,16 +1,26 @@
 import React from "react";
 import { Redirect, Route, Switch } from "react-router";
 
-import AccountPage from "./Account";
+import { AccountPage } from "./Account";
+import { Login } from "./Authentication/Login";
+import { Register } from "./Authentication/Register";
 import { Calendar } from "./Calendar";
-import Home from "./Home";
-import Pages from "./Pages";
-import PermCheck from "./PermCheck";
+import { Home } from "./Home";
+import { Pages } from "./Pages";
+import { PermCheck } from "./PermCheck";
 import Posts from "./Posts";
-import Users from "./Users";
+import { Users } from "./Users";
 
 export const PanelRouter = () => (
   <Switch>
+    <Route path="/admin/login">
+      <Login />
+    </Route>
+
+    <Route path="/admin/register">
+      <Register />
+    </Route>
+
     <Route exact path="/">
       <Redirect to="/" />
     </Route>
@@ -50,7 +60,7 @@ export const PanelRouter = () => (
     </Route>
 
     <Route path="/">
-      <h2 className="title is-size-3 has-text-centered"><code>404</code> Oops! I couldn't find what you were looking for.</h2>
+      <h2 className="title is-size-3 has-text-centered"><code>404</code> Oops! I couldn&apos;t find what you were looking for.</h2>
       <p className="has-text-centered">Please check the URL and try again. If you followed a link here, please let me know.</p>
     </Route>
   </Switch>

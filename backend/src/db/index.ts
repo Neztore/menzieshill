@@ -125,7 +125,6 @@ class Database extends EventEmitter {
         .getOne();
     }
 
-    // X95itlkaAeZBKVMYy3YRFXomrk0IEm5qcPx+yE7QMxEMQNl6t8L16feQ/0e9wB3npkPJM7b/GC5zcPjyZWDcbkSwr/no0ratSVMS
     // Modify or create group
     modifyGroup (group: Group) {
       return this.groups.save(group);
