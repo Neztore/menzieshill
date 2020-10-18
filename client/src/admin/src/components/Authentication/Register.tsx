@@ -2,7 +2,9 @@ import { Form, Formik } from "formik";
 import React, { useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 
-import { Field, NormalInput } from "../../../bulma/Field";
+import {
+  Checkbox, Field, HorizontalMultipleField, NormalInput
+} from "../../../bulma/Field";
 import { Api } from "../../shared/util";
 
 export function Register () {
@@ -10,26 +12,29 @@ export function Register () {
   if (redirect) {
     return <Redirect to="/" />;
   }
-  /*
-    todo;
-      - add tos agreement
-      - add "show password"
-      - add password confirmation and additional fields (See "User" edit form)
-      - partials arent multi-line (Does this matter? probably not.)
-   */
   return (
     <div>
       <Formik
         initialValues={{
           username: "",
-          password: ""
+          password: "",
+          confirmPassword: "",
+          email: "",
+          termsAgreed: false,
+          firstName: "",
+          lastName: ""
         }}
         onSubmit={async (values, { setSubmitting, setErrors }) => {
-          const { username, password } = values;
-          const res = await Api.post("/users", {
+          const {
+            username, password, email, firstName, lastName
+          } = values;
+          const res = await Api.post("/users/register", {
             body: {
               username,
-              password
+              password,
+              email,
+              firstName,
+              lastName
             }
           });
           if (res.error) {
@@ -52,9 +57,17 @@ export function Register () {
         validate={values => {
           const errors:any = {};
           if (!values.username) {
-            errors.username = "Required";
+            errors.username = "A username is required.";
           } else if (values.username.length < 2) {
             errors.username = "Too short.";
+          }
+          if (!values.email) {
+            errors.email = "A valid email address is required.";
+          } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+            errors.email = "Invalid email address";
+          }
+          if (!values.termsAgreed) {
+            errors.termsAgreed = "You must agree to our terms to continue";
           }
           if (values.password) {
             if (values.password.length < 8 || values.password.length > 50) {
@@ -63,6 +76,26 @@ export function Register () {
           } else {
             errors.password = "Required";
           }
+          if (values.confirmPassword) {
+            if (values.confirmPassword.length < 8 || values.confirmPassword.length > 50) {
+              errors.confirmPassword = "Invalid length - Must be more than 8 characters and less than 50.";
+            }
+          } else {
+            errors.confirmPassword = "Required";
+          }
+          if (values.password !== values.confirmPassword && !errors.confirmPassword) {
+            errors.confirmPassword = "Passwords must match.";
+          }
+          if (!values.firstName) {
+            errors.firstName = "Required";
+          } else if (values.firstName.length < 2) {
+            errors.firstName = "Too short.";
+          }
+          if (!values.lastName) {
+            errors.lastName = "Required";
+          } else if (values.lastName.length < 2) {
+            errors.lastName = "Too short.";
+          }
 
           return errors;
         }}>
@@ -70,18 +103,38 @@ export function Register () {
           <div className="columns">
             <div className="column is-one-third is-offset-one-third">
               <Form className="box">
-                <h2 className="is-size-2 has-text-centered">Login</h2>
-                <p>Use this form to login to your existing account. You can use either your username or your email to login.</p>
+                <h2 className="is-size-2 has-text-centered">Register</h2>
+                <p>Fill out this form to create an account on our website, which is useful for keeping up to date.</p>
+                <HorizontalMultipleField
+                  label="Name: "
+                  fields={[
+                    {
+                      name: "firstName",
+                      placeholder: "First name"
+                    },
+                    {
+                      name: "lastName",
+                      placeholder: "Last name"
+                    }]} />
+                <Field>
+                  <NormalInput type="email" name="email" label="Email address" small="This is public and must be unique - no other account can use it." />
+                </Field>
+                <Field>
+                  <NormalInput type="password" name="password" label="Password" small="Must be between 8 and 50 characters." />
+                </Field>
+                <Field>
+                  <NormalInput type="password" name="confirmPassword" label="Confirm password" placeholder="Type your password again!" />
+                </Field>
                 <Field>
                   <NormalInput type="text" name="username" label="Username" />
                 </Field>
                 <Field>
-                  <NormalInput type="password" name="password" label="Password" />
+                  <Checkbox name="termsAgreed"> Agree to the <a href="https://menzieshillwhitehall.co.uk/privacy">privacy policy.</a></Checkbox>
                 </Field>
                 <button type="submit" className={`is-info button ${isSubmitting ? "is-loading" : ""}`}>Submit</button>
               </Form>
               <p className="has-text-centered">
-                <Link to="register">Create an account</Link>
+                <Link to="login">Have an account? Login.</Link>
               </p>
             </div>
 

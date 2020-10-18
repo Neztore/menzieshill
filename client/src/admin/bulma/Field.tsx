@@ -1,7 +1,9 @@
-import { ErrorMessage, Field as FormikField } from "formik";
+import {
+  ErrorMessage, FieldConfig, Field as FormikField, useField
+} from "formik";
 import React, { Fragment, FunctionComponent } from "react";
 
-interface baseProps{
+interface baseProps extends FieldConfig<any>{
     type?: string,
     colour?: string,
     placeholder?:string,
@@ -49,18 +51,25 @@ export const TextArea:FunctionComponent<TextareaProps> = props => (
   </Fragment>
 );
 
-const CheckboxInput = (props: Props) => (
-  <div className="checkbox">
-    <input type="checkbox" {...props} />
-  </div>
-);
-export const Checkbox:FunctionComponent<Props> = props => (
-  <Fragment>
-    <label className="label">{props.label}</label>
-    <FormControl CustomInput={CheckboxInput} {...props} />
-
-  </Fragment>
-);
+export const Checkbox = ({ children, name, ...props }: FieldConfig) => {
+  // We need to tell useField what type of input this is
+  // since React treats radios and checkboxes differently
+  // than inputs/select/textarea.
+  const [field] = useField({
+    type: "checkbox",
+    name,
+    ...props
+  });
+  return (
+    <div className="control">
+      <label className="checkbox">
+        <input type="checkbox" {...field} {...props} />
+        {children}
+      </label>
+      <ErrorMessage component={ErrorComponent} name={name} />
+    </div>
+  );
+};
 
 export const NormalInput:FunctionComponent<Props> = props => (
   <Fragment>

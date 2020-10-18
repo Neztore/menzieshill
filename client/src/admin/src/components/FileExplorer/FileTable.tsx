@@ -2,6 +2,7 @@ import React, { Fragment, FunctionComponent, useState } from "react";
 
 import { parseDate } from "../../../../../public/js";
 import { getExt } from "../../shared/util";
+import { ConfigModal } from "./ConfigModal";
 import { BaseUrl, getFolder } from "./api";
 import { File, Folder } from "./types";
 
@@ -16,10 +17,17 @@ export const FileTable: FunctionComponent<FileTableProps> = ({
   folder, setFolder, handleEditable, canEdit
 }) => {
   const [error, setError] = useState<string|undefined>();
+  const [configTarget, setConfigTarget] = useState<File|Folder|null>(null);
   function configItem (item: File|Folder) {
     if (canEdit) {
-
+      setConfigTarget(item);
     }
+  }
+  function configDone (changed: boolean) {
+    if (changed) {
+      changeFolder(folder.id).catch(console.error);
+    }
+    setConfigTarget(null);
   }
   async function changeFolder (newId: number) {
     try {
@@ -48,6 +56,7 @@ export const FileTable: FunctionComponent<FileTableProps> = ({
   }
   return (
     <Fragment>
+      {configTarget ? <ConfigModal target={configTarget} handleDone={configDone} /> : ""}
       <table className="table is-fullwidth is-hoverable">
         <thead>
           <tr>
@@ -60,8 +69,8 @@ export const FileTable: FunctionComponent<FileTableProps> = ({
         <tbody>
           {
         folder.children.map(fold => (
-          <tr style={{ cursor: "pointer" }} key={fold.id}>
-            <td onClick={() => changeFolder(fold.id)}>{fold.name}</td>
+          <tr key={fold.id}>
+            <td onClick={() => changeFolder(fold.id)} style={{ cursor: "pointer" }}>{fold.name}</td>
             <td>Folder</td>
             <td>{parseDate(fold.created)}</td>
             <td onClick={() => configItem(fold)}><span className="fas fa-cog" /></td>

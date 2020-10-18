@@ -25,10 +25,10 @@ export const AdminPanel:FunctionComponent = () => (
       General
     </p>
     <ul className="menu-list">
-      <AdminItem to="/admin" name="Home" exact />
-      <AdminItem to="/admin/users" name="Users" />
-      <AdminItem to="/admin/calendar" name="Calendar" />
-      <AdminItem to="/admin/posts" name="Posts" />
+      <AdminItem to="/" name="Home" exact />
+      <AdminItem to="/users" name="Users" />
+      <AdminItem to="/calendar" name="Calendar" />
+      <AdminItem to="/posts" name="Posts" />
     </ul>
     <p className="menu-label">
       Files
@@ -43,12 +43,13 @@ export const AdminPanel:FunctionComponent = () => (
       <li>
         <a href="/archive">File archive</a>
       </li>
+      <AdminItem to="/pages" name="Pages" />
     </ul>
     <p className="menu-label">
       Account
     </p>
     <ul className="menu-list">
-      <AdminItem to="/admin/account" name="My account" />
+      <AdminItem to="/account" name="My account" />
       <li>
         <a onClick={logOut}>Log out</a>
       </li>

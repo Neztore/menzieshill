@@ -13,6 +13,7 @@ export function AccountPage () {
   useEffect(() => {
     (async function () {
       if (!info) {
+        console.log("Account/index.tsx: GET /@me");
         const userInfo:User = await Api.get("/users/@me");
         setInfo(userInfo);
       }

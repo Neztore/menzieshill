@@ -16,7 +16,7 @@ if (module.hot) {
 }
 
 const appBase = (
-  <Router>
+  <Router basename="/admin">
     <ErrorBoundary>
       <NavBar />
       <App />

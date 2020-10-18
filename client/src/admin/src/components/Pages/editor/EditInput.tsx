@@ -6,7 +6,7 @@ interface EditorProps {
 
 }
 export const Editor: FunctionComponent<EditorProps> = function Editor ({ setContent, content }) {
-  console.log(`COntent: ${content}`)
+  console.log(`COntent: ${content}`);
   return (
     <Fragment>
       <p>You can use all <a href="https://www.markdownguide.org/cheat-sheet/">Markdown</a> styles here,

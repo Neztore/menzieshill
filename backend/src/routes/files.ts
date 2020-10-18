@@ -73,12 +73,16 @@ files.get("/:folderId", errorCatch(async (req: Request, res: Response): Promise<
   if (validId(req.params.folderId)) {
     const folder = await Database.getFolder(parseInt(req.params.folderId, 10));
     if (folder) {
-      if (await canAccessFolder(req.user, folder)) {
+      const accessInfo = await canAccessFolder(req.user, folder);
+      if (accessInfo.hasAccess) {
         // They can get the folder. Now we check children.
         // Shows the different ways this can be called.
         checkChildrenPermissions(folder, req.user);
 
-        return res.send(folder);
+        return res.send({
+          ...folder,
+          path: accessInfo.path
+        });
       }
       return res.status(Errors.forbidden.error.status).send(Errors.forbidden);
     }
@@ -124,7 +128,8 @@ files.post("/:parent", errorCatch(async (req: Request, res: Response): Promise<a
 
   // It will be
   if (parent) {
-    if (!(await canAccessFolder(req.user, parent))) return res.status(Errors.forbidden.error.status).send(errorGenerator(Errors.forbidden.error.status, "You do not have access to parent folder."));
+    const accessInfo = await canAccessFolder(req.user, parent);
+    if (!accessInfo.hasAccess) return res.status(Errors.forbidden.error.status).send(errorGenerator(Errors.forbidden.error.status, "You do not have access to parent folder."));
     const newFolder = new Folder();
     await modifyItem(newFolder, req.body);
 
@@ -151,7 +156,8 @@ files.patch("/:folderId", errorCatch(async (req: Request, res: Response): Promis
   if (validId(req.params.folderId)) {
     const folder = await Database.getFolder(parseInt(req.params.folderId, 10));
     if (folder) {
-      if (!(await canAccessFolder(req.user, folder))) return res.status(Errors.forbidden.error.status).send(Errors.forbidden);
+      const accessInfo = await canAccessFolder(req.user, folder);
+      if (!accessInfo.hasAccess) return res.status(Errors.forbidden.error.status).send(Errors.forbidden);
       const errors = await modifyItem(folder, req.body);
       if (errors && errors.length !== 0) {
         return res.status(400).send(errorGenerator(400, "Bad folder parameters", { errors }));
@@ -180,7 +186,8 @@ files.delete("/:folderId", errorCatch(async (req: Request, res: Response): Promi
   }
 
   if (folder) {
-    if (!await canAccessFolder(req.user, folder)) return res.status(Errors.forbidden.error.status).send(Errors.forbidden);
+    const accessInfo = await canAccessFolder(req.user, folder);
+    if (!accessInfo.hasAccess) return res.status(Errors.forbidden.error.status).send(Errors.forbidden);
     // Iterate and delete children
     const promises = [];
     for (const child of folder.files) {
@@ -222,7 +229,8 @@ files.post("/:parent/files", upload.array("files", 200), errorCatch(async (req: 
       return res.status(400).send(errorGenerator(400, "Bad parent resource id."));
     }
     if (parent) {
-      if (!await canAccessFolder(req.user, parent)) return res.status(Errors.forbidden.error.status).send(errorGenerator(Errors.forbidden.error.status, "You do not have access to parent folder."));
+      const accessInfo = await canAccessFolder(req.user, parent);
+      if (!accessInfo.hasAccess) return res.status(Errors.forbidden.error.status).send(errorGenerator(Errors.forbidden.error.status, "You do not have access to parent folder."));
       // We're good. Create file associations for the files.
       if (req.files && Array.isArray(req.files) && req.files.length > 0) {
         const promises: Promise<any>[] = [];
@@ -401,13 +409,18 @@ async function modifyItem (folder: Folder|File, body: any) {
   return errors;
 }
 // TODO: Add admin check - Admins can access all files.
-async function canAccessFile (user: User|undefined, file: File): Promise<boolean> {
-  if (hasGroups(user, file.accessGroups)) {
-    return canAccessFolder(user, file.folder);
-  } return false;
+interface accessResult {
+  hasAccess: boolean,
+  path?: Partial<Folder>[]
 }
 
-async function canAccessFolder (user: User|undefined, folder: Folder): Promise<boolean> {
+async function canAccessFile (user: User|undefined, file: File): Promise<accessResult> {
+  if (hasGroups(user, file.accessGroups)) {
+    return canAccessFolder(user, file.folder);
+  } return { hasAccess: false };
+}
+
+async function canAccessFolder (user: User|undefined, folder: Folder): Promise<accessResult> {
   if (!folder.accessGroups) {
     const fetched = await Database.getFolder(folder.id);
     if (fetched) {
@@ -422,12 +435,19 @@ async function canAccessFolder (user: User|undefined, folder: Folder): Promise<b
     const parents = await Database.getFolderParents(folder);
     for (const parent of parents) {
       if (!hasGroups(user, parent.accessGroups)) {
-        return false;
+        return { hasAccess: false };
       }
     }
     // we made it here. they're ok
-    return true;
-  } return false;
+    const path = parents.map(({ id, name }) => ({
+      id,
+      name
+    }));
+    return {
+      hasAccess: true,
+      path
+    };
+  } return { hasAccess: false };
 }
 
 interface DeniedFolder {

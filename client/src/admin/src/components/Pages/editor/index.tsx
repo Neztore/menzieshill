@@ -5,11 +5,11 @@ import React, {
   Fragment, FunctionComponent, useEffect, useState
 } from "react";
 
+import { getExt } from "../../../shared/util";
 import { editContentFile, getFile, uploadFiles } from "../../FileExplorer/api";
 import { EditInfo } from "../index";
 import { Editor } from "./EditInput";
 import { Preview } from "./preview";
-import {getExt} from "../../../shared/util";
 
 enum TabType {
   editor,

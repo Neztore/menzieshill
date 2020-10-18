@@ -169,6 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const loginBox = document.getElementsByClassName("nav-login-button")[0];
   (async function getUserInfo () {
     if (!loginBox) return;
+    console.log("index.js: GET /@me");
     const userInfo = await Api.get("/users/@me");
     if (!userInfo.error) {
       removeChildren(loginBox)

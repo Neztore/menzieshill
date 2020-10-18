@@ -1,61 +1,47 @@
 import React from "react";
-import { Redirect, Route, Switch } from "react-router";
+import { Route, Switch } from "react-router";
 
 import { AccountPage } from "./Account";
-import { Login } from "./Authentication/Login";
-import { Register } from "./Authentication/Register";
 import { Calendar } from "./Calendar";
 import { Home } from "./Home";
 import { Pages } from "./Pages";
 import { PermCheck } from "./PermCheck";
-import Posts from "./Posts";
+import { Posts } from "./Posts";
 import { Users } from "./Users";
 
 export const PanelRouter = () => (
   <Switch>
-    <Route path="/admin/login">
-      <Login />
-    </Route>
-
-    <Route path="/admin/register">
-      <Register />
-    </Route>
-
     <Route exact path="/">
-      <Redirect to="/" />
-    </Route>
-
-    <Route exact path="/admin">
       <PermCheck requiredPerm="member" errorMessage="This console is for those with edit access, and you current lack 'member' permission.">
         <Home />
       </PermCheck>
 
     </Route>
-    <Route path="/admin/users">
+    <Route path="/users">
       <PermCheck requiredPerm="admin">
         <Users />
       </PermCheck>
 
     </Route>
-    <Route path="/admin/calendar">
+    <Route path="/calendar">
       <PermCheck requiredPerm="manageEvents">
         <Calendar />
       </PermCheck>
 
     </Route>
-    <Route path="/admin/posts">
+    <Route path="/posts">
       <PermCheck requiredPerm="managePosts">
         <Posts />
       </PermCheck>
     </Route>
 
-    <Route path="/admin/pages">
+    <Route path="/pages">
       <PermCheck requiredPerm="manageFiles">
         <Pages />
       </PermCheck>
     </Route>
 
-    <Route path="/admin/account">
+    <Route path="/account">
       <AccountPage />
     </Route>
 

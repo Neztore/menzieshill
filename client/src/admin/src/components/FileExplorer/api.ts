@@ -52,6 +52,36 @@ export async function editContentFile (fileId: string, content: string, name: st
   }
   return res;
 }
+
+export async function editFile (fileId: string|number, name: string): Promise<HttpFile> {
+  const res = await Api.patch(`/files/par/files/${fileId}`, { body: { name } });
+  if (res && res.error) {
+    throw new HTTPError("Failed to edit file ", res);
+  }
+  return res;
+}
+export async function editFolder (folderId: string|number, name: string): Promise<Folder> {
+  const res = await Api.patch(`/files/${folderId}`, { body: { name } });
+  if (res && res.error) {
+    throw new HTTPError("Failed to edit folder ", res);
+  }
+  return res;
+}
+
+export async function deleteFile (fileId: string|number): Promise<HttpFile> {
+  const res = await Api.delete(`/files/par/${fileId}`);
+  if (res && res.error) {
+    throw new HTTPError("Failed to edit file ", res);
+  }
+  return res;
+}
+export async function deleteFolder (folderId: string|number): Promise<Folder> {
+  const res = await Api.delete(`/files/${folderId}`);
+  if (res && res.error) {
+    throw new HTTPError("Failed to delete folder ", res);
+  }
+  return res;
+}
 export async function uploadFiles (folderId: number, files: FileList | File[], controller?: AbortController): Promise<void> {
   const fd = new FormData();
   for (let counter = 0; counter < files.length; counter++) {

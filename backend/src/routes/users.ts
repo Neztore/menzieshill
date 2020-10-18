@@ -93,7 +93,7 @@ users.post("/register", errorCatch(async (req: Request, res: Response): Promise<
 
   if (registrationErrors.length !== 0) {
     // There are errors: Return them
-    return res.status(400).send(errorGenerator(400, "Bad registration information", { errors }));
+    return res.status(400).send(errorGenerator(400, "Bad registration information", { errors: registrationErrors }));
   }
   // No errors. Continue.
   // Check for already existing user

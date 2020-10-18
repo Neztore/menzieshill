@@ -143,3 +143,6 @@
 .add-margin-left {
     margin-left: 1rem;
 }
+.fas.fa-cog {
+    cursor: pointer;
+}

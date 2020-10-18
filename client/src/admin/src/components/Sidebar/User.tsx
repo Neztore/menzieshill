@@ -1,8 +1,6 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent, useContext } from "react";
 
-import * as Api from "../../../../../public/js/apiFetch";
-import { Message } from "../../../bulma/Message";
-import { User } from "../../shared/Types";
+import UserContext from "../../context/UserContext";
 
 const UserBoxStyle = {
   paddingLeft: "1em",
@@ -10,24 +8,9 @@ const UserBoxStyle = {
 };
 //
 export const UserBox: FunctionComponent = () => {
-  const [info, setInfo] = useState<any>();
+  const info = useContext(UserContext);
 
-  useEffect(() => {
-    (async function () {
-      if (!info) {
-        const userInfo:User = await Api.get("/users/@me");
-        setInfo(userInfo);
-      }
-    }());
-  });
   if (info) {
-    if (info.error) {
-      if (info.error.status === 401) {
-        document.location.href = "/login";
-        return <p>Redirecting...</p>;
-      }
-      return <Message title={`${info.error.status}: Oops! Something went wrong.`} text={info.error.message} colour="danger" />;
-    }
     return (
       <div style={UserBoxStyle}>
         <p className="title is-5">Hello, {info.firstName || `Loading...`}!</p>
