@@ -34,15 +34,9 @@ export const AdminPanel:FunctionComponent = () => (
       Files
     </p>
     <ul className="menu-list">
-      <li>
-        <a href="/photos">Photos</a>
-      </li>
-      <li>
-        <a href="/docs">Documents</a>
-      </li>
-      <li>
-        <a href="/archive">File archive</a>
-      </li>
+      <AdminItem to="/photos" name="Photos" />
+      <AdminItem to="/documents" name="Documents" />
+      <AdminItem to="/archive" name="File archive" />
       <AdminItem to="/pages" name="Pages" />
     </ul>
     <p className="menu-label">

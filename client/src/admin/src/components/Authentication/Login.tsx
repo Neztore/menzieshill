@@ -1,8 +1,9 @@
 import { Form, Formik } from "formik";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 
 import { Field, NormalInput } from "../../../bulma/Field";
+import UserContext from "../../context/UserContext";
 import { Api } from "../../shared/util";
 
 export function Login () {
@@ -10,6 +11,7 @@ export function Login () {
   if (redirect) {
     return <Redirect to="/" />;
   }
+  const user = useContext(UserContext);
   return (
     <div>
       <Formik
@@ -65,6 +67,7 @@ export function Login () {
               <Form className="box">
                 <h2 className="is-size-2 has-text-centered">Login</h2>
                 <p>Use this form to login to your existing account. You can use either your username or your email to login.</p>
+                { user ? <p className="has-text-danger has-text-centered">Warning: You are currently logged in. <Link to="/"> Open the dashboard.</Link></p> : ""}
                 <Field>
                   <NormalInput type="text" name="username" label="Username" />
                 </Field>

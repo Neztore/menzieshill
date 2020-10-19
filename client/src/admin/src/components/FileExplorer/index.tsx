@@ -5,6 +5,7 @@ import React, {
 import UserContext from "../../context/UserContext";
 import { ExplorerLevel } from "./ExplorerLevel";
 import { FileTable } from "./FileTable";
+import { FolderPath } from "./Path";
 import { UploadModal } from "./UploadModal";
 import { getFolder, uploadFiles } from "./api";
 import { Folder } from "./types";
@@ -124,9 +125,19 @@ export const FileExplorer: FunctionComponent<FileExplorerProps> = ({ root, handl
       onDragEnter={discardEvent}
       onDragOver={discardEvent}
       onDrop={handleDrop}>
-      <ExplorerLevel folderId={folder.id} handleUpload={handleUpload} handleEditable={handleEditable} refresh={getInfo} canEdit={canEdit} />
-      <FileTable folder={folder} setFolder={setFolder} handleEditable={handleEditable} canEdit={canEdit} />
 
+      <ExplorerLevel
+        folderId={folder.id}
+        handleUpload={handleUpload}
+        handleEditable={handleEditable}
+        refresh={getInfo}
+        canEdit={canEdit} />
+      <FolderPath folder={folder} setFolderId={getInfo} />
+      <FileTable
+        folder={folder}
+        setFolder={setFolder}
+        handleEditable={handleEditable}
+        canEdit={canEdit} />
     </div>
   );
 };

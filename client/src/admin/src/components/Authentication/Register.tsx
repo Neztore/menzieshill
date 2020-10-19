@@ -1,10 +1,11 @@
 import { Form, Formik } from "formik";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 
 import {
   Checkbox, Field, HorizontalMultipleField, NormalInput
 } from "../../../bulma/Field";
+import UserContext from "../../context/UserContext";
 import { Api } from "../../shared/util";
 
 export function Register () {
@@ -12,6 +13,7 @@ export function Register () {
   if (redirect) {
     return <Redirect to="/" />;
   }
+  const user = useContext(UserContext);
   return (
     <div>
       <Formik
@@ -105,6 +107,7 @@ export function Register () {
               <Form className="box">
                 <h2 className="is-size-2 has-text-centered">Register</h2>
                 <p>Fill out this form to create an account on our website, which is useful for keeping up to date.</p>
+                { user ? <p className="has-text-danger has-text-centered">Warning: You are currently logged in. <Link to="/"> Open the dashboard.</Link></p> : ""}
                 <HorizontalMultipleField
                   label="Name: "
                   fields={[

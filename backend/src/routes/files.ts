@@ -162,6 +162,7 @@ files.patch("/:folderId", errorCatch(async (req: Request, res: Response): Promis
       if (errors && errors.length !== 0) {
         return res.status(400).send(errorGenerator(400, "Bad folder parameters", { errors }));
       }
+      console.log(`${folder.name} (${folder.id}) was edited by ${req.user && req.user.username} (${req.user && req.user.id}`);
       await Database.saveFolder(folder);
       rebuildFolder(folder);
       return res.send({
@@ -197,6 +198,7 @@ files.delete("/:folderId", errorCatch(async (req: Request, res: Response): Promi
 
     // All 'real' files are gone. Remove folder too.
     const r = await Database.deleteFolder(folder);
+    console.log(`! ${folder.name} (${folder.id}) was Deleted by ${req.user && req.user.username} (${req.user && req.user.id}`);
     if (r === false) {
       return res.send({
         success: false,
@@ -298,6 +300,7 @@ files.patch("/:parent/files/:loc", errorCatch(async (req: Request, res: Response
       if (errors && errors.length !== 0) {
         return res.status(400).send(errorGenerator(400, "Bad file options.", { errors }));
       }
+      console.log(`${file.name} (${file.loc})'s meta-data was edited by ${req.user && req.user.username} (${req.user && req.user.id}`);
       rebuildFolder(file.folder);
       await Database.saveFile(file);
       return res.send({
@@ -328,6 +331,7 @@ files.patch("/:parent/files/:loc/content", errorCatch(async (req: Request, res: 
           }
           // Trigger re-build
           rebuildFolder(file.folder);
+          console.log(`${file.name} (${file.loc})'s content was edited by ${req.user && req.user.username} (${req.user && req.user.id}`);
           return res.send({ success: true });
         });
       }
@@ -346,6 +350,7 @@ files.delete("/:parent/:loc", errorCatch(async (req: Request, res: Response): Pr
       if (!await canAccessFile(req.user, file)) return res.status(Errors.forbidden.error.status).send(errorGenerator(Errors.forbidden.error.status, "You do not have access to that file."));
       const folder = { ...file.folder };
       await Database.deleteFile(file);
+      console.log(`! ${file.name} (${file.loc}) was deleted by ${req.user && req.user.username} (${req.user && req.user.id}`);
       rebuildFolder(folder);
       return res.send({
         success: true,
@@ -378,7 +383,7 @@ async function deleteFile (file: File) {
 async function modifyItem (folder: Folder|File, body: any) {
   const errors: string[] = [];
   if (body.name) {
-    if (validName(body.name) && trim(body.name) !== "") {
+    if (validFileName(body.name) && trim(body.name) !== "") {
       // eslint-disable-next-line no-param-reassign
       folder.name = trim(body.name);
     } else {
@@ -443,6 +448,7 @@ async function canAccessFolder (user: User|undefined, folder: Folder): Promise<a
       id,
       name
     }));
+    path.sort((a, b) => a.id - b.id);
     return {
       hasAccess: true,
       path

@@ -122,9 +122,10 @@ function getExt (str: string): string|undefined {
   return str.substring(str.lastIndexOf(".") + 1);
 }
 async function getPartial (name: string): Promise<string|void> {
-  const target = name.substring(2, name.length - 2);
+  const target = name.substring(2, name.length - 2).trim();
   const partial = await Database.files.createQueryBuilder("file")
-    .where("LOWER(file.name) = :target OR LOWER(file.name) = :target || '.md'", { target })
+    .where("LOWER(file.name) = :target OR LOWER(file.name) = :target || '.md'", { target })// Prioritises 'higher up' files
+    .orderBy("file.folder.id", "ASC")
     .getOne();
   if (partial) {
     // Fetch the file itself
@@ -169,6 +170,8 @@ async function renderMarkdown (content: string, file: File): Promise<string> {
     }
   }
   let rdyContent = newLines.join("\n");
+  // Built in tags.
+  rdyContent = `{{header}} ${rdyContent} {{footer}}`;
   const toHandle = rdyContent.match(reg);
   if (toHandle && Array.isArray(toHandle)) {
     for (const partial of toHandle) {

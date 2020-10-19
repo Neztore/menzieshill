@@ -1,5 +1,10 @@
 import { Group, User } from "../../shared/Types";
 
+interface PathItem {
+  name: Folder["name"],
+  id: Folder["id"]
+}
+
 export interface Folder {
   name: string;
 
@@ -14,6 +19,8 @@ export interface Folder {
   files: File[];
 
   children: Folder[];
+
+  path?: PathItem[]
 }
 export interface File {
   loc:string;

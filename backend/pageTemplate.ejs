@@ -29,102 +29,10 @@
     <meta property="twitter:image" content="https://menzieshillwhitehall.co.uk/img/banner_new2.jpg">
 </head>
 <body>
-    <!-- NAVBAR -->
-    <!-- TODO: Make selected 'page' dynamic -->
-    <nav class="navbar" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand">
-            <a class="navbar-item" href="/">
-                <img src="/img/new-favicon.png"  alt="Logo">
-            </a>
-            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="main-navbar">
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-            </a>
 
-        </div>
-
-        <div class="navbar-menu" id="main-navbar">
-            <div class="navbar-start">
-                <a class="navbar-item" href="/">
-                    Home
-                </a>
-                <a class="navbar-item" href="/contact">
-                    Contact us
-                </a>
-                <div class="navbar-item has-dropdown is-hoverable">
-                    <a class="navbar-link">
-                        About us
-                    </a>
-                    <div class="navbar-dropdown">
-                        <a class="navbar-item" href="/welcome">
-                            Welcome
-                        </a>
-                        <hr class="navbar-divider">
-                        <a class="navbar-item" href="/docs">
-                            Our constitution
-                        </a>
-                        <a class="navbar-item" href="/history">
-                            Club history
-                        </a>
-                        <a class="navbar-item" href="/docs">
-                            Policies and Code of Conduct
-                        </a>
-                        <a class="navbar-item" href="/privacy">
-                            Privacy Policy
-                        </a>
-                    </div>
-                </div>
-
-                <a class="navbar-item" href="/docs">
-                    Documents
-                </a>
-                <div class="navbar-item has-dropdown is-hoverable">
-                    <a class="navbar-link">
-                        More
-                    </a>
-                    <div class="navbar-dropdown">
-                        <a class="navbar-item" href="/kit">
-                            Club kit
-                        </a>
-                        <a class="navbar-item" href="/waterpolo">
-                            Water Polo
-                        </a>
-                        <a class="navbar-item" href="/openwater">
-                            Open Water
-                        </a>
-                        <a class="navbar-item" href="/swimming">
-                            Swimming
-                        </a>
-                        <a class="navbar-item" href="/land-training">
-                            Land Training
-                        </a>
-                        <hr class="navbar-divider">
-                        <a class="navbar-item" href="/admin">
-                            Admin console
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="navbar-end">
-                <div class="navbar-item nav-login-button">
-                    <div class="buttons">
-                        <a class="button" href="/login">
-                            <strong>Log in</strong>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
-    <div class="covid has-background-danger">
-        <h1 class="title has-text-white">COVID-19 UPDATE</h1>
-        <p class="has-text-white">For Government advice and recommendations Scottish Swimming have created a
-            <a href="https://www.scottishswimming.com/clubs/covid-19-guidance" target="_blank" rel="noreferrer">COVID-19 Guidance Hub</a> where they release regular updates and publish approved documents to support our Club!</p>
-    </div>
     <script>
       try {
-          <%# Looks weird and kinda is weird, but passes the user to the client. %>
+          <%# Looks weird and kinda is weird, but passes the url to the client. %>
         window.ApiUrl = "<%- ApiUrl %>"
       } catch (e) {
         console.error("User was not provided by server!")
@@ -132,31 +40,6 @@
     </script>
 
     <%-body%>
-
-
-    <footer class="footer has-background-dark has-text-light">
-        <p class="is-size-6 has-text-centered">The new Menzieshill whitehall website, created by <a href="https://josh.muir.xyz">Josh Muir</a>.</p>
-        <h3 class="has-text-centered subtitle is-4 has-text-white">Site links</h3>
-        <div class="columns is-centered is-mobile">
-            <div class="column is-2">
-                <p><a href="/privacy">Privacy Policy</a></p>
-                <p><a href="/contact">Contact us</a></p>
-                <img src="/img/swimark.jpg" alt="Swimark logo" class="mark"/>
-            </div>
-            <div class="column is-2">
-                <p><a href="/admin">Admin console</a></p>
-                <p><a href="https://www.facebook.com/Menzieshill-Whitehall-Swimming-and-Waterpolo-Club-137997236241813/">Find us on Facebook!</a></p>
-                <img src="/img/polomark.jpg" alt="Polomark logo" class="mark"/>
-            </div>
-        </div>
-
-    </footer>
-
-    <div class="has-background-black-ter has-text-light">
-        <p class="has-text-centered">
-            Copyright 2020 Menzieshill Whitehall Swimming & Water Polo club (SCO46868)
-        </p>
-    </div>
 
 </body>
 </html>
